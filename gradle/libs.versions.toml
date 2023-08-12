@@ -1,0 +1,15 @@
+[versions]
+coingecko = "1.0.0-beta02"
+coroutines = "1.7.2"
+ktor = "2.3.3"
+
+[plugins]
+
+[libraries]
+coingecko = { group = "org.drewcarlson", name = "coingecko", version.ref = "coingecko" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
