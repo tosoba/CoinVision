@@ -2,6 +2,8 @@
 coingecko = "1.0.0-beta02"
 coroutines = "1.7.2"
 ktor = "2.3.3"
+logback-classic = "1.4.11"
+napier = "1.4.1"
 
 [plugins]
 
@@ -12,4 +14,7 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
+napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }

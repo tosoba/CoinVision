@@ -13,8 +13,13 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
+        implementation(libs.napier)
+        implementation(libs.logback.classic)
+
         implementation(libs.coingecko)
+
         implementation(libs.ktor.client.core)
+        implementation(libs.ktor.client.logging)
       }
     }
 
