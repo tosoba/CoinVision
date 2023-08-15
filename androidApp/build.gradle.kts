@@ -1,27 +1,34 @@
 plugins {
+  kotlin("multiplatform")
   id("com.android.application")
-  kotlin("android")
+  id("org.jetbrains.compose")
+}
+
+kotlin {
+  androidTarget()
+  sourceSets {
+    val androidMain by getting { dependencies { implementation(project(":shared")) } }
+  }
 }
 
 android {
   namespace = "com.trm.coinvision.android"
   compileSdk = 33
+
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+
   defaultConfig {
     applicationId = "com.trm.coinvision.android"
-    minSdk = 21
-    targetSdk = 33
+    minSdk = (findProperty("android.minSdk") as String).toInt()
+    targetSdk = (findProperty("android.targetSdk") as String).toInt()
     versionCode = 1
     versionName = "1.0"
   }
-  buildFeatures { compose = true }
-  composeOptions { kotlinCompilerExtensionVersion = "1.4.4" }
-  packagingOptions { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
-  buildTypes { getByName("release") { isMinifyEnabled = false } }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
-  kotlinOptions { jvmTarget = "1.8" }
+  kotlin { jvmToolchain(11) }
 }
 
 dependencies {

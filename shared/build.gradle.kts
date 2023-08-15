@@ -1,19 +1,35 @@
 plugins {
   kotlin("multiplatform")
+  kotlin("native.cocoapods")
   id("com.android.library")
+  id("org.jetbrains.compose")
 }
 
 kotlin {
-  android { compilations.all { kotlinOptions { jvmTarget = "1.8" } } }
+  androidTarget()
 
-  listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach {
-    it.binaries.framework { baseName = "shared" }
+  jvm("desktop")
+
+  iosX64()
+  iosArm64()
+  iosSimulatorArm64()
+
+  cocoapods {
+    version = "1.0.0"
+    summary = "Some description for the Shared Module"
+    homepage = "Link to the Shared Module homepage"
+    ios.deploymentTarget = "14.1"
+    podfile = project.file("../iosApp/Podfile")
+    framework {
+      baseName = "shared"
+      isStatic = true
+    }
+    extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
   }
 
   sourceSets {
     val commonMain by getting {
       dependencies {
-        implementation(libs.napier)
         implementation(libs.logback.classic)
 
         implementation(libs.coingecko)
@@ -65,4 +81,14 @@ android {
   namespace = "com.trm.coinvision"
   compileSdk = 33
   defaultConfig { minSdk = 21 }
+
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  sourceSets["main"].res.srcDirs("src/androidMain/res")
+  sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
+  kotlin { jvmToolchain(11) }
 }
