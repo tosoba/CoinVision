@@ -1,9 +1,9 @@
 package com.trm.coinvision.android
 
-import MainView
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import com.trm.coinvision.MainView
 
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
