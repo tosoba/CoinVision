@@ -1,14 +1,21 @@
 [versions]
+activity-compose = "1.7.2"
+appcompat = "1.6.1"
 coingecko = "1.0.0-beta02"
+core-ktx = "1.10.1"
 coroutines = "1.7.2"
 ktor = "2.3.3"
 logback-classic = "1.4.11"
 napier = "1.4.1"
+voyager = "1.0.0-rc05"
 
 [plugins]
 
 [libraries]
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 coingecko = { group = "org.drewcarlson", name = "coingecko", version.ref = "coingecko" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
@@ -18,3 +25,6 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }

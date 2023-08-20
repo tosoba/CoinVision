@@ -36,6 +36,10 @@ kotlin {
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
 
+        implementation(libs.voyager.navigator)
+        implementation(libs.voyager.tab.navigator)
+        implementation(libs.voyager.transitions)
+
         implementation(libs.logback.classic)
 
         implementation(libs.coingecko)
@@ -53,9 +57,9 @@ kotlin {
     }
     val androidMain by getting {
       dependencies {
-        api("androidx.activity:activity-compose:1.6.1")
-        api("androidx.appcompat:appcompat:1.6.1")
-        api("androidx.core:core-ktx:1.9.0")
+        api(libs.activity.compose)
+        api(libs.appcompat)
+        api(libs.core.ktx)
 
         implementation(libs.kotlinx.coroutines.android)
 
