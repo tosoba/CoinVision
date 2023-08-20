@@ -3,6 +3,7 @@ plugins {
   kotlin("native.cocoapods")
   id("com.android.library")
   id("org.jetbrains.compose")
+  id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
@@ -36,6 +37,9 @@ kotlin {
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
 
+        api(libs.resources)
+        api(libs.resources.compose)
+
         implementation(libs.voyager.navigator)
         implementation(libs.voyager.tab.navigator)
         implementation(libs.voyager.transitions)
@@ -48,13 +52,13 @@ kotlin {
         implementation(libs.ktor.client.logging)
       }
     }
-
     val commonTest by getting {
       dependencies {
         implementation(kotlin("test"))
         implementation(libs.kotlinx.coroutines.test)
       }
     }
+
     val androidMain by getting {
       dependencies {
         api(libs.activity.compose)
@@ -68,6 +72,7 @@ kotlin {
       }
     }
     val androidUnitTest by getting
+
     val iosX64Main by getting
     val iosArm64Main by getting
     val iosSimulatorArm64Main by getting
@@ -88,6 +93,7 @@ kotlin {
       iosArm64Test.dependsOn(this)
       iosSimulatorArm64Test.dependsOn(this)
     }
+
     val desktopMain by getting { dependencies { implementation(compose.desktop.common) } }
   }
 }
@@ -101,9 +107,18 @@ android {
   sourceSets["main"].res.srcDirs("src/androidMain/res")
   sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+  // hack for problem:
+  // "Expected object 'MR' has no actual declaration in module <mpp-library_debug> for JVM"
+  // Issue: https://github.com/icerockdev/moko-resources/issues/510
+  // Remove after fix this
+  sourceSets["main"].java.srcDirs("build/generated/moko/androidMain/src")
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
+
   kotlin { jvmToolchain(11) }
 }
+
+multiplatformResources { multiplatformResourcesPackage = "com.trm.coinvision" }
