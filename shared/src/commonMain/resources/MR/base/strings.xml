@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name="app_title">CoinVision</string>
     <string name="compare">Compare</string>
     <string name="list">List</string>
 </resources>

@@ -16,14 +16,15 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.ui.compare.CompareTab
 import com.trm.coinvision.ui.list.ListTab
+import dev.icerock.moko.resources.compose.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
   MaterialTheme {
-    TabNavigator(CompareTab) {
+    TabNavigator(tab = CompareTab) {
       Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("CoinVision") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(MR.strings.app_title)) }) },
         bottomBar = {
           NavigationBar {
             TabNavigationItem(CompareTab)
