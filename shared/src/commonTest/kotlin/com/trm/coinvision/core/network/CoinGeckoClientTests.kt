@@ -1,9 +1,7 @@
-package com.trm.coinvision
+package com.trm.coinvision.core.network
 
 import coingecko.CoinGeckoClient
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
+import com.trm.coinvision.core.network.util.testCoinGeckoClient
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
@@ -12,8 +10,8 @@ class CoinGeckoClientTests {
   private lateinit var coinGeckoClient: CoinGeckoClient
 
   @BeforeTest
-  fun initializeClient() {
-    coinGeckoClient = CoinGeckoClient(HttpClient { install(Logging) { level = LogLevel.BODY } })
+  fun init() {
+    coinGeckoClient = testCoinGeckoClient()
   }
 
   @Test fun ping() = runTest { coinGeckoClient.ping() }
