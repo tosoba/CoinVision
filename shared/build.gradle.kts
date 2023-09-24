@@ -4,6 +4,7 @@ plugins {
   id("com.android.library")
   id("org.jetbrains.compose")
   id("dev.icerock.mobile.multiplatform-resources")
+  alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -50,6 +51,8 @@ kotlin {
 
         implementation(libs.ktor.client.core)
         implementation(libs.ktor.client.logging)
+
+        implementation(libs.kotlinx.serialization.json)
       }
     }
     val commonTest by getting {

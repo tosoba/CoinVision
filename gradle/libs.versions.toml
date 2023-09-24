@@ -4,13 +4,13 @@ appcompat = "1.6.1"
 coingecko = "1.0.0-beta02"
 core-ktx = "1.10.1"
 coroutines = "1.7.2"
+kotlin = "1.8.10"
+kotlinxSerializationJson = "1.4.1"
 ktor = "2.3.3"
 logback-classic = "1.4.11"
 napier = "1.4.1"
 resources = "0.22.3"
 voyager = "1.0.0-rc05"
-
-[plugins]
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -19,6 +19,7 @@ coingecko = { group = "org.drewcarlson", name = "coingecko", version.ref = "coin
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
@@ -32,3 +33,6 @@ resources-generator = { module = "dev.icerock.moko:resources-generator", version
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+
+[plugins]
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
