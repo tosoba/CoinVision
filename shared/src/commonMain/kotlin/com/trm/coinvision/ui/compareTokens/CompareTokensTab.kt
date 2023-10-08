@@ -1,4 +1,4 @@
-package com.trm.coinvision.ui.list
+package com.trm.coinvision.ui.compareTokens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.MR
-import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.compose.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-object ListTab : Tab {
+object CompareTokensTab : Tab {
   @Composable
   override fun Content() {
     Box(Modifier.fillMaxSize()) {
-      Text(stringResource(MR.strings.list), modifier = Modifier.align(Alignment.Center))
+      Text(stringResource(MR.strings.compare), modifier = Modifier.align(Alignment.Center))
     }
   }
 
@@ -26,8 +26,8 @@ object ListTab : Tab {
   override val options: TabOptions
     @Composable
     get() {
-      val icon = painterResource("list.xml")
-      val title = stringResource(MR.strings.list)
-      return remember { TabOptions(index = 1u, title = title, icon = icon) }
+      val icon = painterResource("compare.xml")
+      val title = stringResource(MR.strings.compare)
+      return remember { TabOptions(index = 0u, title = title, icon = icon) }
     }
 }

@@ -32,29 +32,32 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
-        implementation(compose.runtime)
+        implementation(libs.coingecko)
+
         implementation(compose.foundation)
         implementation(compose.material3)
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
+        implementation(compose.runtime)
 
         api(libs.resources)
         api(libs.resources.compose)
 
-        implementation(libs.voyager.navigator)
-        implementation(libs.voyager.tab.navigator)
-        implementation(libs.voyager.transitions)
-
         implementation(libs.logback.classic)
 
-        implementation(libs.coingecko)
+        api(libs.koin.core)
+
+        implementation(libs.kotlinx.serialization.json)
 
         implementation(libs.ktor.client.core)
         implementation(libs.ktor.client.logging)
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization.kotlinx.json)
 
-        implementation(libs.kotlinx.serialization.json)
+        implementation(libs.voyager.koin)
+        implementation(libs.voyager.navigator)
+        implementation(libs.voyager.tab.navigator)
+        implementation(libs.voyager.transitions)
       }
     }
     val commonTest by getting {
@@ -124,6 +127,8 @@ android {
   }
 
   kotlin { jvmToolchain(11) }
+
+  packagingOptions { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 }
 
 multiplatformResources { multiplatformResourcesPackage = "com.trm.coinvision" }

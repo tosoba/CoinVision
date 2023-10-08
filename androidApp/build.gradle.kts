@@ -7,7 +7,14 @@ plugins {
 kotlin {
   androidTarget()
   sourceSets {
-    val androidMain by getting { dependencies { implementation(project(":shared")) } }
+    val androidMain by getting {
+      dependencies {
+        implementation(project(":shared"))
+
+        implementation(libs.koin.android)
+        implementation(libs.koin.core)
+      }
+    }
   }
 }
 
