@@ -108,7 +108,7 @@ kotlin {
 
 android {
   namespace = "com.trm.coinvision"
-  compileSdk = 33
+  compileSdk = 34
   defaultConfig { minSdk = 21 }
 
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
