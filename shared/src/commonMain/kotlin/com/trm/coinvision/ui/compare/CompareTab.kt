@@ -1,6 +1,7 @@
 package com.trm.coinvision.ui.compare
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,7 +17,9 @@ import org.jetbrains.compose.resources.painterResource
 object CompareTab : Tab {
   @Composable
   override fun Content() {
-    Box { Text(stringResource(MR.strings.compare), modifier = Modifier.align(Alignment.Center)) }
+    Box(Modifier.fillMaxSize()) {
+      Text(stringResource(MR.strings.compare), modifier = Modifier.align(Alignment.Center))
+    }
   }
 
   @OptIn(ExperimentalResourceApi::class)
