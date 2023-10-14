@@ -1,4 +1,4 @@
-package com.trm.coinvision.core.di
+package com.trm.coinvision.core.common.di
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.model.ScreenModel
