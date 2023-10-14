@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui.tokensList
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.trm.coinvision.core.domain.repo.CryptoRepository
 
-class TokensListScreenModel : ScreenModel {}
+class TokensListScreenModel(private val repository: CryptoRepository) : ScreenModel {}

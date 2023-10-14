@@ -1,6 +1,10 @@
 package com.trm.coinvision.core.data
 
+import com.trm.coinvision.core.data.mapper.isValid
+import com.trm.coinvision.core.data.mapper.toDomain
+import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.model.FiatCurrency
+import com.trm.coinvision.core.domain.repo.CryptoRepository
 import com.trm.coinvision.core.network.client.COIN_GECKO_API_BASE_URL
 import com.trm.coinvision.core.network.model.CoinMarketsResponseItem
 import io.ktor.client.HttpClient
@@ -8,11 +12,11 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 
-class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) {
+class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) : CryptoRepository {
   private val FiatCurrency.queryParam: String
     get() = name.lowercase()
 
-  suspend fun getCoinMarkets(vsFiatCurrency: FiatCurrency): List<CoinMarketsResponseItem> =
+  override suspend fun getCoinMarkets(vsFiatCurrency: FiatCurrency): List<CoinMarketsItem> =
     coinGeckoClient
       .get(COIN_GECKO_API_BASE_URL) {
         url {
@@ -20,5 +24,7 @@ class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) {
           parameters.append("vs_currency", vsFiatCurrency.queryParam)
         }
       }
-      .body()
+      .body<List<CoinMarketsResponseItem>>()
+      .filter(CoinMarketsResponseItem::isValid)
+      .map(CoinMarketsResponseItem::toDomain)
 }

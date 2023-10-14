@@ -22,7 +22,7 @@ data class CoinMarketsResponseItem(
   @SerialName("market_cap") val marketCap: Double?,
   @SerialName("market_cap_change_24h") val marketCapChange24h: Double?,
   @SerialName("market_cap_change_percentage_24h") val marketCapChangePercentage24h: Double?,
-  @SerialName("market_cap_rank") val marketCapRank: Double?,
+  @SerialName("market_cap_rank") val marketCapRank: Long?,
   @SerialName("max_supply") val maxSupply: Double?,
   @SerialName("name") val name: String?,
   @SerialName("price_change_24h") val priceChange24h: Double?,
