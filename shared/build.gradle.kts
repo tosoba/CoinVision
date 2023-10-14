@@ -32,8 +32,6 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
-        implementation(libs.coingecko)
-
         implementation(compose.foundation)
         implementation(compose.material3)
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
