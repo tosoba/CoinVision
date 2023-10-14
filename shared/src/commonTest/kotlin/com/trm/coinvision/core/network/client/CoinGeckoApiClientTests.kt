@@ -1,5 +1,6 @@
 package com.trm.coinvision.core.network.client
 
+import com.trm.coinvision.core.network.model.CoinMarketsResponseItem
 import com.trm.coinvision.core.network.model.SearchResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -17,7 +18,10 @@ class CoinGeckoApiClientTests {
 
   @BeforeTest
   fun init() {
-    client = coinGeckoApiClient { install(Logging) { level = LogLevel.BODY } }
+    client = coinGeckoApiClient {
+      coinGeckoApiClientDefaultConfig()()
+      install(Logging) { level = LogLevel.BODY }
+    }
   }
 
   @Test
@@ -31,5 +35,18 @@ class CoinGeckoApiClientTests {
       }
       .body<SearchResponse>()
       .run { assertFalse(coins.isNullOrEmpty()) }
+  }
+
+  @Test
+  fun coinMarkets() = runTest {
+    client
+      .get(COIN_GECKO_API_BASE_URL) {
+        url {
+          appendPathSegments("coins", "markets")
+          parameters.append("vs_currency", "usd")
+        }
+      }
+      .body<List<CoinMarketsResponseItem>>()
+      .run { assertFalse(isEmpty()) }
   }
 }
