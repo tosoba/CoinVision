@@ -71,6 +71,9 @@ kotlin {
         api(libs.appcompat)
         api(libs.core.ktx)
 
+        implementation(libs.koin.android)
+        implementation(libs.koin.core)
+
         implementation(libs.kotlinx.coroutines.android)
 
         implementation(libs.ktor.client.android)
