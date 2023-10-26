@@ -14,7 +14,7 @@ import dev.icerock.moko.resources.compose.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-object CompareTokensTab : Tab {
+internal object CompareTokensTab : Tab {
   @Composable
   override fun Content() {
     Box(Modifier.fillMaxSize()) {
