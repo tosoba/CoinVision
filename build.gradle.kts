@@ -7,5 +7,3 @@ plugins {
   id("org.jetbrains.compose") apply false
   alias(libs.plugins.kotlin.serialization) apply false
 }
-
-buildscript { dependencies { classpath(libs.resources.generator) } }

@@ -9,8 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.trm.coinvision.MR
-import dev.icerock.moko.resources.compose.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -18,7 +16,7 @@ internal object CompareTokensTab : Tab {
   @Composable
   override fun Content() {
     Box(Modifier.fillMaxSize()) {
-      Text(stringResource(MR.strings.compare), modifier = Modifier.align(Alignment.Center))
+      Text("Compare", modifier = Modifier.align(Alignment.Center))
     }
   }
 
@@ -27,7 +25,7 @@ internal object CompareTokensTab : Tab {
     @Composable
     get() {
       val icon = painterResource("compare.xml")
-      val title = stringResource(MR.strings.compare)
+      val title = "Compare"
       return remember { TabOptions(index = 0u, title = title, icon = icon) }
     }
 }

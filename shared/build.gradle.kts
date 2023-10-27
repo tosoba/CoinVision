@@ -3,7 +3,6 @@ plugins {
   kotlin("native.cocoapods")
   id("com.android.library")
   id("org.jetbrains.compose")
-  id("dev.icerock.mobile.multiplatform-resources")
   alias(libs.plugins.kotlin.serialization)
 }
 
@@ -26,7 +25,6 @@ kotlin {
       baseName = "shared"
       isStatic = true
     }
-    extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
   }
 
   sourceSets {
@@ -37,9 +35,6 @@ kotlin {
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
         implementation(compose.runtime)
-
-        api(libs.resources)
-        api(libs.resources.compose)
 
         implementation(libs.logback.classic)
 
@@ -120,8 +115,6 @@ android {
   // "Expected object 'MR' has no actual declaration in module <mpp-library_debug> for JVM"
   // Issue: https://github.com/icerockdev/moko-resources/issues/510
   // Remove after fix this
-  sourceSets["main"].java.srcDirs("build/generated/moko/androidMain/src")
-
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -131,5 +124,3 @@ android {
 
   packagingOptions { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 }
-
-multiplatformResources { multiplatformResourcesPackage = "com.trm.coinvision" }
