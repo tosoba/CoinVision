@@ -1,21 +1,34 @@
 package com.trm.coinvision.core.common.util
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.intl.Locale
 
-@Immutable data class StringResources(val appTitle: String, val compare: String, val list: String)
+@Immutable
+data class StringResources(
+  val appTitle: String,
+  val compare: String,
+  val list: String,
+)
 
 fun stringResourcesEn() =
-  StringResources(appTitle = "CoinVision", compare = "Compare", list = "List")
+  StringResources(
+    appTitle = "CoinVision",
+    compare = "Compare",
+    list = "List",
+  )
 
 fun stringResourcesPl() =
-  StringResources(appTitle = "CoinVision", compare = "Porównaj", list = "Lista")
+  StringResources(
+    appTitle = "CoinVision",
+    compare = "Porównaj",
+    list = "Lista",
+  )
 
-val LocalStringResources = staticCompositionLocalOf { stringResourcesEn() }
+val LocalStringResources = compositionLocalOf { stringResourcesEn() }
 
-fun stringResources(): StringResources =
-  when (Locale.current.language) {
-    "PL" -> stringResourcesPl()
+fun stringResources(language: String = Locale.current.language): StringResources =
+  when (language) {
+    "pl" -> stringResourcesPl()
     else -> stringResourcesEn()
   }
