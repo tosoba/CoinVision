@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.trm.coinvision.core.common.util.LocalStringResources
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -16,7 +17,7 @@ internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
     Box(Modifier.fillMaxSize()) {
-      Text("List", modifier = Modifier.align(Alignment.Center))
+      Text(LocalStringResources.current.list, modifier = Modifier.align(Alignment.Center))
     }
   }
 
@@ -25,7 +26,7 @@ internal object TokensListTab : Tab {
     @Composable
     get() {
       val icon = painterResource("list.xml")
-      val title = "List"
+      val title = LocalStringResources.current.list
       return remember { TabOptions(index = 1u, title = title, icon = icon) }
     }
 }

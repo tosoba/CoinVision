@@ -10,28 +10,35 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.trm.coinvision.core.common.util.LocalStringResources
+import com.trm.coinvision.core.common.util.stringResources
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-  MaterialTheme {
-    TabNavigator(tab = CompareTokensTab) {
-      Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("CoinVision") }) },
-        bottomBar = {
-          NavigationBar {
-            TabNavigationItem(CompareTokensTab)
-            TabNavigationItem(TokensListTab)
+  CompositionLocalProvider(LocalStringResources provides stringResources()) {
+    MaterialTheme {
+      TabNavigator(tab = CompareTokensTab) {
+        Scaffold(
+          topBar = {
+            CenterAlignedTopAppBar(title = { Text(LocalStringResources.current.appTitle) })
+          },
+          bottomBar = {
+            NavigationBar {
+              TabNavigationItem(CompareTokensTab)
+              TabNavigationItem(TokensListTab)
+            }
           }
+        ) {
+          CurrentTab()
         }
-      ) {
-        CurrentTab()
       }
     }
   }
