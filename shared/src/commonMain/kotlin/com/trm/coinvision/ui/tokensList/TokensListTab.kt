@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -15,6 +16,7 @@ import org.jetbrains.compose.resources.painterResource
 internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<TokensListScreenModel>()
     Box(Modifier.fillMaxSize()) {
       Text(LocalStringResources.current.list, modifier = Modifier.align(Alignment.Center))
     }
