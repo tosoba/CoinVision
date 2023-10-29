@@ -29,16 +29,20 @@ class GetCoinMarketsPagingUseCase(private val repository: CryptoRepository) {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CoinMarketsItem> {
       // TODO: use search endpoint for fetching token ids if query not blank
       val page = params.key ?: FIRST_PAGE
-      val response = repository.getCoinMarkets(FiatCurrency.USD)
-      return if (response.status.isSuccess()) {
-        val coinMarkets = response.coinMarketsBody()
-        PagingSourceLoadResultPage(
-          data = coinMarkets,
-          prevKey = (page - 1).takeIf { it >= FIRST_PAGE },
-          nextKey = (page + 1).takeIf { coinMarkets.isNotEmpty() }
-        )
-      } else {
-        PagingSourceLoadResultError(Exception("Received a ${response.status}."))
+      return try {
+        val response = repository.getCoinMarkets(FiatCurrency.USD)
+        if (response.status.isSuccess()) {
+          val coinMarkets = response.coinMarketsBody()
+          PagingSourceLoadResultPage(
+            data = coinMarkets,
+            prevKey = (page - 1).takeIf { it >= FIRST_PAGE },
+            nextKey = (page + 1).takeIf { coinMarkets.isNotEmpty() }
+          )
+        } else {
+          PagingSourceLoadResultError(Exception("Received a ${response.status}."))
+        }
+      } catch (ex: Exception) {
+        PagingSourceLoadResultError(ex)
       }
     }
   }
