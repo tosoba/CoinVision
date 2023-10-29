@@ -1,6 +1,8 @@
 package com.trm.coinvision
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -45,7 +48,7 @@ fun App() {
             }
           }
         ) {
-          CurrentTab()
+          Box(modifier = Modifier.padding(it)) { CurrentTab() }
         }
       }
     }
