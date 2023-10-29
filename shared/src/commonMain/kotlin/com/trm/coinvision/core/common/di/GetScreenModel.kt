@@ -9,7 +9,7 @@ import org.koin.core.qualifier.Qualifier
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
-inline fun <reified T : ScreenModel> Screen.getScreenModel(
+internal inline fun <reified T : ScreenModel> Screen.getScreenModel(
   qualifier: Qualifier? = null,
   noinline parameters: ParametersDefinition? = null,
 ): T {

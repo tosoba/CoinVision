@@ -14,9 +14,15 @@ import com.trm.coinvision.core.domain.repo.CryptoRepository
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 
-class GetCoinMarketsPagingUseCase(private val repository: CryptoRepository) {
+internal class GetCoinMarketsPagingUseCase(private val repository: CryptoRepository) {
   operator fun invoke(query: String? = null): Flow<PagingData<CoinMarketsItem>> =
-    Pager(PagingConfig(pageSize = DEFAULT_PAGE_SIZE, initialLoadSize = DEFAULT_PAGE_SIZE)) {
+    Pager(
+        PagingConfig(
+          pageSize = DEFAULT_PAGE_SIZE,
+          initialLoadSize = DEFAULT_PAGE_SIZE,
+          prefetchDistance = DEFAULT_PAGE_SIZE / 5
+        )
+      ) {
         CoinMarketsPagingSource(query)
       }
       .flow
@@ -30,7 +36,12 @@ class GetCoinMarketsPagingUseCase(private val repository: CryptoRepository) {
       // TODO: use search endpoint for fetching token ids if query not blank
       val page = params.key ?: FIRST_PAGE
       return try {
-        val response = repository.getCoinMarkets(FiatCurrency.USD)
+        val response =
+          repository.getCoinMarkets(
+            vsFiatCurrency = FiatCurrency.USD,
+            page = page,
+            perPage = params.loadSize
+          )
         if (response.status.isSuccess()) {
           val coinMarkets = response.coinMarketsBody()
           PagingSourceLoadResultPage(

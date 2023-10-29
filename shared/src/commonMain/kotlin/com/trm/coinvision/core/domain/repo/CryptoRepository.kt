@@ -4,7 +4,7 @@ import androidx.annotation.IntRange
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import io.ktor.client.statement.HttpResponse
 
-interface CryptoRepository {
+internal interface CryptoRepository {
   suspend fun getCoinMarkets(
     vsFiatCurrency: FiatCurrency,
     page: Int = 1,

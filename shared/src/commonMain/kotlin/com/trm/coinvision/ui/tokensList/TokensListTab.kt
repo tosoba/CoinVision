@@ -30,7 +30,8 @@ internal object TokensListTab : Tab {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
     LazyColumn(contentPadding = PaddingValues(20.dp)) {
-      items(coinMarkets.itemCount) { index -> Text(text = coinMarkets[index]!!.name) }
+      items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
+
       with(coinMarkets) {
         when {
           loadState.refresh is LoadState.Loading -> {

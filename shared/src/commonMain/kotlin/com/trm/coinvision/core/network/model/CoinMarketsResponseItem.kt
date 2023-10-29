@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinMarketsResponseItem(
+internal data class CoinMarketsResponseItem(
   @SerialName("ath") val ath: Double?,
   @SerialName("ath_change_percentage") val athChangePercentage: Double?,
   @SerialName("ath_date") val athDate: String?,

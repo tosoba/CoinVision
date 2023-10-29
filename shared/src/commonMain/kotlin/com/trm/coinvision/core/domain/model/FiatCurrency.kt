@@ -1,5 +1,5 @@
 package com.trm.coinvision.core.domain.model
 
-enum class FiatCurrency {
+internal enum class FiatCurrency {
   USD
 }

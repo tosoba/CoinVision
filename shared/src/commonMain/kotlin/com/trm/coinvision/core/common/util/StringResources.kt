@@ -5,29 +5,29 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.intl.Locale
 
 @Immutable
-data class StringResources(
+internal data class StringResources(
   val appTitle: String,
   val compare: String,
   val list: String,
 )
 
-fun stringResourcesEn() =
+internal fun stringResourcesEn() =
   StringResources(
     appTitle = "CoinVision",
     compare = "Compare",
     list = "List",
   )
 
-fun stringResourcesPl() =
+internal fun stringResourcesPl() =
   StringResources(
     appTitle = "CoinVision",
     compare = "Porównaj",
     list = "Lista",
   )
 
-val LocalStringResources = compositionLocalOf { stringResourcesEn() }
+internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }
 
-fun stringResources(language: String = Locale.current.language): StringResources =
+internal fun stringResources(language: String = Locale.current.language): StringResources =
   when (language) {
     "pl" -> stringResourcesPl()
     else -> stringResourcesEn()

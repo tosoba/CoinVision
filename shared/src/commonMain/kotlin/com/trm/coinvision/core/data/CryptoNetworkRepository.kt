@@ -9,7 +9,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.appendPathSegments
 
-class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) : CryptoRepository {
+internal class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) : CryptoRepository {
   private val FiatCurrency.queryParam: String
     get() = name.lowercase()
 

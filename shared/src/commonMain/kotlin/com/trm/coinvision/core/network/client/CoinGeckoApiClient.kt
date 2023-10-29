@@ -9,9 +9,12 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun coinGeckoApiClient(config: HttpClientConfig<*>.() -> Unit): HttpClient = HttpClient(config)
+internal fun coinGeckoApiClient(config: HttpClientConfig<*>.() -> Unit): HttpClient =
+  HttpClient(config)
 
-fun coinGeckoApiClientDefaultConfig(logLevel: LogLevel? = null): HttpClientConfig<*>.() -> Unit = {
+internal fun coinGeckoApiClientDefaultConfig(
+  logLevel: LogLevel? = null
+): HttpClientConfig<*>.() -> Unit = {
   install(ContentNegotiation) {
     json(
       Json {

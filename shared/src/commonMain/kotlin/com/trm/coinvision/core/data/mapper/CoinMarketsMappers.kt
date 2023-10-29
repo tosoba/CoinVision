@@ -5,23 +5,23 @@ import com.trm.coinvision.core.network.model.CoinMarketsResponseItem
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 
-fun CoinMarketsResponseItem.toDomain(): CoinMarketsItem =
+internal fun CoinMarketsResponseItem.toDomain(): CoinMarketsItem =
   CoinMarketsItem(
-    requireNotNull(currentPrice),
-    high24h,
-    requireNotNull(id),
-    low24h,
-    marketCap,
-    marketCapRank,
-    requireNotNull(name),
-    priceChangePercentage24h,
-    requireNotNull(symbol)
+    currentPrice = requireNotNull(currentPrice),
+    high24h = high24h,
+    id = requireNotNull(id),
+    low24h = low24h,
+    marketCap = marketCap,
+    marketCapRank = marketCapRank,
+    name = requireNotNull(name),
+    priceChangePercentage24h = priceChangePercentage24h,
+    symbol = requireNotNull(symbol)
   )
 
-fun CoinMarketsResponseItem.isValid(): Boolean =
+internal fun CoinMarketsResponseItem.isValid(): Boolean =
   currentPrice != null && id != null && name != null && symbol != null
 
-suspend fun HttpResponse.coinMarketsBody(): List<CoinMarketsItem> =
+internal suspend fun HttpResponse.coinMarketsBody(): List<CoinMarketsItem> =
   body<List<CoinMarketsResponseItem>>()
     .filter(CoinMarketsResponseItem::isValid)
     .map(CoinMarketsResponseItem::toDomain)

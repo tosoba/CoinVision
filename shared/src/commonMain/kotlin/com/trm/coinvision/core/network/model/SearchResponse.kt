@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchResponse(
+internal data class SearchResponse(
   @SerialName("categories") val categories: List<Category>?,
   @SerialName("coins") val coins: List<Coin>?,
   @SerialName("exchanges") val exchanges: List<Exchange>?,

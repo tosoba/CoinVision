@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Exchange(
+internal data class Exchange(
   @SerialName("id") val id: String?,
   @SerialName("large") val large: String?,
   @SerialName("market_type") val marketType: String?,
