@@ -1,8 +1,8 @@
 package com.trm.coinvision.core.domain.repo
 
 import androidx.annotation.IntRange
-import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.model.FiatCurrency
+import io.ktor.client.statement.HttpResponse
 
 interface CryptoRepository {
   suspend fun getCoinMarkets(
@@ -14,5 +14,5 @@ interface CryptoRepository {
     sparkline: Boolean = false,
     locale: String = "en",
     @IntRange(from = 0L, to = 18L) precision: Short = 2
-  ): List<CoinMarketsItem>
+  ): HttpResponse
 }

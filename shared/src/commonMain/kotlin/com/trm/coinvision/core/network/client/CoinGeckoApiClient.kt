@@ -2,8 +2,8 @@ package com.trm.coinvision.core.network.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 fun coinGeckoApiClient(
@@ -11,7 +11,6 @@ fun coinGeckoApiClient(
 ): HttpClient = HttpClient(config)
 
 fun coinGeckoApiClientDefaultConfig(): HttpClientConfig<*>.() -> Unit = {
-  expectSuccess = true
   install(ContentNegotiation) {
     json(
       Json {

@@ -1,10 +1,12 @@
 package com.trm.coinvision.core.data
 
+import com.trm.coinvision.core.data.mapper.coinMarketsBody
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.network.client.coinGeckoApiClient
 import com.trm.coinvision.core.network.client.coinGeckoApiClientDefaultConfig
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.isSuccess
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -26,6 +28,8 @@ class CryptoRepositoryTests {
 
   @Test
   fun getCoinMarkets() = runTest {
-    repository.getCoinMarkets(FiatCurrency.USD).also { assertTrue(it.isNotEmpty()) }
+    val response = repository.getCoinMarkets(FiatCurrency.USD)
+    assertTrue(response.status.isSuccess())
+    assertTrue(response.coinMarketsBody().isNotEmpty())
   }
 }
