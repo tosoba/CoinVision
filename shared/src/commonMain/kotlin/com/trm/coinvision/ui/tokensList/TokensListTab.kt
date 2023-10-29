@@ -48,8 +48,8 @@ internal object TokensListTab : Tab {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
               ) {
-                Text("Error occurred")
-                Button(coinMarkets::retry) { Text("Retry") }
+                Text(text = LocalStringResources.current.errorOccurred)
+                Button(coinMarkets::retry) { Text(text = LocalStringResources.current.retry) }
               }
             }
           }
@@ -67,8 +67,8 @@ internal object TokensListTab : Tab {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
               ) {
-                Text("Error occurred")
-                Button(coinMarkets::retry) { Text("Retry") }
+                Text(text = LocalStringResources.current.errorOccurred)
+                Button(coinMarkets::retry) { Text(text = LocalStringResources.current.retry) }
               }
             }
           }
