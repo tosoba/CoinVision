@@ -5,7 +5,6 @@ import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.network.client.coinGeckoApiClient
 import com.trm.coinvision.core.network.client.coinGeckoApiClientDefaultConfig
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.isSuccess
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -19,10 +18,7 @@ class CryptoRepositoryTests {
   fun init() {
     repository =
       CryptoNetworkRepository(
-        coinGeckoApiClient {
-          coinGeckoApiClientDefaultConfig()()
-          install(Logging) { level = LogLevel.BODY }
-        }
+        coinGeckoApiClient { coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL)() }
       )
   }
 

@@ -5,7 +5,6 @@ import com.trm.coinvision.core.network.model.SearchResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 import kotlin.test.BeforeTest
@@ -18,10 +17,7 @@ class CoinGeckoApiClientTests {
 
   @BeforeTest
   fun init() {
-    client = coinGeckoApiClient {
-      coinGeckoApiClientDefaultConfig()()
-      install(Logging) { level = LogLevel.BODY }
-    }
+    client = coinGeckoApiClient { coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL)() }
   }
 
   @Test

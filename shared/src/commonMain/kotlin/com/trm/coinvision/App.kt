@@ -39,7 +39,7 @@ fun App() {
       TabNavigator(tab = CompareTokensTab) {
         Scaffold(
           topBar = {
-            CenterAlignedTopAppBar(title = { Text(LocalStringResources.current.appTitle) })
+            CenterAlignedTopAppBar(title = { Text(text = LocalStringResources.current.appTitle) })
           },
           bottomBar = {
             NavigationBar {

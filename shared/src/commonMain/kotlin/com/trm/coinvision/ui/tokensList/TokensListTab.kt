@@ -1,7 +1,9 @@
 package com.trm.coinvision.ui.tokensList
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,12 +29,16 @@ internal object TokensListTab : Tab {
   override fun Content() {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
-    LazyColumn(modifier = Modifier.padding(20.dp)) {
+    LazyColumn(contentPadding = PaddingValues(20.dp)) {
       items(coinMarkets.itemCount) { index -> Text(text = coinMarkets[index]!!.name) }
       with(coinMarkets) {
         when {
           loadState.refresh is LoadState.Loading -> {
-            item { CircularProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
+            item {
+              Box(modifier = Modifier.fillParentMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+              }
+            }
           }
           loadState.refresh is LoadState.Error -> {
             item {
@@ -47,7 +53,11 @@ internal object TokensListTab : Tab {
             }
           }
           loadState.append is LoadState.Loading -> {
-            item { CircularProgressIndicator(modifier = Modifier.padding(20.dp)) }
+            item {
+              Box(modifier = Modifier.padding(20.dp)) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+              }
+            }
           }
           loadState.append is LoadState.Error -> {
             item {
