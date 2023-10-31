@@ -3,6 +3,8 @@ package com.trm.coinvision.core.network.client
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -13,7 +15,8 @@ internal fun coinGeckoApiClient(config: HttpClientConfig<*>.() -> Unit): HttpCli
   HttpClient(config)
 
 internal fun coinGeckoApiClientDefaultConfig(
-  logLevel: LogLevel? = null
+  logLevel: LogLevel? = null,
+  cacheStorage: CacheStorage? = null,
 ): HttpClientConfig<*>.() -> Unit = {
   install(ContentNegotiation) {
     json(
@@ -28,6 +31,8 @@ internal fun coinGeckoApiClientDefaultConfig(
   }
 
   logLevel?.let { install(Logging) { level = it } }
+
+  cacheStorage?.let { install(HttpCache) { publicStorage(it) } }
 
   install(HttpRequestRetry) {
     retryOnServerErrors(maxRetries = 3)

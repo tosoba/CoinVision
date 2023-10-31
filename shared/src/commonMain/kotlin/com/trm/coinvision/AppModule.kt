@@ -4,7 +4,7 @@ import com.trm.coinvision.core.coreModule
 import com.trm.coinvision.ui.uiModule
 import org.koin.dsl.module
 
-val appModule = module { includes(uiModule, coreModule) }
+val appModule = module { includes(coreModule, uiModule) }
 
 interface KoinInitializer {
   operator fun invoke()

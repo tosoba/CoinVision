@@ -9,6 +9,7 @@ kotlinxSerializationJson = "1.5.1"
 ktor = "2.3.3"
 logback-classic = "1.2.12" # upgrading this to 1.4.x version causes a runtime crash...
 napier = "2.6.1"
+okio = "3.6.0"
 paging = "3.3.0-alpha02-0.4.0"
 resources = "0.23.0"
 voyager = "1.0.0-rc06"
@@ -32,6 +33,7 @@ ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 paging-compose-common = { group = "app.cash.paging", name = "paging-compose-common", version.ref = "paging" }
 resources = { module = "dev.icerock.moko:resources", version.ref = "resources" }
 resources-compose = { module = "dev.icerock.moko:resources-compose", version.ref = "resources" }

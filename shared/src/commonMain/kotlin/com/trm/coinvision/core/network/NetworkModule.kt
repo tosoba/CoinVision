@@ -6,5 +6,9 @@ import io.ktor.client.plugins.logging.LogLevel
 import org.koin.dsl.module
 
 internal val networkModule = module {
-  single { coinGeckoApiClient { coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL)() } }
+  single {
+    coinGeckoApiClient {
+      coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL, cacheStorage = get())()
+    }
+  }
 }
