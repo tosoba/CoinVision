@@ -2,6 +2,7 @@ package com.trm.coinvision
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -36,7 +39,11 @@ fun App() {
     MaterialTheme {
       TabNavigator(tab = CompareTokensTab) {
         Scaffold(
-          topBar = { TopSearchBar() },
+          topBar = {
+            Box(modifier = Modifier.fillMaxWidth()) {
+              TopSearchBar(modifier = Modifier.align(Alignment.Center).padding(top = 10.dp))
+            }
+          },
           bottomBar = {
             NavigationBar {
               TabNavigationItem(CompareTokensTab)
