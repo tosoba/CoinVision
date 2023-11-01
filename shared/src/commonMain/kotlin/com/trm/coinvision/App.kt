@@ -3,8 +3,6 @@ package com.trm.coinvision
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -25,10 +23,10 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.PlatformLocaleChangedObserverEffect
 import com.trm.coinvision.core.common.util.stringResources
+import com.trm.coinvision.ui.TopSearchBar
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
   var stringResources by remember { mutableStateOf(stringResources()) }
@@ -38,9 +36,7 @@ fun App() {
     MaterialTheme {
       TabNavigator(tab = CompareTokensTab) {
         Scaffold(
-          topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = LocalStringResources.current.appTitle) })
-          },
+          topBar = { TopSearchBar() },
           bottomBar = {
             NavigationBar {
               TabNavigationItem(CompareTokensTab)
