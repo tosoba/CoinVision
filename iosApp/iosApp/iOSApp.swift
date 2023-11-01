@@ -5,6 +5,7 @@ import shared
 struct iOSApp: App {
     init() {
         PlatformKoinInitializer.init().invoke()
+		LogConfigKt.initNapierDebug()
     }
     
 	var body: some Scene {

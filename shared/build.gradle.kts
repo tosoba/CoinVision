@@ -47,6 +47,8 @@ kotlin {
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization.kotlinx.json)
 
+        implementation(libs.napier)
+
         implementation(libs.okio)
 
         implementation(libs.paging.compose.common)
