@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class TokensListScreenModel(
@@ -28,8 +27,4 @@ internal class TokensListScreenModel(
       .distinctUntilChanged()
       .flatMapLatest { getCoinMarketsPagingUseCase(it).cachedIn(coroutineScope) }
       .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000L), PagingData.empty())
-
-  fun onSearchQuery(query: String?) {
-    coroutineScope.launch { queryFlow.emit(query) }
-  }
 }

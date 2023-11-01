@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +30,7 @@ internal object TokensListTab : Tab {
   override fun Content() {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
-    LazyColumn(contentPadding = PaddingValues(20.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp)) {
       items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
 
       with(coinMarkets) {
