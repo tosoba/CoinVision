@@ -11,6 +11,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.PlatformLocaleChangedObserverEffect
 import com.trm.coinvision.core.common.util.stringResources
+import com.trm.coinvision.ui.MainScreen
 
 @Composable
 fun App() {

@@ -1,4 +1,4 @@
-package com.trm.coinvision
+package com.trm.coinvision.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -18,7 +18,6 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.trm.coinvision.ui.TopSearchBar
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
@@ -29,7 +28,7 @@ internal object MainScreen : Screen {
       Scaffold(
         topBar = {
           Box(modifier = Modifier.fillMaxWidth()) {
-            TopSearchBar(modifier = Modifier.align(Alignment.Center).padding(top = 10.dp))
+            MainSearchBar(modifier = Modifier.align(Alignment.Center).padding(top = 10.dp))
           }
         },
         bottomBar = {

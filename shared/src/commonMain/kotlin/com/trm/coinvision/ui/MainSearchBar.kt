@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun TopSearchBar(modifier: Modifier = Modifier) {
+fun MainSearchBar(modifier: Modifier = Modifier) {
   var text by rememberSaveable { mutableStateOf("") }
   var active by rememberSaveable { mutableStateOf(false) }
 
