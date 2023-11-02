@@ -55,7 +55,7 @@ fun MainSearchBar(modifier: Modifier = Modifier) {
       contentPadding = PaddingValues(16.dp),
       verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-      items(4) { idx ->
+      items(15) { idx ->
         val resultText = "Suggestion $idx"
         ListItem(
           modifier =
