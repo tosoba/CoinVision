@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,7 +39,15 @@ fun TopSearchBar(modifier: Modifier = Modifier) {
     active = active,
     onActiveChange = { active = it },
     placeholder = { Text("Hinted search text") },
-    leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+    leadingIcon = {
+      IconButton({ active = !active }) {
+        if (active) {
+          Icon(Icons.Rounded.ArrowBack, contentDescription = null)
+        } else {
+          Icon(Icons.Rounded.Search, contentDescription = null)
+        }
+      }
+    },
     trailingIcon = { Icon(Icons.Rounded.MoreVert, contentDescription = null) },
   ) {
     LazyColumn(
