@@ -6,10 +6,12 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.usecase.GetCoinMarketsPagingUseCase
+import com.trm.coinvision.core.domain.usecase.MainSearchBarSizeFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onStart
@@ -17,8 +19,11 @@ import kotlinx.coroutines.flow.stateIn
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class TokensListScreenModel(
+  mainSearchBarSizeFlowUseCase: MainSearchBarSizeFlowUseCase,
   private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase
 ) : ScreenModel {
+  val mainSearchBarSizeFlow = mainSearchBarSizeFlowUseCase.asSharedFlow()
+
   private val queryFlow = MutableSharedFlow<String?>()
 
   val coinMarkets: StateFlow<PagingData<CoinMarketsItem>> =

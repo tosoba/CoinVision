@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 internal val uiModule = module {
   factory { CompareTokensScreenModel(get()) }
-  factory { TokensListScreenModel(get()) }
+  factory { TokensListScreenModel(get(), get()) }
   factory { MainScreenModel(get()) }
 }

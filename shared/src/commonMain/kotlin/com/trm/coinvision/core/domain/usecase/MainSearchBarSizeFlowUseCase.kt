@@ -4,5 +4,5 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class MainSearchBarSizeFlowUseCase(
-  private val flow: MutableSharedFlow<IntSize?> = MutableSharedFlow(),
+  private val flow: MutableSharedFlow<IntSize?> = MutableSharedFlow(replay = 1),
 ) : MutableSharedFlow<IntSize?> by flow
