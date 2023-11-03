@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
@@ -65,8 +64,8 @@ internal object MainScreen : Screen {
             if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
               MainSearchBar(
                 modifier =
-                  Modifier.fillMaxWidth()
-                    .padding(mainSearchBarPadding)
+                  Modifier.onGloballyPositioned { mainSearchBarSize = null }
+                    .fillMaxWidth()
                     .heightIn(
                       max =
                         with(LocalDensity.current) {
@@ -77,6 +76,7 @@ internal object MainScreen : Screen {
                             .toDp()
                         }
                     )
+                    .padding(mainSearchBarPadding)
               )
             }
           },
@@ -98,7 +98,6 @@ internal object MainScreen : Screen {
                   Modifier.onGloballyPositioned { mainSearchBarSize = it.size }
                     .fillMaxWidth(.5f)
                     .padding(mainSearchBarPadding)
-                    .alpha(.5f)
               )
             }
             CurrentTab()
