@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -28,6 +30,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
+import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.mainSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -36,22 +39,25 @@ internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<TokensListScreenModel>()
-    val mainSearchBarSize = screenModel.mainSearchBarSizeFlow.collectAsState(null)
-    when (val mainSearchBarSizeValue = mainSearchBarSize.value) {
-      null -> {
-        CoinMarketsColumn(Modifier.fillMaxSize())
-      }
-      else -> {
-        Row(Modifier.fillMaxSize()) {
-          Column(Modifier.weight(.5f).fillMaxHeight()) {
-            val width = with(LocalDensity.current) { mainSearchBarSizeValue.width.toDp() }
-            val height = with(LocalDensity.current) { mainSearchBarSizeValue.height.toDp() }
-            Spacer(modifier = Modifier.width(width).height(height).padding(mainSearchBarPadding))
-            Spacer(modifier = Modifier.weight(1f))
-          }
-          CoinMarketsColumn(Modifier.weight(.5f).fillMaxHeight())
+    if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+      Row(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
+          val mainSearchBarSize by screenModel.mainSearchBarSizeFlow.collectAsState(null)
+          Spacer(
+            modifier =
+              Modifier.width(
+                  mainSearchBarSize?.let { with(LocalDensity.current) { it.width.toDp() } } ?: 0.dp
+                )
+                .height(
+                  mainSearchBarSize?.let { with(LocalDensity.current) { it.height.toDp() } } ?: 0.dp
+                )
+                .padding(mainSearchBarPadding)
+          )
         }
+        CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight())
       }
+    } else {
+      CoinMarketsColumn(modifier = Modifier.fillMaxSize())
     }
   }
 
