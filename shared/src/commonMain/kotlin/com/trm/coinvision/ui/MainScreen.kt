@@ -16,19 +16,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
@@ -36,6 +40,11 @@ import com.trm.coinvision.ui.tokensList.TokensListTab
 internal object MainScreen : Screen {
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<MainScreenModel>()
+
+    var mainSearchBarSize: IntSize? by remember { mutableStateOf(null) }
+    LaunchedEffect(mainSearchBarSize) { screenModel.onMainSearchBarSizeChanged(mainSearchBarSize) }
+
     TabNavigator(tab = CompareTokensTab) {
       Row {
         if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
@@ -53,17 +62,23 @@ internal object MainScreen : Screen {
         Scaffold(
           modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
           topBar = {
-            MainSearchBar(
-              modifier =
-                Modifier.fillMaxWidth()
-                  .padding(10.dp)
-                  .heightIn(
-                    max =
-                      with(LocalDensity.current) {
-                        (scaffoldHeightPx - bottomBarHeightPx).toDouble().times(0.9).toInt().toDp()
-                      }
-                  )
-            )
+            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
+              MainSearchBar(
+                modifier =
+                  Modifier.fillMaxWidth()
+                    .padding(mainSearchBarPadding)
+                    .heightIn(
+                      max =
+                        with(LocalDensity.current) {
+                          (scaffoldHeightPx - bottomBarHeightPx)
+                            .toDouble()
+                            .times(0.9)
+                            .toInt()
+                            .toDp()
+                        }
+                    )
+              )
+            }
           },
           bottomBar = {
             if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
@@ -75,8 +90,19 @@ internal object MainScreen : Screen {
               }
             }
           }
-        ) {
-          Box(modifier = Modifier.padding(it)) { CurrentTab() }
+        ) { paddingValues ->
+          Box(modifier = Modifier.padding(paddingValues)) {
+            if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+              MainSearchBar(
+                modifier =
+                  Modifier.onGloballyPositioned { mainSearchBarSize = it.size }
+                    .fillMaxWidth(.5f)
+                    .padding(mainSearchBarPadding)
+                    .alpha(.5f)
+              )
+            }
+            CurrentTab()
+          }
         }
       }
     }
@@ -109,3 +135,5 @@ private fun TabNavigationRailItem(tab: Tab) {
 private fun TabNavigationItemIcon(tab: Tab) {
   tab.options.icon?.let { Icon(painter = it, contentDescription = tab.options.title) }
 }
+
+internal val mainSearchBarPadding = 10.dp
