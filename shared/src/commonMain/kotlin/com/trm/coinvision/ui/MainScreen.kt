@@ -1,7 +1,9 @@
 package com.trm.coinvision.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -28,25 +30,27 @@ internal object MainScreen : Screen {
   @Composable
   override fun Content() {
     TabNavigator(tab = CompareTokensTab) {
-      Scaffold(
-        topBar = { MainSearchBar(modifier = Modifier.fillMaxWidth().padding(10.dp)) },
-        bottomBar = {
-          if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
-            NavigationBar {
-              TabNavigationBarItem(CompareTokensTab)
-              TabNavigationBarItem(TokensListTab)
-            }
+      Row {
+        if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+          NavigationRail {
+            Spacer(Modifier.weight(1f))
+            TabNavigationRailItem(CompareTokensTab)
+            TabNavigationRailItem(TokensListTab)
+            Spacer(Modifier.weight(1f))
           }
         }
-      ) {
-        Row(modifier = Modifier.padding(it)) {
-          if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-            NavigationRail {
-              TabNavigationRailItem(CompareTokensTab)
-              TabNavigationRailItem(TokensListTab)
+        Scaffold(
+          topBar = { MainSearchBar(modifier = Modifier.fillMaxWidth().padding(10.dp)) },
+          bottomBar = {
+            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
+              NavigationBar {
+                TabNavigationBarItem(CompareTokensTab)
+                TabNavigationBarItem(TokensListTab)
+              }
             }
           }
-          CurrentTab()
+        ) {
+          Box(modifier = Modifier.padding(it)) { CurrentTab() }
         }
       }
     }
