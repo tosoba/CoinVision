@@ -1,14 +1,17 @@
 package com.trm.coinvision.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -17,6 +20,7 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
@@ -27,22 +31,43 @@ internal object MainScreen : Screen {
       Scaffold(
         topBar = { MainSearchBar(modifier = Modifier.fillMaxWidth().padding(10.dp)) },
         bottomBar = {
-          NavigationBar {
-            TabNavigationItem(CompareTokensTab)
-            TabNavigationItem(TokensListTab)
+          if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
+            NavigationBar {
+              TabNavigationBarItem(CompareTokensTab)
+              TabNavigationBarItem(TokensListTab)
+            }
           }
         }
       ) {
-        Box(modifier = Modifier.padding(it)) { CurrentTab() }
+        Row(modifier = Modifier.padding(it)) {
+          if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+            NavigationRail {
+              TabNavigationRailItem(CompareTokensTab)
+              TabNavigationRailItem(TokensListTab)
+            }
+          }
+          CurrentTab()
+        }
       }
     }
   }
 }
 
 @Composable
-private fun RowScope.TabNavigationItem(tab: Tab) {
+private fun RowScope.TabNavigationBarItem(tab: Tab) {
   val tabNavigator = LocalTabNavigator.current
   NavigationBarItem(
+    selected = tabNavigator.current.key == tab.key,
+    onClick = { tabNavigator.current = tab },
+    icon = { tab.options.icon?.let { Icon(painter = it, contentDescription = tab.options.title) } },
+    label = { Text(tab.options.title) }
+  )
+}
+
+@Composable
+private fun TabNavigationRailItem(tab: Tab) {
+  val tabNavigator = LocalTabNavigator.current
+  NavigationRailItem(
     selected = tabNavigator.current.key == tab.key,
     onClick = { tabNavigator.current = tab },
     icon = { tab.options.icon?.let { Icon(painter = it, contentDescription = tab.options.title) } },
