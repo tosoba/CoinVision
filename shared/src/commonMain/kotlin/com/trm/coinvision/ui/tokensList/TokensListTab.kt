@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -39,6 +41,7 @@ internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<TokensListScreenModel>()
+    val listState = rememberLazyListState()
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -48,18 +51,18 @@ internal object TokensListTab : Tab {
               Modifier.size(mainSearchBarSize?.toDp() ?: DpSize.Zero).padding(mainSearchBarPadding)
           )
         }
-        CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight())
+        CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight(), state = listState)
       }
     } else {
-      CoinMarketsColumn(modifier = Modifier.fillMaxSize())
+      CoinMarketsColumn(modifier = Modifier.fillMaxSize(), state = listState)
     }
   }
 
   @Composable
-  private fun CoinMarketsColumn(modifier: Modifier = Modifier) {
+  private fun CoinMarketsColumn(modifier: Modifier = Modifier, state: LazyListState) {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
-    LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp)) {
+    LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
       items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
 
       with(coinMarkets) {

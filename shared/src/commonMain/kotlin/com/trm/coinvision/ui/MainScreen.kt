@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -27,7 +28,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
@@ -44,7 +44,7 @@ internal object MainScreen : Screen {
     var mainSearchBarSize: IntSize? by remember { mutableStateOf(null) }
     LaunchedEffect(mainSearchBarSize) { screenModel.onMainSearchBarSizeChanged(mainSearchBarSize) }
 
-    TabNavigator(tab = CompareTokensTab) {
+    TabNavigator(tab = CompareTokensTab) { tabNavigator ->
       Row {
         if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
           NavigationRail {
@@ -100,7 +100,18 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding)
               )
             }
-            CurrentTab()
+            Crossfade(tabNavigator.current) {
+              tabNavigator.saveableState("currentTab", it) {
+                when (it) {
+                  CompareTokensTab -> {
+                    CompareTokensTab.Content()
+                  }
+                  TokensListTab -> {
+                    TokensListTab.Content()
+                  }
+                }
+              }
+            }
           }
         }
       }
