@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,11 +19,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import app.cash.paging.compose.collectAsLazyPagingItems
@@ -32,7 +29,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.core.common.util.ext.toDp
+import com.trm.coinvision.ui.mainSearchBarHeight
 import com.trm.coinvision.ui.mainSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -40,16 +37,11 @@ import org.jetbrains.compose.resources.painterResource
 internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
-    val screenModel = getScreenModel<TokensListScreenModel>()
     val listState = rememberLazyListState()
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
-          val mainSearchBarSize by screenModel.mainSearchBarSizeFlow.collectAsState(null)
-          Spacer(
-            modifier =
-              Modifier.size(mainSearchBarSize?.toDp() ?: DpSize.Zero).padding(mainSearchBarPadding)
-          )
+          Spacer(modifier = Modifier.height(mainSearchBarHeight).padding(mainSearchBarPadding))
         }
         CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight(), state = listState)
       }

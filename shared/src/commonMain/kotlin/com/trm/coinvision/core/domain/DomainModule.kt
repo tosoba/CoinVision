@@ -1,10 +1,6 @@
 package com.trm.coinvision.core.domain
 
 import com.trm.coinvision.core.domain.usecase.GetCoinMarketsPagingUseCase
-import com.trm.coinvision.core.domain.usecase.MainSearchBarSizeFlowUseCase
 import org.koin.dsl.module
 
-internal val domainModule = module {
-  factory { GetCoinMarketsPagingUseCase(get()) }
-  single { MainSearchBarSizeFlowUseCase() }
-}
+internal val domainModule = module { factory { GetCoinMarketsPagingUseCase(get()) } }
