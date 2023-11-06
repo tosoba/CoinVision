@@ -89,14 +89,10 @@ internal object MainScreen : Screen {
               )
             }
             Crossfade(tabNavigator.current) {
-              tabNavigator.saveableState("currentTab", it) {
+              tabNavigator.saveableState(CURRENT_TAB_SAVE_STATE_KEY, it) {
                 when (it) {
-                  CompareTokensTab -> {
-                    CompareTokensTab.Content()
-                  }
-                  TokensListTab -> {
-                    TokensListTab.Content()
-                  }
+                  CompareTokensTab -> CompareTokensTab.Content()
+                  TokensListTab -> TokensListTab.Content()
                 }
               }
             }
@@ -120,6 +116,8 @@ private fun Modifier.fillMainSearchBarMaxHeight(
         }
     )
   )
+
+private const val CURRENT_TAB_SAVE_STATE_KEY = "currentTab"
 
 @Composable
 private fun RowScope.TabNavigationBarItem(tab: Tab) {
