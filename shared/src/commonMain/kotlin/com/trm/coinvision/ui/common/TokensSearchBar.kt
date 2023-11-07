@@ -29,18 +29,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
+import app.cash.paging.compose.collectAsLazyPagingItems
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
-  tokensSearchBarState: TokensSearchBarState,
+  tokensSearchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
   onQueryChange: (String) -> Unit = {},
   tokensListState: LazyListState = rememberLazyListState(),
-  // TODO: maybe pass CombinedLoadStates here instead (for easier previews)?
-  tokens: LazyPagingItems<CoinMarketsItem>
+  tokens: LazyPagingItems<CoinMarketsItem> =
+    flowOf(PagingData.empty<CoinMarketsItem>()).collectAsLazyPagingItems()
 ) {
   DockedSearchBar(
     modifier = modifier,
