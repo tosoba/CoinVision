@@ -39,26 +39,22 @@ import kotlinx.coroutines.flow.flowOf
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
-  tokensSearchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
-  onQueryChange: (String) -> Unit = {},
+  searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
   tokensListState: LazyListState = rememberLazyListState(),
   tokens: LazyPagingItems<CoinMarketsItem> =
     flowOf(PagingData.empty<CoinMarketsItem>()).collectAsLazyPagingItems()
 ) {
   DockedSearchBar(
     modifier = modifier,
-    query = tokensSearchBarState.query,
-    onQueryChange = {
-      tokensSearchBarState.query = it
-      onQueryChange(it)
-    },
-    onSearch = { tokensSearchBarState.active = false },
-    active = tokensSearchBarState.active,
-    onActiveChange = { tokensSearchBarState.active = it },
+    query = searchBarState.query,
+    onQueryChange = searchBarState::updateQuery,
+    onSearch = { searchBarState.updateActive(false) },
+    active = searchBarState.active,
+    onActiveChange = searchBarState::updateActive,
     placeholder = { Text("Hinted search text") },
     leadingIcon = {
-      IconButton({ tokensSearchBarState.active = !tokensSearchBarState.active }) {
-        if (tokensSearchBarState.active) {
+      IconButton({ searchBarState.updateActive(!searchBarState.active) }) {
+        if (searchBarState.active) {
           Icon(Icons.Rounded.ArrowBack, contentDescription = null)
         } else {
           Icon(Icons.Rounded.Search, contentDescription = null)
@@ -101,9 +97,8 @@ internal fun TokensSearchBar(
               ListItem(
                 modifier =
                   Modifier.clickable {
-                    tokensSearchBarState.query = it.name
-                    onQueryChange(it.name)
-                    tokensSearchBarState.active = false
+                    searchBarState.updateQuery(it.name)
+                    searchBarState.updateActive(false)
                   },
                 headlineContent = {
                   Text(text = it.name, style = MaterialTheme.typography.titleMedium)
@@ -136,12 +131,27 @@ internal fun TokensSearchBar(
 }
 
 @Stable
-class TokensSearchBarState(
+internal class TokensSearchBarState(
   query: String = "",
   active: Boolean = false,
+  private val onQueryChange: (String) -> Unit = {},
+  private val onActiveChange: (Boolean) -> Unit = {}
 ) {
   var query by mutableStateOf(query)
+    private set
+
   var active by mutableStateOf(active)
+    private set
+
+  fun updateQuery(query: String) {
+    this.query = query
+    onQueryChange(query)
+  }
+
+  fun updateActive(active: Boolean) {
+    this.active = active
+    onActiveChange(active)
+  }
 
   companion object {
     // 4
@@ -154,7 +164,7 @@ class TokensSearchBarState(
 }
 
 @Composable
-fun rememberTokensSearchBarState(
+internal fun rememberTokensSearchBarState(
   vararg inputs: Any?,
   init: () -> TokensSearchBarState = { TokensSearchBarState() }
 ): TokensSearchBarState =
