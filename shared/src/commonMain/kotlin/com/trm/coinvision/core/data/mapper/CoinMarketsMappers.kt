@@ -10,6 +10,7 @@ internal fun CoinMarketsResponseItem.toDomain(): CoinMarketsItem =
     currentPrice = requireNotNull(currentPrice),
     high24h = high24h,
     id = requireNotNull(id),
+    image = image,
     low24h = low24h,
     marketCap = marketCap,
     marketCapRank = marketCapRank,

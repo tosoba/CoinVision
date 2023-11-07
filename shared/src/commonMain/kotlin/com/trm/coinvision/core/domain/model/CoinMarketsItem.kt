@@ -6,6 +6,7 @@ internal data class CoinMarketsItem(
   val currentPrice: Double,
   val high24h: Double?,
   val id: String,
+  val image: String?,
   val low24h: Double?,
   val marketCap: Double?,
   val marketCapRank: Long?,
