@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
@@ -36,7 +38,9 @@ internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   tokensSearchBarState: TokensSearchBarState,
   onQueryChange: (String) -> Unit = {},
-  coinMarkets: LazyPagingItems<CoinMarketsItem>
+  tokensListState: LazyListState = rememberLazyListState(),
+  // TODO: maybe pass CombinedLoadStates here instead (for easier previews)?
+  tokens: LazyPagingItems<CoinMarketsItem>
 ) {
   DockedSearchBar(
     modifier = modifier,
@@ -62,25 +66,26 @@ internal fun TokensSearchBar(
   ) {
     LazyColumn(
       modifier = Modifier.fillMaxWidth(),
+      state = tokensListState,
       contentPadding = PaddingValues(16.dp),
     ) {
-      if (coinMarkets.loadState.prepend is LoadState.Error) {
+      if (tokens.loadState.prepend is LoadState.Error) {
         item {
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
-            onRetryClick = coinMarkets::retry
+            onRetryClick = tokens::retry
           )
         }
-      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+      } else if (tokens.loadState.prepend == LoadState.Loading) {
         item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
       }
 
-      when (coinMarkets.loadState.refresh) {
+      when (tokens.loadState.refresh) {
         is LoadState.Error -> {
           item {
             CoinVisionRetryColumn(
               modifier = Modifier.fillParentMaxSize(),
-              onRetryClick = coinMarkets::retry
+              onRetryClick = tokens::retry
             )
           }
         }
@@ -88,8 +93,8 @@ internal fun TokensSearchBar(
           item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
         }
         is LoadState.NotLoading -> {
-          items(coinMarkets.itemCount) { index ->
-            coinMarkets[index]?.let {
+          items(tokens.itemCount) { index ->
+            tokens[index]?.let {
               ListItem(
                 modifier =
                   Modifier.clickable {
@@ -113,14 +118,14 @@ internal fun TokensSearchBar(
         }
       }
 
-      if (coinMarkets.loadState.append is LoadState.Error) {
+      if (tokens.loadState.append is LoadState.Error) {
         item {
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
-            onRetryClick = coinMarkets::retry
+            onRetryClick = tokens::retry
           )
         }
-      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+      } else if (tokens.loadState.prepend == LoadState.Loading) {
         item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
       }
     }

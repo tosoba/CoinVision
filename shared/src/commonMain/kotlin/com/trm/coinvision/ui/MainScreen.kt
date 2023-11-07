@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +56,7 @@ internal object MainScreen : Screen {
         var bottomBarHeightPx by remember { mutableStateOf(0) }
 
         val screenModel = getScreenModel<MainScreenModel>()
+        val mainTokensListState = rememberLazyListState()
         val mainTokensSearchBarState = rememberTokensSearchBarState()
         val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
 
@@ -73,7 +74,8 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 tokensSearchBarState = mainTokensSearchBarState,
                 onQueryChange = screenModel::onQueryChange,
-                coinMarkets = coinMarkets
+                tokensListState = mainTokensListState,
+                tokens = coinMarkets
               )
             }
           },
@@ -100,7 +102,8 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 tokensSearchBarState = mainTokensSearchBarState,
                 onQueryChange = screenModel::onQueryChange,
-                coinMarkets = coinMarkets
+                tokensListState = mainTokensListState,
+                tokens = coinMarkets
               )
             }
             Crossfade(tabNavigator.current) {
