@@ -1,7 +1,5 @@
 package com.trm.coinvision.ui.tokensList
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,12 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -29,6 +24,9 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
+import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
+import com.trm.coinvision.ui.common.CoinVisionRetryColumn
+import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.mainSearchBarHeight
 import com.trm.coinvision.ui.mainSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -55,49 +53,43 @@ internal object TokensListTab : Tab {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
     LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
-      items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
+      if (coinMarkets.loadState.prepend is LoadState.Error) {
+        item {
+          CoinVisionRetryRow(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            onRetryClick = coinMarkets::retry
+          )
+        }
+      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+      }
 
-      with(coinMarkets) {
-        when {
-          loadState.refresh is LoadState.Loading -> {
-            item {
-              Box(modifier = Modifier.fillParentMaxSize()) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-              }
-            }
-          }
-          loadState.refresh is LoadState.Error -> {
-            item {
-              Column(
-                modifier = Modifier.fillParentMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-              ) {
-                Text(text = LocalStringResources.current.errorOccurred)
-                Button(coinMarkets::retry) { Text(text = LocalStringResources.current.retry) }
-              }
-            }
-          }
-          loadState.append is LoadState.Loading -> {
-            item {
-              Box(modifier = Modifier.padding(20.dp)) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-              }
-            }
-          }
-          loadState.append is LoadState.Error -> {
-            item {
-              Row(
-                modifier = Modifier.fillMaxWidth().padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-              ) {
-                Text(text = LocalStringResources.current.errorOccurred)
-                Button(coinMarkets::retry) { Text(text = LocalStringResources.current.retry) }
-              }
-            }
+      when (coinMarkets.loadState.refresh) {
+        is LoadState.Error -> {
+          item {
+            CoinVisionRetryColumn(
+              modifier = Modifier.fillParentMaxSize(),
+              onRetryClick = coinMarkets::retry
+            )
           }
         }
+        LoadState.Loading -> {
+          item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
+        }
+        is LoadState.NotLoading -> {
+          items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
+        }
+      }
+
+      if (coinMarkets.loadState.append is LoadState.Error) {
+        item {
+          CoinVisionRetryRow(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            onRetryClick = coinMarkets::retry
+          )
+        }
+      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
       }
     }
   }

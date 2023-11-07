@@ -55,7 +55,7 @@ internal object MainScreen : Screen {
 
         val screenModel = getScreenModel<MainScreenModel>()
         val query by screenModel.queryFlow.collectAsState("")
-        val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems() //TODO: pass it to SearchBar
+        val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
 
         Scaffold(
           modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
@@ -70,7 +70,8 @@ internal object MainScreen : Screen {
                     )
                     .padding(mainSearchBarPadding),
                 initialQuery = query,
-                onQueryChange = screenModel::onQueryChange
+                onQueryChange = screenModel::onQueryChange,
+                coinMarkets = coinMarkets
               )
             }
           },
@@ -96,7 +97,8 @@ internal object MainScreen : Screen {
                     )
                     .padding(mainSearchBarPadding),
                 initialQuery = query,
-                onQueryChange = screenModel::onQueryChange
+                onQueryChange = screenModel::onQueryChange,
+                coinMarkets = coinMarkets
               )
             }
             Crossfade(tabNavigator.current) {

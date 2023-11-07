@@ -27,7 +27,11 @@ internal class MainScreenModel(
       .onStart { emit("") }
       .map { it.takeIf(String::isNotBlank) }
       .flatMapLatest { getCoinMarketsPagingUseCase(it).cachedIn(coroutineScope) }
-      .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000L), PagingData.empty())
+      .stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = PagingData.empty()
+      )
 
   fun onQueryChange(query: String) {
     coroutineScope.launch { queryFlow.emit(query) }
