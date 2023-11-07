@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,6 +34,9 @@ import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
+import io.ktor.http.Url
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -109,7 +113,20 @@ internal fun TokensSearchBar(
                     style = MaterialTheme.typography.titleMedium
                   )
                 },
-                leadingContent = { Icon(Icons.Rounded.Star, contentDescription = it.name) },
+                leadingContent = {
+                  if (it.image != null) {
+                    KamelImage(
+                      modifier = Modifier.size(40.dp),
+                      resource = asyncPainterResource(data = Url(it.image)),
+                      contentDescription = it.name,
+                      // TODO: onLoading - shimmer
+                      // TODO: onFailure - circle with first letter (or full symbol if it's short)
+                    )
+                  } else {
+                    // TODO: circle with first letter (or full symbol if it's short)
+                    Icon(Icons.Rounded.Star, contentDescription = it.name)
+                  }
+                },
               )
             }
           }

@@ -38,6 +38,8 @@ kotlin {
 
         implementation(libs.logback.classic)
 
+        implementation(libs.kamel)
+
         api(libs.koin.core)
 
         implementation(libs.kotlinx.serialization.json)
