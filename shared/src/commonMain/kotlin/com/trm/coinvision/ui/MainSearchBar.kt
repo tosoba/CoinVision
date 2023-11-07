@@ -27,14 +27,21 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun MainSearchBar(modifier: Modifier = Modifier) {
-  var text by rememberSaveable { mutableStateOf("") }
+internal fun TokensSearchBar(
+  modifier: Modifier = Modifier,
+  initialQuery: String = "",
+  onQueryChange: (String) -> Unit = {}
+) {
+  var query by rememberSaveable { mutableStateOf(initialQuery) }
   var active by rememberSaveable { mutableStateOf(false) }
 
   DockedSearchBar(
     modifier = modifier,
-    query = text,
-    onQueryChange = { text = it },
+    query = query,
+    onQueryChange = {
+      query = it
+      onQueryChange(it)
+    },
     onSearch = { active = false },
     active = active,
     onActiveChange = { active = it },
@@ -60,7 +67,8 @@ fun MainSearchBar(modifier: Modifier = Modifier) {
         ListItem(
           modifier =
             Modifier.clickable {
-              text = resultText
+              query = resultText
+              onQueryChange(resultText)
               active = false
             },
           headlineContent = {

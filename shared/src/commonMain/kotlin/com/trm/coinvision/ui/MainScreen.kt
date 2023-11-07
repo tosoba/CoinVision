@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,10 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
@@ -50,18 +53,24 @@ internal object MainScreen : Screen {
         var scaffoldHeightPx by remember { mutableStateOf(0) }
         var bottomBarHeightPx by remember { mutableStateOf(0) }
 
+        val screenModel = getScreenModel<MainScreenModel>()
+        val query by screenModel.queryFlow.collectAsState("")
+        val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems() //TODO: pass it to SearchBar
+
         Scaffold(
           modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
           topBar = {
             if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
-              MainSearchBar(
+              TokensSearchBar(
                 modifier =
                   Modifier.fillMaxWidth()
                     .fillMainSearchBarMaxHeight(
                       scaffoldHeightPx = scaffoldHeightPx,
                       bottomBarHeightPx = bottomBarHeightPx
                     )
-                    .padding(mainSearchBarPadding)
+                    .padding(mainSearchBarPadding),
+                initialQuery = query,
+                onQueryChange = screenModel::onQueryChange
               )
             }
           },
@@ -78,14 +87,16 @@ internal object MainScreen : Screen {
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
             if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-              MainSearchBar(
+              TokensSearchBar(
                 modifier =
                   Modifier.fillMaxWidth(.5f)
                     .fillMainSearchBarMaxHeight(
                       scaffoldHeightPx = scaffoldHeightPx,
                       bottomBarHeightPx = bottomBarHeightPx
                     )
-                    .padding(mainSearchBarPadding)
+                    .padding(mainSearchBarPadding),
+                initialQuery = query,
+                onQueryChange = screenModel::onQueryChange
               )
             }
             Crossfade(tabNavigator.current) {
