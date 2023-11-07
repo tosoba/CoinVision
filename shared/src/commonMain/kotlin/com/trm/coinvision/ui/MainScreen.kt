@@ -33,6 +33,8 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
+import com.trm.coinvision.ui.common.TokensSearchBar
+import com.trm.coinvision.ui.common.rememberTokensSearchBarState
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
@@ -54,7 +56,7 @@ internal object MainScreen : Screen {
         var bottomBarHeightPx by remember { mutableStateOf(0) }
 
         val screenModel = getScreenModel<MainScreenModel>()
-        val query by screenModel.queryFlow.collectAsState("")
+        val mainTokensSearchBarState = rememberTokensSearchBarState()
         val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
 
         Scaffold(
@@ -69,7 +71,7 @@ internal object MainScreen : Screen {
                       bottomBarHeightPx = bottomBarHeightPx
                     )
                     .padding(mainSearchBarPadding),
-                initialQuery = query,
+                tokensSearchBarState = mainTokensSearchBarState,
                 onQueryChange = screenModel::onQueryChange,
                 coinMarkets = coinMarkets
               )
@@ -96,7 +98,7 @@ internal object MainScreen : Screen {
                       bottomBarHeightPx = bottomBarHeightPx
                     )
                     .padding(mainSearchBarPadding),
-                initialQuery = query,
+                tokensSearchBarState = mainTokensSearchBarState,
                 onQueryChange = screenModel::onQueryChange,
                 coinMarkets = coinMarkets
               )

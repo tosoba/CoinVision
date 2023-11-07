@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 internal class MainScreenModel(
   private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase
 ) : ScreenModel {
-  val queryFlow = MutableSharedFlow<String>()
+  private val queryFlow = MutableSharedFlow<String>()
 
   val coinMarkets: StateFlow<PagingData<CoinMarketsItem>> =
     queryFlow
