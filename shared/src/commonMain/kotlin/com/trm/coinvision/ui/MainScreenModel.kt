@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,11 +19,12 @@ import kotlinx.coroutines.launch
 internal class MainScreenModel(
   private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase
 ) : ScreenModel {
+  private var searchBarWasActive = false
+
   private val queryFlow = MutableSharedFlow<String>()
 
   val coinMarkets: StateFlow<PagingData<CoinMarketsItem>> =
     queryFlow
-      .onStart { emit("") }
       .map { it.takeIf(String::isNotBlank) }
       .flatMapLatest { getCoinMarketsPagingUseCase(it).cachedIn(coroutineScope) }
       .stateIn(
@@ -33,7 +33,21 @@ internal class MainScreenModel(
         initialValue = PagingData.empty()
       )
 
+  fun onActiveChange(active: Boolean) {
+    if (searchBarWasActive || !active) return
+    searchBarWasActive = true
+    resetSearch()
+  }
+
   fun onQueryChange(query: String) {
     coroutineScope.launch { queryFlow.emit(query) }
+  }
+
+  fun onSuggestionSelected() {
+    resetSearch()
+  }
+
+  private fun resetSearch() {
+    coroutineScope.launch { queryFlow.emit("") }
   }
 }

@@ -51,7 +51,7 @@ internal fun TokensSearchBar(
   DockedSearchBar(
     modifier = modifier,
     query = searchBarState.query,
-    onQueryChange = searchBarState::updateQuery,
+    onQueryChange = { searchBarState.updateQuery(query = it, suggestionSelected = false) },
     onSearch = { searchBarState.updateActive(false) },
     active = searchBarState.active,
     onActiveChange = searchBarState::updateActive,
@@ -96,12 +96,12 @@ internal fun TokensSearchBar(
           item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
         }
         is LoadState.NotLoading -> {
-          items(tokens.itemCount) { index ->
+          items(tokens.itemCount, key = { tokens[it]?.id.orEmpty() }) { index ->
             tokens[index]?.let { token ->
               ListItem(
                 modifier =
                   Modifier.clickable {
-                    searchBarState.updateQuery(token.name)
+                    searchBarState.updateQuery(query = token.name, suggestionSelected = true)
                     searchBarState.updateActive(false)
                   },
                 headlineContent = {
@@ -156,6 +156,7 @@ internal class TokensSearchBarState(
   query: String = "",
   active: Boolean = false,
   private val onQueryChange: (String) -> Unit = {},
+  private val onSuggestionSelected: (String) -> Unit = {},
   private val onActiveChange: (Boolean) -> Unit = {}
 ) {
   var query by mutableStateOf(query)
@@ -164,9 +165,9 @@ internal class TokensSearchBarState(
   var active by mutableStateOf(active)
     private set
 
-  fun updateQuery(query: String) {
+  fun updateQuery(query: String, suggestionSelected: Boolean) {
     this.query = query
-    onQueryChange(query)
+    if (!suggestionSelected) onQueryChange(query) else onSuggestionSelected(query)
   }
 
   fun updateActive(active: Boolean) {
