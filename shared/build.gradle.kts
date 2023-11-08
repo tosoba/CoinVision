@@ -57,6 +57,8 @@ kotlin {
 
         implementation(libs.paging.compose.common)
 
+        implementation(libs.shimmer)
+
         implementation(libs.voyager.koin)
         implementation(libs.voyager.navigator)
         implementation(libs.voyager.tab.navigator)

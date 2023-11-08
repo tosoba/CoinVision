@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun TokenSymbol(symbol: String, modifier: Modifier = Modifier) {
+internal fun TokenSymbol(symbol: String = "", modifier: Modifier = Modifier.tokenSymbolShape()) {
   Box(modifier = modifier) {
     Text(
       modifier = Modifier.align(Alignment.Center).basicMarquee(),
@@ -30,7 +30,7 @@ internal fun TokenSymbol(symbol: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun Modifier.tokenSymbolCircle(): Modifier =
+internal fun Modifier.tokenSymbolShape(): Modifier =
   then(
     Modifier.background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp))
       .size(40.dp)

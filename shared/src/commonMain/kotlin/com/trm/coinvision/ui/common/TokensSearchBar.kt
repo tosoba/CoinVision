@@ -33,6 +33,7 @@ import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
+import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.ktor.http.Url
@@ -118,13 +119,16 @@ internal fun TokensSearchBar(
                       modifier = Modifier.size(40.dp),
                       resource = asyncPainterResource(data = Url(token.image)),
                       contentDescription = token.name,
-                      onFailure = {
-                        TokenSymbol(symbol = token.symbol, modifier = Modifier.tokenSymbolCircle())
+                      onFailure = { TokenSymbol(symbol = token.symbol) },
+                      onLoading = {
+                        TokenSymbol(
+                          symbol = token.symbol,
+                          modifier = Modifier.shimmer().tokenSymbolShape()
+                        )
                       }
-                      // TODO: onLoading - shimmer
                     )
                   } else {
-                    TokenSymbol(symbol = token.symbol, modifier = Modifier.tokenSymbolCircle())
+                    TokenSymbol(symbol = token.symbol)
                   }
                 },
               )
