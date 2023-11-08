@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui.tokensList
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -40,12 +42,20 @@ internal object TokensListTab : Tab {
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           Spacer(modifier = Modifier.height(mainSearchBarHeight).padding(mainSearchBarPadding))
+          SelectedToken()
         }
         CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight(), state = listState)
       }
     } else {
       CoinMarketsColumn(modifier = Modifier.fillMaxSize(), state = listState)
     }
+  }
+
+  @Composable
+  private fun SelectedToken() {
+    val screenModel = getScreenModel<TokensListScreenModel>()
+    val token = screenModel.selectedToken.collectAsState(null)
+    Box(Modifier.fillMaxSize()) { Text(token.value?.name ?: "Nothing selected") }
   }
 
   @Composable

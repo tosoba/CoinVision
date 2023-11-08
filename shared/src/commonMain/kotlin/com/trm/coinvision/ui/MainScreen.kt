@@ -60,9 +60,9 @@ internal object MainScreen : Screen {
         val mainTokensListState = rememberLazyListState()
         val mainTokensSearchBarState = rememberTokensSearchBarState {
           TokensSearchBarState(
-            onActiveChange = screenModel::onActiveChange,
             onQueryChange = screenModel::onQueryChange,
-            onSuggestionSelected = { screenModel.onSuggestionSelected() }
+            onActiveChange = screenModel::onActiveChange,
+            onTokenSelected = screenModel::onTokenSelected
           )
         }
         val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()

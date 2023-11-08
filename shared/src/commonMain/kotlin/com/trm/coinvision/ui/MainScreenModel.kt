@@ -6,6 +6,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.usecase.GetCoinMarketsPagingUseCase
+import com.trm.coinvision.core.domain.usecase.SelectedTokenFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class MainScreenModel(
-  private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase
+  private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase,
+  private val selectedTokenFlowUseCase: SelectedTokenFlowUseCase
 ) : ScreenModel {
   private var searchBarWasActive = false
 
@@ -43,8 +45,9 @@ internal class MainScreenModel(
     coroutineScope.launch { queryFlow.emit(query) }
   }
 
-  fun onSuggestionSelected() {
+  fun onTokenSelected(token: CoinMarketsItem) {
     resetSearch()
+    coroutineScope.launch { selectedTokenFlowUseCase.emit(token) }
   }
 
   private fun resetSearch() {
