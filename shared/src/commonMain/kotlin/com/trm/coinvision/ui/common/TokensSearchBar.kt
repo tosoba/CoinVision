@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -97,34 +96,35 @@ internal fun TokensSearchBar(
         }
         is LoadState.NotLoading -> {
           items(tokens.itemCount) { index ->
-            tokens[index]?.let {
+            tokens[index]?.let { token ->
               ListItem(
                 modifier =
                   Modifier.clickable {
-                    searchBarState.updateQuery(it.name)
+                    searchBarState.updateQuery(token.name)
                     searchBarState.updateActive(false)
                   },
                 headlineContent = {
-                  Text(text = it.name, style = MaterialTheme.typography.titleMedium)
+                  Text(text = token.name, style = MaterialTheme.typography.titleMedium)
                 },
                 supportingContent = {
                   Text(
-                    text = it.currentPrice.toString(),
+                    text = token.currentPrice.toString(),
                     style = MaterialTheme.typography.titleMedium
                   )
                 },
                 leadingContent = {
-                  if (it.image != null) {
+                  if (token.image != null) {
                     KamelImage(
                       modifier = Modifier.size(40.dp),
-                      resource = asyncPainterResource(data = Url(it.image)),
-                      contentDescription = it.name,
+                      resource = asyncPainterResource(data = Url(token.image)),
+                      contentDescription = token.name,
+                      onFailure = {
+                        TokenSymbol(symbol = token.symbol, modifier = Modifier.tokenSymbolCircle())
+                      }
                       // TODO: onLoading - shimmer
-                      // TODO: onFailure - circle with first letter (or full symbol if it's short)
                     )
                   } else {
-                    // TODO: circle with first letter (or full symbol if it's short)
-                    Icon(Icons.Rounded.Star, contentDescription = it.name)
+                    TokenSymbol(symbol = token.symbol, modifier = Modifier.tokenSymbolCircle())
                   }
                 },
               )
