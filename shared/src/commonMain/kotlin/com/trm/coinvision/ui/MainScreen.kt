@@ -61,7 +61,7 @@ internal object MainScreen : Screen {
         val mainTokensSearchBarState = rememberTokensSearchBarState {
           TokensSearchBarState(
             onQueryChange = screenModel::onQueryChange,
-            onActiveChange = screenModel::onActiveChange,
+            onActiveChange = { screenModel.onActiveChange() },
             onTokenSelected = screenModel::onTokenSelected
           )
         }

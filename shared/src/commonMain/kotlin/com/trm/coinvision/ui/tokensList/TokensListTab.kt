@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -55,7 +56,12 @@ internal object TokensListTab : Tab {
   private fun SelectedToken() {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val token = screenModel.selectedToken.collectAsState(null)
-    Box(Modifier.fillMaxSize()) { Text(token.value?.name ?: "Nothing selected") }
+    Box(modifier = Modifier.fillMaxSize()) {
+      Text(
+        modifier = Modifier.align(Alignment.Center),
+        text = token.value?.name ?: "Nothing selected"
+      )
+    }
   }
 
   @Composable

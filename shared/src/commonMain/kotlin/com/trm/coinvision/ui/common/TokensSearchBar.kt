@@ -52,7 +52,7 @@ internal fun TokensSearchBar(
     modifier = modifier,
     query = searchBarState.query,
     onQueryChange = searchBarState::updateQuery,
-    onSearch = { searchBarState.updateActive(false) },
+    onSearch = {},
     active = searchBarState.active,
     onActiveChange = searchBarState::updateActive,
     placeholder = { Text("Hinted search text") },
@@ -99,11 +99,7 @@ internal fun TokensSearchBar(
           items(tokens.itemCount, key = { tokens[it]?.id.orEmpty() }) { index ->
             tokens[index]?.let { token ->
               ListItem(
-                modifier =
-                  Modifier.clickable {
-                    searchBarState.onTokenSelected(token)
-                    searchBarState.updateActive(false)
-                  },
+                modifier = Modifier.clickable { searchBarState.selectToken(token) },
                 headlineContent = {
                   Text(text = token.name, style = MaterialTheme.typography.titleMedium)
                 },
@@ -153,12 +149,14 @@ internal fun TokensSearchBar(
 
 @Stable
 internal class TokensSearchBarState(
-  query: String = "",
+  query: String = "Bitcoin", // TODO: remove hardcoded shit lol
   active: Boolean = false,
   private val onQueryChange: (String) -> Unit = {},
   private val onActiveChange: (Boolean) -> Unit = {},
-  val onTokenSelected: (CoinMarketsItem) -> Unit = {}
+  private val onTokenSelected: (CoinMarketsItem) -> Unit = {}
 ) {
+  private var previousSelectionName = query
+
   var query by mutableStateOf(query)
     private set
 
@@ -172,11 +170,18 @@ internal class TokensSearchBarState(
 
   fun updateActive(active: Boolean) {
     this.active = active
+    if (!active) query = previousSelectionName
     onActiveChange(active)
   }
 
+  fun selectToken(token: CoinMarketsItem) {
+    query = token.name
+    previousSelectionName = token.name
+    active = false
+    onTokenSelected(token)
+  }
+
   companion object {
-    // 4
     val Saver =
       Saver<TokensSearchBarState, List<Any>>(
         save = { listOf(it.query, it.active) },

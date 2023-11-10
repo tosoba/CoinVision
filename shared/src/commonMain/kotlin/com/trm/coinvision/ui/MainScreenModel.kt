@@ -8,26 +8,29 @@ import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.usecase.GetCoinMarketsPagingUseCase
 import com.trm.coinvision.core.domain.usecase.SelectedTokenFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class MainScreenModel(
   private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase,
   private val selectedTokenFlowUseCase: SelectedTokenFlowUseCase
 ) : ScreenModel {
-  private var searchBarWasActive = false
-
   private val queryFlow = MutableSharedFlow<String>()
 
   val coinMarkets: StateFlow<PagingData<CoinMarketsItem>> =
     queryFlow
       .map { it.takeIf(String::isNotBlank) }
+      .distinctUntilChanged()
+      .debounce(500L)
       .flatMapLatest { getCoinMarketsPagingUseCase(it).cachedIn(coroutineScope) }
       .stateIn(
         scope = coroutineScope,
@@ -35,9 +38,7 @@ internal class MainScreenModel(
         initialValue = PagingData.empty()
       )
 
-  fun onActiveChange(active: Boolean) {
-    if (searchBarWasActive || !active) return
-    searchBarWasActive = true
+  fun onActiveChange() {
     resetSearch()
   }
 
