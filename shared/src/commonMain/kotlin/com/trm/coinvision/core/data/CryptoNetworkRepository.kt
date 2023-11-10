@@ -36,4 +36,12 @@ internal class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) 
         parameters.append("precision", precision.toString())
       }
     }
+
+  override suspend fun search(query: String): HttpResponse =
+    coinGeckoClient.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("coins", "markets")
+        parameters.append("vs_currency", "usd")
+      }
+    }
 }

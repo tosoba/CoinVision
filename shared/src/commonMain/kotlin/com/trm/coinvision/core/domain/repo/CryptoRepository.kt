@@ -15,4 +15,6 @@ internal interface CryptoRepository {
     locale: String = "en",
     @IntRange(from = 0L, to = 18L) precision: Short = 2
   ): HttpResponse
+
+  suspend fun search(query: String): HttpResponse
 }

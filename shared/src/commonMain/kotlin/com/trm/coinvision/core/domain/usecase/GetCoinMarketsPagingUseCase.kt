@@ -11,6 +11,9 @@ import com.trm.coinvision.core.data.mapper.coinMarketsBody
 import com.trm.coinvision.core.domain.model.CoinMarketsItem
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.domain.repo.CryptoRepository
+import com.trm.coinvision.core.network.model.Coin
+import com.trm.coinvision.core.network.model.SearchResponse
+import io.ktor.client.call.body
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 
@@ -33,12 +36,27 @@ internal class GetCoinMarketsPagingUseCase(private val repository: CryptoReposit
     override fun getRefreshKey(state: PagingState<Int, CoinMarketsItem>): Int? = null
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CoinMarketsItem> {
-      // TODO: use search endpoint for fetching token ids if query not blank
+      val ids =
+        if (query != null) {
+          try {
+            val ids = repository.search(query).body<SearchResponse>().coins?.mapNotNull(Coin::id)
+            if (ids.isNullOrEmpty()) {
+              return PagingSourceLoadResultPage(emptyList(), null, null)
+            }
+            ids
+          } catch (ex: Exception) {
+            return PagingSourceLoadResultError(ex)
+          }
+        } else {
+          null
+        }
+
       val page = params.key ?: FIRST_PAGE
       return try {
         val response =
           repository.getCoinMarkets(
             vsFiatCurrency = FiatCurrency.USD,
+            ids = ids,
             page = page,
             perPage = params.loadSize
           )
