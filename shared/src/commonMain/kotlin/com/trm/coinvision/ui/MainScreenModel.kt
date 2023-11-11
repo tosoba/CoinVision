@@ -4,9 +4,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.trm.coinvision.core.domain.model.TokenListItem
+import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.usecase.GetTokensPagingUseCase
-import com.trm.coinvision.core.domain.usecase.SelectedTokenFlowUseCase
+import com.trm.coinvision.core.domain.usecase.GetSelectedTokenFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,11 +22,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class MainScreenModel(
   private val getTokensPagingUseCase: GetTokensPagingUseCase,
-  private val selectedTokenFlowUseCase: SelectedTokenFlowUseCase
+  private val getSelectedTokenFlowUseCase: GetSelectedTokenFlowUseCase
 ) : ScreenModel {
   private val queryFlow = MutableSharedFlow<String>()
 
-  val tokensPagingFlow: StateFlow<PagingData<TokenListItem>> =
+  val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
     queryFlow
       .map { it.takeIf(String::isNotBlank) }
       .distinctUntilChanged()
@@ -46,9 +46,9 @@ internal class MainScreenModel(
     coroutineScope.launch { queryFlow.emit(query) }
   }
 
-  fun onTokenSelected(token: TokenListItem) {
+  fun onTokenSelected(token: TokenListItemDTO) {
     resetSearch()
-    coroutineScope.launch { selectedTokenFlowUseCase.emit(token) }
+    coroutineScope.launch { getSelectedTokenFlowUseCase.emit(token) }
   }
 
   private fun resetSearch() {

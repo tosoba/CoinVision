@@ -33,7 +33,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
-import com.trm.coinvision.core.domain.model.TokenListItem
+import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -46,8 +46,8 @@ internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
   tokensListState: LazyListState = rememberLazyListState(),
-  tokens: LazyPagingItems<TokenListItem> =
-    flowOf(PagingData.empty<TokenListItem>()).collectAsLazyPagingItems()
+  tokens: LazyPagingItems<TokenListItemDTO> =
+    flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems()
 ) {
   DockedSearchBar(
     modifier = modifier,
@@ -118,10 +118,10 @@ internal fun TokensSearchBar(
                   )
                 },
                 leadingContent = {
-                  if (token.image != null) {
+                  token.image?.let {
                     KamelImage(
                       modifier = Modifier.size(40.dp),
-                      resource = asyncPainterResource(data = Url(token.image)),
+                      resource = asyncPainterResource(data = Url(it)),
                       contentDescription = token.name,
                       onFailure = { TokenSymbol(symbol = token.symbol) },
                       onLoading = {
@@ -131,9 +131,7 @@ internal fun TokensSearchBar(
                         )
                       }
                     )
-                  } else {
-                    TokenSymbol(symbol = token.symbol)
-                  }
+                  } ?: run { TokenSymbol(symbol = token.symbol) }
                 },
               )
             }
@@ -161,7 +159,7 @@ internal class TokensSearchBarState(
   active: Boolean = false,
   private val onQueryChange: (String) -> Unit = {},
   private val onActiveChange: (Boolean) -> Unit = {},
-  private val onTokenSelected: (TokenListItem) -> Unit = {}
+  private val onTokenSelected: (TokenListItemDTO) -> Unit = {}
 ) {
   private var previousSelectionName = query
 
@@ -182,7 +180,7 @@ internal class TokensSearchBarState(
     onActiveChange(active)
   }
 
-  fun selectToken(token: TokenListItem) {
+  fun selectToken(token: TokenListItemDTO) {
     query = token.name
     previousSelectionName = token.name
     active = false

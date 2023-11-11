@@ -9,7 +9,7 @@ import app.cash.paging.PagingSourceLoadResultError
 import app.cash.paging.PagingSourceLoadResultPage
 import com.trm.coinvision.core.data.mapper.toTokenListItems
 import com.trm.coinvision.core.domain.model.FiatCurrency
-import com.trm.coinvision.core.domain.model.TokenListItem
+import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.repo.CryptoRepository
 import com.trm.coinvision.core.network.model.Coin
 import com.trm.coinvision.core.network.model.SearchResponse
@@ -18,7 +18,7 @@ import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 
 internal class GetTokensPagingUseCase(private val repository: CryptoRepository) {
-  operator fun invoke(query: String? = null): Flow<PagingData<TokenListItem>> =
+  operator fun invoke(query: String? = null): Flow<PagingData<TokenListItemDTO>> =
     Pager(
         PagingConfig(
           pageSize = DEFAULT_PAGE_SIZE,
@@ -32,10 +32,10 @@ internal class GetTokensPagingUseCase(private val repository: CryptoRepository) 
 
   private inner class CoinMarketsPagingSource(
     private val query: String?,
-  ) : PagingSource<Int, TokenListItem>() {
-    override fun getRefreshKey(state: PagingState<Int, TokenListItem>): Int? = null
+  ) : PagingSource<Int, TokenListItemDTO>() {
+    override fun getRefreshKey(state: PagingState<Int, TokenListItemDTO>): Int? = null
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TokenListItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TokenListItemDTO> {
       val ids =
         if (query != null) {
           try {
