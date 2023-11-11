@@ -7,9 +7,9 @@ import app.cash.paging.PagingConfig
 import app.cash.paging.PagingSource
 import app.cash.paging.PagingSourceLoadResultError
 import app.cash.paging.PagingSourceLoadResultPage
-import com.trm.coinvision.core.data.mapper.coinMarketsBody
-import com.trm.coinvision.core.domain.model.CoinMarketsItem
+import com.trm.coinvision.core.data.mapper.toTokenListItems
 import com.trm.coinvision.core.domain.model.FiatCurrency
+import com.trm.coinvision.core.domain.model.TokenListItem
 import com.trm.coinvision.core.domain.repo.CryptoRepository
 import com.trm.coinvision.core.network.model.Coin
 import com.trm.coinvision.core.network.model.SearchResponse
@@ -17,8 +17,8 @@ import io.ktor.client.call.body
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 
-internal class GetCoinMarketsPagingUseCase(private val repository: CryptoRepository) {
-  operator fun invoke(query: String? = null): Flow<PagingData<CoinMarketsItem>> =
+internal class GetTokensPagingUseCase(private val repository: CryptoRepository) {
+  operator fun invoke(query: String? = null): Flow<PagingData<TokenListItem>> =
     Pager(
         PagingConfig(
           pageSize = DEFAULT_PAGE_SIZE,
@@ -32,10 +32,10 @@ internal class GetCoinMarketsPagingUseCase(private val repository: CryptoReposit
 
   private inner class CoinMarketsPagingSource(
     private val query: String?,
-  ) : PagingSource<Int, CoinMarketsItem>() {
-    override fun getRefreshKey(state: PagingState<Int, CoinMarketsItem>): Int? = null
+  ) : PagingSource<Int, TokenListItem>() {
+    override fun getRefreshKey(state: PagingState<Int, TokenListItem>): Int? = null
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CoinMarketsItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TokenListItem> {
       val ids =
         if (query != null) {
           try {
@@ -54,18 +54,18 @@ internal class GetCoinMarketsPagingUseCase(private val repository: CryptoReposit
       val page = params.key ?: FIRST_PAGE
       return try {
         val response =
-          repository.getCoinMarkets(
+          repository.getTokens(
             vsFiatCurrency = FiatCurrency.USD,
             ids = ids,
             page = page,
             perPage = params.loadSize
           )
         if (response.status.isSuccess()) {
-          val coinMarkets = response.coinMarketsBody()
+          val tokens = response.toTokenListItems()
           PagingSourceLoadResultPage(
-            data = coinMarkets,
+            data = tokens,
             prevKey = (page - 1).takeIf { it >= FIRST_PAGE },
-            nextKey = (page + 1).takeIf { coinMarkets.isNotEmpty() }
+            nextKey = (page + 1).takeIf { tokens.isNotEmpty() }
           )
         } else {
           PagingSourceLoadResultError(Exception("Received a ${response.status}."))

@@ -65,7 +65,7 @@ internal object MainScreen : Screen {
             onTokenSelected = screenModel::onTokenSelected
           )
         }
-        val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
+        val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
         Scaffold(
           modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
@@ -81,7 +81,7 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 searchBarState = mainTokensSearchBarState,
                 tokensListState = mainTokensListState,
-                tokens = coinMarkets
+                tokens = tokens
               )
             }
           },
@@ -108,7 +108,7 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 searchBarState = mainTokensSearchBarState,
                 tokensListState = mainTokensListState,
-                tokens = coinMarkets
+                tokens = tokens
               )
             }
             Crossfade(tabNavigator.current) {

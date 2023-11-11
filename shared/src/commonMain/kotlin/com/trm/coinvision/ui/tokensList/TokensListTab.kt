@@ -67,25 +67,25 @@ internal object TokensListTab : Tab {
   @Composable
   private fun CoinMarketsColumn(modifier: Modifier = Modifier, state: LazyListState) {
     val screenModel = getScreenModel<TokensListScreenModel>()
-    val coinMarkets = screenModel.coinMarkets.collectAsLazyPagingItems()
+    val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
     LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
-      if (coinMarkets.loadState.prepend is LoadState.Error) {
+      if (tokens.loadState.prepend is LoadState.Error) {
         item {
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
-            onRetryClick = coinMarkets::retry
+            onRetryClick = tokens::retry
           )
         }
-      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+      } else if (tokens.loadState.prepend == LoadState.Loading) {
         item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
       }
 
-      when (coinMarkets.loadState.refresh) {
+      when (tokens.loadState.refresh) {
         is LoadState.Error -> {
           item {
             CoinVisionRetryColumn(
               modifier = Modifier.fillParentMaxSize(),
-              onRetryClick = coinMarkets::retry
+              onRetryClick = tokens::retry
             )
           }
         }
@@ -93,18 +93,18 @@ internal object TokensListTab : Tab {
           item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
         }
         is LoadState.NotLoading -> {
-          items(coinMarkets.itemCount) { index -> coinMarkets[index]?.let { Text(text = it.name) } }
+          items(tokens.itemCount) { index -> tokens[index]?.let { Text(text = it.name) } }
         }
       }
 
-      if (coinMarkets.loadState.append is LoadState.Error) {
+      if (tokens.loadState.append is LoadState.Error) {
         item {
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
-            onRetryClick = coinMarkets::retry
+            onRetryClick = tokens::retry
           )
         }
-      } else if (coinMarkets.loadState.prepend == LoadState.Loading) {
+      } else if (tokens.loadState.prepend == LoadState.Loading) {
         item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
       }
     }

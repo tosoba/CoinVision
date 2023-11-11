@@ -1,6 +1,6 @@
 package com.trm.coinvision.core.data
 
-import com.trm.coinvision.core.data.mapper.coinMarketsBody
+import com.trm.coinvision.core.data.mapper.toTokenListItems
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.network.client.coinGeckoApiClient
 import com.trm.coinvision.core.network.client.coinGeckoApiClientDefaultConfig
@@ -24,8 +24,8 @@ class CryptoRepositoryTests {
 
   @Test
   fun getCoinMarkets() = runTest {
-    val response = repository.getCoinMarkets(FiatCurrency.USD)
+    val response = repository.getTokens(FiatCurrency.USD)
     assertTrue(response.status.isSuccess())
-    assertTrue(response.coinMarketsBody().isNotEmpty())
+    assertTrue(response.toTokenListItems().isNotEmpty())
   }
 }

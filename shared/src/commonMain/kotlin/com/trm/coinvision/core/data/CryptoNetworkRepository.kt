@@ -13,7 +13,7 @@ internal class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) 
   private val FiatCurrency.queryParam: String
     get() = name.lowercase()
 
-  override suspend fun getCoinMarkets(
+  override suspend fun getTokens(
     vsFiatCurrency: FiatCurrency,
     page: Int,
     perPage: Int,
@@ -42,6 +42,19 @@ internal class CryptoNetworkRepository(private val coinGeckoClient: HttpClient) 
       url {
         appendPathSegments("search")
         parameters.append("query", query)
+      }
+    }
+
+  override suspend fun getTokenById(id: String): HttpResponse =
+    coinGeckoClient.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("coins", id)
+        parameters.append("localization", "false")
+        parameters.append("tickers", "false")
+        parameters.append("market_data", "true")
+        parameters.append("community_data", "false")
+        parameters.append("developer_data", "false")
+        parameters.append("sparkline", "true")
       }
     }
 }

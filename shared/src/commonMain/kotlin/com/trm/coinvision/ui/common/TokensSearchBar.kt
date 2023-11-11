@@ -33,7 +33,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
-import com.trm.coinvision.core.domain.model.CoinMarketsItem
+import com.trm.coinvision.core.domain.model.TokenListItem
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -46,8 +46,8 @@ internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
   tokensListState: LazyListState = rememberLazyListState(),
-  tokens: LazyPagingItems<CoinMarketsItem> =
-    flowOf(PagingData.empty<CoinMarketsItem>()).collectAsLazyPagingItems()
+  tokens: LazyPagingItems<TokenListItem> =
+    flowOf(PagingData.empty<TokenListItem>()).collectAsLazyPagingItems()
 ) {
   DockedSearchBar(
     modifier = modifier,
@@ -161,7 +161,7 @@ internal class TokensSearchBarState(
   active: Boolean = false,
   private val onQueryChange: (String) -> Unit = {},
   private val onActiveChange: (Boolean) -> Unit = {},
-  private val onTokenSelected: (CoinMarketsItem) -> Unit = {}
+  private val onTokenSelected: (TokenListItem) -> Unit = {}
 ) {
   private var previousSelectionName = query
 
@@ -182,7 +182,7 @@ internal class TokensSearchBarState(
     onActiveChange(active)
   }
 
-  fun selectToken(token: CoinMarketsItem) {
+  fun selectToken(token: TokenListItem) {
     query = token.name
     previousSelectionName = token.name
     active = false

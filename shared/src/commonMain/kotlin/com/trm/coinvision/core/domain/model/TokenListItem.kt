@@ -2,7 +2,7 @@ package com.trm.coinvision.core.domain.model
 
 import com.trm.coinvision.core.common.model.Serializable
 
-internal data class CoinMarketsItem(
+internal data class TokenListItem(
   val currentPrice: Double,
   val high24h: Double?,
   val id: String,

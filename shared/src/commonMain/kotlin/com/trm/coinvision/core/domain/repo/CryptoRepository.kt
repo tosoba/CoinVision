@@ -5,7 +5,7 @@ import com.trm.coinvision.core.domain.model.FiatCurrency
 import io.ktor.client.statement.HttpResponse
 
 internal interface CryptoRepository {
-  suspend fun getCoinMarkets(
+  suspend fun getTokens(
     vsFiatCurrency: FiatCurrency,
     page: Int = 1,
     perPage: Int = 250,
@@ -17,4 +17,6 @@ internal interface CryptoRepository {
   ): HttpResponse
 
   suspend fun search(query: String): HttpResponse
+
+  suspend fun getTokenById(id: String): HttpResponse
 }

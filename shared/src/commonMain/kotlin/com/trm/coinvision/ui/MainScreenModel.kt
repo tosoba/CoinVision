@@ -4,8 +4,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.trm.coinvision.core.domain.model.CoinMarketsItem
-import com.trm.coinvision.core.domain.usecase.GetCoinMarketsPagingUseCase
+import com.trm.coinvision.core.domain.model.TokenListItem
+import com.trm.coinvision.core.domain.usecase.GetTokensPagingUseCase
 import com.trm.coinvision.core.domain.usecase.SelectedTokenFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -21,17 +21,17 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class MainScreenModel(
-  private val getCoinMarketsPagingUseCase: GetCoinMarketsPagingUseCase,
+  private val getTokensPagingUseCase: GetTokensPagingUseCase,
   private val selectedTokenFlowUseCase: SelectedTokenFlowUseCase
 ) : ScreenModel {
   private val queryFlow = MutableSharedFlow<String>()
 
-  val coinMarkets: StateFlow<PagingData<CoinMarketsItem>> =
+  val tokensPagingFlow: StateFlow<PagingData<TokenListItem>> =
     queryFlow
       .map { it.takeIf(String::isNotBlank) }
       .distinctUntilChanged()
       .debounce(500L)
-      .flatMapLatest { getCoinMarketsPagingUseCase(it).cachedIn(coroutineScope) }
+      .flatMapLatest { getTokensPagingUseCase(it).cachedIn(coroutineScope) }
       .stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
@@ -46,7 +46,7 @@ internal class MainScreenModel(
     coroutineScope.launch { queryFlow.emit(query) }
   }
 
-  fun onTokenSelected(token: CoinMarketsItem) {
+  fun onTokenSelected(token: TokenListItem) {
     resetSearch()
     coroutineScope.launch { selectedTokenFlowUseCase.emit(token) }
   }
