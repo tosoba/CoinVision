@@ -1,4 +1,4 @@
-package com.trm.coinvision.core.data.mapper
+package com.trm.coinvision.core.network.mapper
 
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.network.model.CoinMarketsResponseItem

@@ -1,43 +1,58 @@
 package com.trm.coinvision.core.network.client
 
+import androidx.annotation.IntRange
+import com.trm.coinvision.core.domain.model.FiatCurrency
 import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
-import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.cache.storage.CacheStorage
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.appendPathSegments
 
-internal fun coinGeckoApiClient(config: HttpClientConfig<*>.() -> Unit): HttpClient =
-  HttpClient(config)
+internal class CoinGeckoApiClient(private val client: HttpClient) {
+  private val FiatCurrency.queryParam: String
+    get() = name.lowercase()
 
-internal fun coinGeckoApiClientDefaultConfig(
-  logLevel: LogLevel? = null,
-  cacheStorage: CacheStorage? = null,
-): HttpClientConfig<*>.() -> Unit = {
-  install(ContentNegotiation) {
-    json(
-      Json {
-        encodeDefaults = true
-        isLenient = true
-        allowSpecialFloatingPointValues = true
-        allowStructuredMapKeys = true
-        ignoreUnknownKeys = true
+  suspend fun getTokens(
+    vsFiatCurrency: FiatCurrency,
+    page: Int = 1,
+    perPage: Int = 250,
+    ids: List<String>? = null,
+    order: String = "market_cap_desc",
+    sparkline: Boolean = false,
+    locale: String = "en",
+    @IntRange(from = 0L, to = 18L) precision: Short = 2
+  ): HttpResponse =
+    client.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("coins", "markets")
+        parameters.append("vs_currency", vsFiatCurrency.queryParam)
+        parameters.append("page", page.toString())
+        parameters.append("per_page", perPage.toString())
+        ids?.let { parameters.append("ids", it.joinToString(separator = ",")) }
+        parameters.append("order", order)
+        parameters.append("sparkline", sparkline.toString())
+        parameters.append("locale", locale)
+        parameters.append("precision", precision.toString())
       }
-    )
-  }
+    }
 
-  logLevel?.let { install(Logging) { level = it } }
+  suspend fun search(query: String): HttpResponse =
+    client.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("search")
+        parameters.append("query", query)
+      }
+    }
 
-  cacheStorage?.let { install(HttpCache) { publicStorage(it) } }
-
-  install(HttpRequestRetry) {
-    retryOnServerErrors(maxRetries = 3)
-    exponentialDelay()
-  }
+  suspend fun getTokenById(id: String): HttpResponse =
+    client.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("coins", id)
+        parameters.append("localization", "false")
+        parameters.append("tickers", "false")
+        parameters.append("market_data", "true")
+        parameters.append("community_data", "false")
+        parameters.append("developer_data", "false")
+        parameters.append("sparkline", "true")
+      }
+    }
 }
-
-internal const val COIN_GECKO_API_BASE_URL = "https://api.coingecko.com/api/v3"

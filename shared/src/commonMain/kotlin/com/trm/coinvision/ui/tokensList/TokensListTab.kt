@@ -59,7 +59,7 @@ internal object TokensListTab : Tab {
     Box(modifier = Modifier.fillMaxSize()) {
       Text(
         modifier = Modifier.align(Alignment.Center),
-        text = token.value?.name ?: "Nothing selected"
+        text = token.value?.getOrNull()?.name ?: "Nothing selected"
       )
     }
   }

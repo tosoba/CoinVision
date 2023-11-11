@@ -1,9 +1,10 @@
 package com.trm.coinvision.core.data
 
-import com.trm.coinvision.core.data.mapper.toTokenListItems
+import com.trm.coinvision.core.network.mapper.toTokenListItems
 import com.trm.coinvision.core.domain.model.FiatCurrency
-import com.trm.coinvision.core.network.client.coinGeckoApiClient
-import com.trm.coinvision.core.network.client.coinGeckoApiClientDefaultConfig
+import com.trm.coinvision.core.network.client.CoinGeckoApiClient
+import com.trm.coinvision.core.network.client.coinGeckoHttpClient
+import com.trm.coinvision.core.network.client.coinGeckoHttpClientDefaultConfig
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.http.isSuccess
 import kotlin.test.BeforeTest
@@ -12,13 +13,13 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 
 class CryptoRepositoryTests {
-  private lateinit var repository: CryptoNetworkRepository
+  private lateinit var repository: CoinGeckoApiClient
 
   @BeforeTest
   fun init() {
     repository =
-      CryptoNetworkRepository(
-        coinGeckoApiClient { coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL)() }
+      CoinGeckoApiClient(
+        coinGeckoHttpClient { coinGeckoHttpClientDefaultConfig(logLevel = LogLevel.ALL)() }
       )
   }
 

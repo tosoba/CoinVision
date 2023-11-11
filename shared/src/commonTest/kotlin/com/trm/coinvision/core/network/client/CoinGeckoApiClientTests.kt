@@ -19,7 +19,7 @@ class CoinGeckoApiClientTests {
 
   @BeforeTest
   fun init() {
-    client = coinGeckoApiClient { coinGeckoApiClientDefaultConfig(logLevel = LogLevel.ALL)() }
+    client = coinGeckoHttpClient { coinGeckoHttpClientDefaultConfig(logLevel = LogLevel.ALL)() }
   }
 
   @Test
