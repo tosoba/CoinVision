@@ -56,7 +56,7 @@ internal fun TokensSearchBar(
     onSearch = {},
     active = searchBarState.active,
     onActiveChange = searchBarState::updateActive,
-    placeholder = { Text("Hinted search text") },
+    placeholder = { Text("Search for tokens...") },
     leadingIcon = {
       IconButton({ searchBarState.updateActive(!searchBarState.active) }) {
         if (searchBarState.active) {
