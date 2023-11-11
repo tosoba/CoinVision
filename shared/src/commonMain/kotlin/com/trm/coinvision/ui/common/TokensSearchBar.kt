@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui.common
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,8 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,7 +66,14 @@ internal fun TokensSearchBar(
         }
       }
     },
-    trailingIcon = { Icon(Icons.Rounded.MoreVert, contentDescription = null) },
+    trailingIcon = {
+      AnimatedVisibility(visible = searchBarState.active && searchBarState.query.isNotBlank()) {
+        IconButton(onClick = { searchBarState.updateQuery("") }) {
+          Icon(imageVector = Icons.Filled.Clear, contentDescription = null)
+        }
+      }
+      // TODO: about icon with CrossFade?
+    },
   ) {
     LazyColumn(
       modifier = Modifier.fillMaxWidth(),
