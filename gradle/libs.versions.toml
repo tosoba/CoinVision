@@ -3,6 +3,7 @@ activity-compose = "1.8.0"
 appcompat = "1.6.1"
 core-ktx = "1.12.0"
 coroutines = "1.7.2"
+datastore = "1.1.0-alpha04"
 kamel = "0.8.3"
 koin = "3.5.0"
 kotlin = "1.8.10"
@@ -21,6 +22,8 @@ voyager = "1.0.0-rc06"
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
+datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
