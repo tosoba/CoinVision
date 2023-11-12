@@ -13,7 +13,7 @@ internal class CompareTokensScreenModel(
 ) : ScreenModel {
   val selectedToken: SharedFlow<Result<TokenDTO>> =
     selectedTokenRepository
-      .getSelectedTokenFlow()
+      .getSelectedTokenResultFlow()
       .shareIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
