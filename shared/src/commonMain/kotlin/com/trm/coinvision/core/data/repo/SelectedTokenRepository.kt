@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.trm.coinvision.core.data.source.SelectedTokenResultInMemoryDataSource
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.map
 
 internal fun selectedTokenRepository(
   client: CoinGeckoApiClient,
-  selectedTokenResultDataSource: SelectedTokenResultInMemoryDataSource,
   dataStore: DataStore<Preferences>
 ): SelectedTokenRepository =
   object : SelectedTokenRepository {
@@ -24,16 +22,12 @@ internal fun selectedTokenRepository(
     private val nameKey = stringPreferencesKey("selected_token_name")
     private val imageKey = stringPreferencesKey("selected_token_image")
 
-    override suspend fun saveSelectedToken(id: String, name: String, image: String?) {
+    override suspend fun updateSelectedToken(id: String, name: String, image: String?) {
       dataStore.edit {
         it[idKey] = id
         it[nameKey] = name
         it[imageKey] = image.orEmpty()
       }
-
-      selectedTokenResultDataSource.emit(
-        runCatching { client.getTokenById(id) }.map { it.body<CoinResponse>() }
-      )
     }
 
     override fun getSelectedTokenFlow(): Flow<SelectedToken> =
@@ -45,8 +39,12 @@ internal fun selectedTokenRepository(
         )
       }
 
-    override fun getSelectedTokenResultFlow(): Flow<Result<TokenDTO>> =
-      selectedTokenResultDataSource
+    override fun getSelectedTokenIdFlow(): Flow<String> =
+      dataStore.data.map { it[idKey] ?: DEFAULT_SELECTED_TOKEN_ID }
+
+    override suspend fun getTokenById(id: String): Result<TokenDTO> = runCatching {
+      client.getTokenById(id).body<CoinResponse>()
+    }
   }
 
 private const val DEFAULT_SELECTED_TOKEN_ID = "ethereum"

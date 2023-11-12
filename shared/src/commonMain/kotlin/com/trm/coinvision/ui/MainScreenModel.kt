@@ -49,7 +49,7 @@ internal class MainScreenModel(
   fun onTokenSelected(token: TokenListItemDTO) {
     resetSearch()
     coroutineScope.launch {
-      selectedTokenRepository.saveSelectedToken(
+      selectedTokenRepository.updateSelectedToken(
         id = token.id,
         name = token.name,
         image = token.image
