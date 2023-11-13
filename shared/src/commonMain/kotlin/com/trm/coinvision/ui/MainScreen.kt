@@ -58,13 +58,8 @@ internal object MainScreen : Screen {
 
         val screenModel = getScreenModel<MainScreenModel>()
         val mainTokensListState = rememberLazyListState()
-        val mainTokensSearchBarState = rememberTokensSearchBarState {
-          TokensSearchBarState(
-            onQueryChange = screenModel::onQueryChange,
-            onActiveChange = { screenModel.onActiveChange() },
-            onTokenSelected = screenModel::onTokenSelected
-          )
-        }
+        val mainTokensSearchBarState = rememberTokensSearchBarState { TokensSearchBarState() }
+
         val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
         Scaffold(
@@ -81,7 +76,10 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 searchBarState = mainTokensSearchBarState,
                 tokensListState = mainTokensListState,
-                tokens = tokens
+                tokens = tokens,
+                onQueryChange = screenModel::onQueryChange,
+                onActiveChange = { screenModel.onActiveChange() },
+                onTokenSelected = screenModel::onTokenSelected
               )
             }
           },
@@ -108,7 +106,10 @@ internal object MainScreen : Screen {
                     .padding(mainSearchBarPadding),
                 searchBarState = mainTokensSearchBarState,
                 tokensListState = mainTokensListState,
-                tokens = tokens
+                tokens = tokens,
+                onQueryChange = screenModel::onQueryChange,
+                onActiveChange = { screenModel.onActiveChange() },
+                onTokenSelected = screenModel::onTokenSelected
               )
             }
             Crossfade(tabNavigator.current) {

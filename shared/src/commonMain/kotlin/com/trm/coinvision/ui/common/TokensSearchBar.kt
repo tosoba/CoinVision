@@ -45,19 +45,30 @@ import kotlinx.coroutines.flow.flowOf
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
+  onQueryChange: (String) -> Unit = {},
+  onActiveChange: (Boolean) -> Unit = {},
+  onTokenSelected: (TokenListItemDTO) -> Unit = {},
   tokensListState: LazyListState = rememberLazyListState(),
   tokens: LazyPagingItems<TokenListItemDTO> =
     flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems()
 ) {
+  // TODO: enabled based on loading
   DockedSearchBar(
     modifier = modifier,
     query = searchBarState.query,
-    onQueryChange = searchBarState::updateQuery,
+    onQueryChange = {
+      searchBarState.updateQuery(it)
+      onQueryChange(it)
+    },
     onSearch = {},
     active = searchBarState.active,
-    onActiveChange = searchBarState::updateActive,
+    onActiveChange = {
+      searchBarState.updateActive(it)
+      onActiveChange(it)
+    },
     placeholder = { Text("Search for tokens...") },
     leadingIcon = {
+      // TODO: loading icon here (using derivedStateOf or smth similar)?
       IconButton({ searchBarState.updateActive(!searchBarState.active) }) {
         if (searchBarState.active) {
           Icon(Icons.Rounded.ArrowBack, contentDescription = null)
@@ -67,12 +78,34 @@ internal fun TokensSearchBar(
       }
     },
     trailingIcon = {
+      // TODO: Replace with selected token icon
       AnimatedVisibility(visible = searchBarState.active && searchBarState.query.isNotBlank()) {
-        IconButton(onClick = { searchBarState.updateQuery("") }) {
+        IconButton(
+          onClick = {
+            searchBarState.updateQuery("")
+            onQueryChange("")
+          }
+        ) {
           Icon(imageVector = Icons.Filled.Clear, contentDescription = null)
         }
+
+        //        AnimatedVisibility(visible = !searchBarState.isLoading) {
+        //          searchBarState.image?.let {
+        //            KamelImage(
+        //              modifier = Modifier.size(40.dp),
+        //              resource = asyncPainterResource(data = Url(it)),
+        //              contentDescription = token.name,
+        //              onFailure = { TokenSymbol(symbol = token.symbol) },
+        //              onLoading = {
+        //                TokenSymbol(
+        //                  symbol = token.symbol,
+        //                  modifier = Modifier.shimmer().tokenSymbolShape()
+        //                )
+        //              }
+        //            )
+        //          } ?: run { TokenSymbol(symbol = token.symbol) }
+        //        }
       }
-      // TODO: about icon with CrossFade?
     },
   ) {
     LazyColumn(
@@ -107,7 +140,11 @@ internal fun TokensSearchBar(
           items(tokens.itemCount, key = { tokens[it]?.id.orEmpty() }) { index ->
             tokens[index]?.let { token ->
               ListItem(
-                modifier = Modifier.clickable { searchBarState.selectToken(token) },
+                modifier =
+                  Modifier.clickable {
+                    searchBarState.selectToken(token)
+                    onTokenSelected(token)
+                  },
                 headlineContent = {
                   Text(text = token.name, style = MaterialTheme.typography.titleMedium)
                 },
@@ -155,15 +192,17 @@ internal fun TokensSearchBar(
 
 @Stable
 internal class TokensSearchBarState(
-  query: String = "Bitcoin", // TODO: remove hardcoded shit lol
+  query: String = "",
+  image: String? = null,
   active: Boolean = false,
-  private val onQueryChange: (String) -> Unit = {},
-  private val onActiveChange: (Boolean) -> Unit = {},
-  private val onTokenSelected: (TokenListItemDTO) -> Unit = {}
+  val isLoading: Boolean = false,
 ) {
   private var previousSelectionName = query
 
   var query by mutableStateOf(query)
+    private set
+
+  var image by mutableStateOf(image)
     private set
 
   var active by mutableStateOf(active)
@@ -171,27 +210,40 @@ internal class TokensSearchBarState(
 
   fun updateQuery(query: String) {
     this.query = query
-    onQueryChange(query)
   }
 
   fun updateActive(active: Boolean) {
     this.active = active
     if (!active) query = previousSelectionName
-    onActiveChange(active)
   }
 
   fun selectToken(token: TokenListItemDTO) {
     query = token.name
+    image = token.image
     previousSelectionName = token.name
     active = false
-    onTokenSelected(token)
+  }
+
+  sealed interface LeadingIconMode {
+    data object Search : LeadingIconMode
+
+    data object Back : LeadingIconMode
+
+    data object Loading : LeadingIconMode
   }
 
   companion object {
     val Saver =
       Saver<TokensSearchBarState, List<Any>>(
-        save = { listOf(it.query, it.active) },
-        restore = { TokensSearchBarState(query = it[0] as String, active = it[1] as Boolean) }
+        save = { listOf(it.query, it.image.orEmpty(), it.active, it.isLoading) },
+        restore = {
+          TokensSearchBarState(
+            query = it[0] as String,
+            image = (it[1] as String).takeIf(String::isNotBlank),
+            active = it[2] as Boolean,
+            isLoading = it[3] as Boolean
+          )
+        }
       )
   }
 }
