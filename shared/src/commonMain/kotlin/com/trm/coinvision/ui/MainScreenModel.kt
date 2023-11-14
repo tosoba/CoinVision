@@ -32,7 +32,7 @@ internal class MainScreenModel(
 
   val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
     queryFlow
-      .map { it.takeIf(String::isNotBlank) }
+      .map { it.takeIf { it.length > 2 } }
       .distinctUntilChanged()
       .debounce(500L)
       .flatMapLatest { tokenListRepository(it).cachedIn(coroutineScope) }
@@ -42,7 +42,7 @@ internal class MainScreenModel(
         initialValue = PagingData.empty()
       )
 
-  val initialMainTokenSearchbarStateFlow: StateFlow<TokensSearchBarState> =
+  val initialMainTokenSearchBarStateFlow: StateFlow<TokensSearchBarState> =
     flow {
         emit(Loadable.InProgress)
         emit(Loadable.Completed(Result.success(selectedTokenRepository.getSelectedToken())))

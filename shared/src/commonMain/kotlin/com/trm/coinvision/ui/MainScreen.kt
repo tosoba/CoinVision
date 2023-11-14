@@ -59,13 +59,13 @@ internal object MainScreen : Screen {
 
         val screenModel = getScreenModel<MainScreenModel>()
         val mainTokensListState = rememberLazyListState()
-        val initialMainTokenSearchbarState by
-          screenModel.initialMainTokenSearchbarStateFlow.collectAsState(
+        val initialMainTokenSearchBarState by
+          screenModel.initialMainTokenSearchBarStateFlow.collectAsState(
             TokensSearchBarState(isLoading = true)
           )
         val mainTokensSearchBarState =
-          rememberTokensSearchBarState(initialMainTokenSearchbarState) {
-            initialMainTokenSearchbarState
+          rememberTokensSearchBarState(initialMainTokenSearchBarState) {
+            initialMainTokenSearchBarState
           }
 
         val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
