@@ -9,4 +9,4 @@ interface DatastoreInitializer {
 
 internal expect class PlatformDatastoreInitializer : DatastoreInitializer
 
-internal const val DATASTORE_FILE_NAME = "coinvision.preferences"
+internal const val DATASTORE_FILE_NAME = "coinvision.preferences_pb"

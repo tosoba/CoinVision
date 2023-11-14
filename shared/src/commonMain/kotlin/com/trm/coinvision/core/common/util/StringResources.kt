@@ -10,7 +10,9 @@ internal data class StringResources(
   val compare: String,
   val list: String,
   val errorOccurred: String,
-  val retry: String
+  val retry: String,
+  val searchForTokens: String,
+  val loading: String
 )
 
 internal fun stringResourcesEn() =
@@ -19,7 +21,9 @@ internal fun stringResourcesEn() =
     compare = "Compare",
     list = "List",
     errorOccurred = "Error occurred",
-    retry = "Retry"
+    retry = "Retry",
+    searchForTokens = "Search for tokens...",
+    loading = "Loading..."
   )
 
 internal fun stringResourcesPl() =
@@ -28,7 +32,9 @@ internal fun stringResourcesPl() =
     compare = "Porównaj",
     list = "Lista",
     errorOccurred = "Wystąpił błąd",
-    retry = "Ponów próbę"
+    retry = "Ponów próbę",
+    searchForTokens = "Szukaj tokenów...",
+    loading = "Ładowanie..."
   )
 
 internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }

@@ -4,9 +4,12 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
+import com.trm.coinvision.ui.common.TokensSearchBarState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -38,6 +42,33 @@ internal class MainScreenModel(
         initialValue = PagingData.empty()
       )
 
+  val initialMainTokenSearchbarStateFlow: StateFlow<TokensSearchBarState> =
+    flow {
+        emit(Loadable.InProgress)
+        emit(Loadable.Completed(Result.success(selectedTokenRepository.getSelectedToken())))
+      }
+      .map {
+        when (it) {
+          is Loadable.Completed -> {
+            val (_, symbol, name, image) = it.result.getOrThrow()
+            TokensSearchBarState(
+              query = name,
+              selectedTokenSymbol = symbol,
+              selectedTokenImage = image,
+              isLoading = false
+            )
+          }
+          Loadable.InProgress -> {
+            TokensSearchBarState(isLoading = true)
+          }
+        }
+      }
+      .stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = TokensSearchBarState(isLoading = true)
+      )
+
   fun onActiveChange() {
     resetSearch()
   }
@@ -50,9 +81,12 @@ internal class MainScreenModel(
     resetSearch()
     coroutineScope.launch {
       selectedTokenRepository.updateSelectedToken(
-        id = token.id,
-        name = token.name,
-        image = token.image
+        SelectedToken(
+          id = token.id,
+          symbol = token.symbol,
+          name = token.name,
+          image = token.image,
+        )
       )
     }
   }

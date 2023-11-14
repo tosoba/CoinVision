@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,7 +59,14 @@ internal object MainScreen : Screen {
 
         val screenModel = getScreenModel<MainScreenModel>()
         val mainTokensListState = rememberLazyListState()
-        val mainTokensSearchBarState = rememberTokensSearchBarState { TokensSearchBarState() }
+        val initialMainTokenSearchbarState by
+          screenModel.initialMainTokenSearchbarStateFlow.collectAsState(
+            TokensSearchBarState(isLoading = true)
+          )
+        val mainTokensSearchBarState =
+          rememberTokensSearchBarState(initialMainTokenSearchbarState) {
+            initialMainTokenSearchbarState
+          }
 
         val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
 

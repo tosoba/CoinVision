@@ -5,7 +5,9 @@ import com.trm.coinvision.core.domain.model.TokenDTO
 import kotlinx.coroutines.flow.Flow
 
 internal interface SelectedTokenRepository {
-  suspend fun updateSelectedToken(id: String, name: String, image: String?)
+  suspend fun updateSelectedToken(token: SelectedToken)
+
+  suspend fun getSelectedToken(): SelectedToken
 
   fun getSelectedTokenFlow(): Flow<SelectedToken>
 
