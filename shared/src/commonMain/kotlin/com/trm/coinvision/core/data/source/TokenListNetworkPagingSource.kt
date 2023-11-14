@@ -49,7 +49,7 @@ internal class TokenListNetworkPagingSource(
         PagingSourceLoadResultPage(
           data = tokens,
           prevKey = (page - 1).takeIf { it >= FIRST_PAGE },
-          nextKey = (page + 1).takeIf { tokens.isNotEmpty() }
+          nextKey = (page + 1).takeIf { tokens.size == params.loadSize }
         )
       } else {
         PagingSourceLoadResultError(Exception("Received a ${response.status}."))
