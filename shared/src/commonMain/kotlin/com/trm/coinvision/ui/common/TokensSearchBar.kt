@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
@@ -31,6 +32,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -92,20 +94,12 @@ internal fun TokensSearchBar(
           enter = fadeIn(),
           exit = fadeOut(),
         ) {
-          searchBarState.selectedTokenImage?.let {
-            KamelImage(
-              modifier = Modifier.size(40.dp),
-              resource = asyncPainterResource(data = Url(it)),
-              contentDescription = searchBarState.selectedTokenName,
-              onFailure = { TokenSymbol(symbol = searchBarState.selectedTokenSymbol) },
-              onLoading = {
-                TokenSymbol(
-                  symbol = searchBarState.selectedTokenSymbol,
-                  modifier = Modifier.shimmer().tokenSymbolShape()
-                )
-              }
-            )
-          } ?: run { TokenSymbol(symbol = searchBarState.selectedTokenSymbol) }
+          TokenImageOrSymbol(
+            modifier = Modifier.size(40.dp).clip(CircleShape),
+            image = searchBarState.selectedTokenImage,
+            symbol = searchBarState.selectedTokenSymbol,
+            name = searchBarState.selectedTokenName
+          )
         }
       },
     ) {
@@ -156,20 +150,12 @@ internal fun TokensSearchBar(
                     )
                   },
                   leadingContent = {
-                    token.image?.let {
-                      KamelImage(
-                        modifier = Modifier.size(40.dp),
-                        resource = asyncPainterResource(data = Url(it)),
-                        contentDescription = token.name,
-                        onFailure = { TokenSymbol(symbol = token.symbol) },
-                        onLoading = {
-                          TokenSymbol(
-                            symbol = token.symbol,
-                            modifier = Modifier.shimmer().tokenSymbolShape()
-                          )
-                        }
-                      )
-                    } ?: run { TokenSymbol(symbol = token.symbol) }
+                    TokenImageOrSymbol(
+                      modifier = Modifier.size(40.dp).clip(CircleShape),
+                      image = token.image,
+                      symbol = token.symbol,
+                      name = token.name
+                    )
                   },
                 )
               }
@@ -198,6 +184,24 @@ internal fun TokensSearchBar(
       LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     }
   }
+}
+
+@Composable
+private fun TokenImageOrSymbol(
+  modifier: Modifier = Modifier,
+  image: String?,
+  symbol: String,
+  name: String
+) {
+  image?.let {
+    KamelImage(
+      modifier = modifier,
+      resource = asyncPainterResource(data = Url(it)),
+      contentDescription = name,
+      onFailure = { TokenSymbol(symbol = symbol) },
+      onLoading = { TokenSymbol(symbol = symbol, modifier = Modifier.shimmer().tokenSymbolShape()) }
+    )
+  } ?: run { TokenSymbol(symbol = symbol) }
 }
 
 @Stable
