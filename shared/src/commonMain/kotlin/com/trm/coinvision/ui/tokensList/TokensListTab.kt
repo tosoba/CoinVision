@@ -26,7 +26,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
@@ -40,7 +40,7 @@ internal object TokensListTab : Tab {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<TokensListScreenModel>()
-    val token by screenModel.selectedToken.collectAsState(initial = Loadable.InProgress)
+    val token by screenModel.selectedToken.collectAsState(initial = LoadingFirst)
     val listState = rememberLazyListState()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {

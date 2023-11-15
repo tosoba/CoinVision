@@ -42,9 +42,8 @@ internal fun selectedTokenRepository(
     override fun getSelectedTokenIdFlow(): Flow<String> =
       dataStore.data.map { it[idKey] ?: DEFAULT_SELECTED_TOKEN_ID }
 
-    override suspend fun getTokenById(id: String): Result<TokenDTO> = runCatching {
+    override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
-    }
 
     private fun Preferences.mapToSelectedToken(): SelectedToken =
       SelectedToken(

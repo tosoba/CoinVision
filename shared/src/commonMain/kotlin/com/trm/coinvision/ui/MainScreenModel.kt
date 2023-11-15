@@ -4,9 +4,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.LoadingFirst
+import com.trm.coinvision.core.domain.model.Ready
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
+import com.trm.coinvision.core.domain.model.WithData
 import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.ui.common.TokensSearchBarState
@@ -44,13 +46,13 @@ internal class MainScreenModel(
 
   val initialMainTokenSearchBarStateFlow: StateFlow<TokensSearchBarState> =
     flow {
-        emit(Loadable.InProgress)
-        emit(Loadable.Completed(Result.success(selectedTokenRepository.getSelectedToken())))
+        emit(LoadingFirst)
+        emit(Ready(selectedTokenRepository.getSelectedToken()))
       }
       .map {
         when (it) {
-          is Loadable.Completed -> {
-            val (_, symbol, name, image) = it.result.getOrThrow()
+          is WithData -> {
+            val (_, symbol, name, image) = it.data
             TokensSearchBarState(
               query = name,
               selectedTokenSymbol = symbol,
@@ -58,7 +60,7 @@ internal class MainScreenModel(
               isLoading = false
             )
           }
-          Loadable.InProgress -> {
+          else -> {
             TokensSearchBarState(isLoading = true)
           }
         }

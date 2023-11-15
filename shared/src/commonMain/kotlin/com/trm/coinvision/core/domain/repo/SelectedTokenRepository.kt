@@ -13,5 +13,5 @@ internal interface SelectedTokenRepository {
 
   fun getSelectedTokenIdFlow(): Flow<String>
 
-  suspend fun getTokenById(id: String): Result<TokenDTO>
+  suspend fun getTokenById(id: String): TokenDTO
 }

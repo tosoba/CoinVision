@@ -5,6 +5,8 @@ import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.LoadingFirst
+import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.core.domain.usecase.GetSelectedTokenFlowUseCase
@@ -16,12 +18,12 @@ internal class TokensListScreenModel(
   getSelectedTokenFlowUseCase: GetSelectedTokenFlowUseCase,
   tokenListPagingRepository: TokenListPagingRepository,
 ) : ScreenModel {
-  val selectedToken =
+  val selectedToken: StateFlow<Loadable<TokenDTO>> =
     getSelectedTokenFlowUseCase()
       .stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = Loadable.InProgress
+        initialValue = LoadingFirst
       )
 
   val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =

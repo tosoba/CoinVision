@@ -17,7 +17,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.mainSearchBarHeight
 import com.trm.coinvision.ui.mainSearchBarPadding
@@ -28,7 +28,7 @@ internal object CompareTokensTab : Tab {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<CompareTokensScreenModel>()
-    val token by screenModel.selectedToken.collectAsState(initial = Loadable.InProgress)
+    val token by screenModel.selectedToken.collectAsState(initial = LoadingFirst)
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
