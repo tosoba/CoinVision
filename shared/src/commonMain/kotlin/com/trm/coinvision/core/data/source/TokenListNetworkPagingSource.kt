@@ -12,6 +12,7 @@ import com.trm.coinvision.core.network.model.Coin
 import com.trm.coinvision.core.network.model.SearchResponse
 import io.ktor.client.call.body
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.CancellationException
 
 internal class TokenListNetworkPagingSource(
   private val client: CoinGeckoApiClient,
@@ -28,6 +29,8 @@ internal class TokenListNetworkPagingSource(
             return PagingSourceLoadResultPage(emptyList(), null, null)
           }
           ids
+        } catch (ex: CancellationException) {
+          throw ex
         } catch (ex: Exception) {
           return PagingSourceLoadResultError(ex)
         }
@@ -54,6 +57,8 @@ internal class TokenListNetworkPagingSource(
       } else {
         PagingSourceLoadResultError(Exception("Received a ${response.status}."))
       }
+    } catch (ex: CancellationException) {
+      throw ex
     } catch (ex: Exception) {
       PagingSourceLoadResultError(ex)
     }
