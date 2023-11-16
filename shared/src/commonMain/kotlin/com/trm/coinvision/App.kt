@@ -16,6 +16,8 @@ import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.PlatformLocaleChangedObserverEffect
 import com.trm.coinvision.core.common.util.stringResources
 import com.trm.coinvision.ui.MainScreen
+import com.trm.coinvision.ui.common.coinVisionShimmerTheme
+import com.valentinilk.shimmer.LocalShimmerTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -28,7 +30,8 @@ fun App() {
   CompositionLocalProvider(
     LocalStringResources provides stringResources,
     LocalWidthSizeClass provides windowSizeClass.widthSizeClass,
-    LocalHeightSizeClass provides windowSizeClass.heightSizeClass
+    LocalHeightSizeClass provides windowSizeClass.heightSizeClass,
+    LocalShimmerTheme provides coinVisionShimmerTheme
   ) {
     MaterialTheme { Navigator(MainScreen) }
   }
