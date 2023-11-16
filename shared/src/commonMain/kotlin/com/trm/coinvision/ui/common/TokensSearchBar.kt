@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -103,11 +102,7 @@ internal fun TokensSearchBar(
         }
       },
     ) {
-      LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        state = tokensListState,
-        contentPadding = PaddingValues(16.dp),
-      ) {
+      LazyColumn(modifier = Modifier.fillMaxWidth(), state = tokensListState) {
         if (tokens.loadState.prepend is LoadState.Error) {
           item {
             CoinVisionRetryRow(
