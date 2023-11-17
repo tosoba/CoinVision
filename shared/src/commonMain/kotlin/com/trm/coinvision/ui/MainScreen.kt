@@ -103,29 +103,30 @@ internal object MainScreen : Screen {
           }
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
-            if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-              TokensSearchBar(
-                modifier =
-                  Modifier.fillMaxWidth(.5f)
-                    .fillMainSearchBarMaxHeight(
-                      scaffoldHeightPx = scaffoldHeightPx,
-                      bottomBarHeightPx = bottomBarHeightPx
-                    )
-                    .padding(mainSearchBarPadding),
-                searchBarState = mainTokensSearchBarState,
-                tokensListState = mainTokensListState,
-                tokens = tokens,
-                onQueryChange = screenModel::onQueryChange,
-                onActiveChange = { screenModel.onActiveChange() },
-                onTokenSelected = screenModel::onTokenSelected
-              )
-            }
             Crossfade(tabNavigator.current) {
               tabNavigator.saveableState(CURRENT_TAB_SAVE_STATE_KEY, it) {
                 when (it) {
                   CompareTokensTab -> CompareTokensTab.Content()
                   TokensListTab -> TokensListTab.Content()
                 }
+              }
+
+              if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+                TokensSearchBar(
+                  modifier =
+                    Modifier.fillMaxWidth(.5f)
+                      .fillMainSearchBarMaxHeight(
+                        scaffoldHeightPx = scaffoldHeightPx,
+                        bottomBarHeightPx = bottomBarHeightPx
+                      )
+                      .padding(mainSearchBarPadding),
+                  searchBarState = mainTokensSearchBarState,
+                  tokensListState = mainTokensListState,
+                  tokens = tokens,
+                  onQueryChange = screenModel::onQueryChange,
+                  onActiveChange = { screenModel.onActiveChange() },
+                  onTokenSelected = screenModel::onTokenSelected
+                )
               }
             }
           }
