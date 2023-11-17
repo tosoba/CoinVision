@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.DockedSearchBar
@@ -165,6 +166,11 @@ internal fun TokensSearchBar(
                       name = token.name
                     )
                   },
+                  trailingContent = {
+                    AnimatedVisibility(visible = searchBarState.selectedTokenId == token.id) {
+                      Icon(Icons.Default.Check, contentDescription = null)
+                    }
+                  }
                 )
               }
             }
@@ -217,6 +223,7 @@ private fun TokenImageOrSymbol(
 @Stable
 internal class TokensSearchBarState(
   query: String = "",
+  selectedTokenId: String = "",
   selectedTokenSymbol: String = "",
   selectedTokenImage: String? = null,
   active: Boolean = false,
@@ -226,6 +233,9 @@ internal class TokensSearchBarState(
     private set
 
   var query by mutableStateOf(query)
+    private set
+
+  var selectedTokenId by mutableStateOf(selectedTokenId)
     private set
 
   var selectedTokenSymbol by mutableStateOf(selectedTokenSymbol)
@@ -248,6 +258,7 @@ internal class TokensSearchBarState(
 
   fun onTokenSelected(token: TokenListItemDTO) {
     query = token.name
+    selectedTokenId = token.id
     selectedTokenSymbol = token.symbol
     selectedTokenImage = token.image
     selectedTokenName = token.name
@@ -260,6 +271,7 @@ internal class TokensSearchBarState(
         save = {
           listOf(
             it.query,
+            it.selectedTokenId,
             it.selectedTokenSymbol,
             it.selectedTokenImage.orEmpty(),
             it.active,
@@ -269,10 +281,11 @@ internal class TokensSearchBarState(
         restore = {
           TokensSearchBarState(
             query = it[0] as String,
-            selectedTokenSymbol = it[1] as String,
-            selectedTokenImage = (it[2] as String).takeIf(String::isNotBlank),
-            active = it[3] as Boolean,
-            isLoading = it[4] as Boolean
+            selectedTokenId = it[1] as String,
+            selectedTokenSymbol = it[2] as String,
+            selectedTokenImage = (it[3] as String).takeIf(String::isNotBlank),
+            active = it[4] as Boolean,
+            isLoading = it[5] as Boolean
           )
         }
       )

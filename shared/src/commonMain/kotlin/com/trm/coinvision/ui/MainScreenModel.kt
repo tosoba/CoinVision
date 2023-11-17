@@ -52,9 +52,10 @@ internal class MainScreenModel(
       .map {
         when (it) {
           is WithData -> {
-            val (_, symbol, name, image) = it.data
+            val (id, symbol, name, image) = it.data
             TokensSearchBarState(
               query = name,
+              selectedTokenId = id,
               selectedTokenSymbol = symbol,
               selectedTokenImage = image,
               isLoading = false
