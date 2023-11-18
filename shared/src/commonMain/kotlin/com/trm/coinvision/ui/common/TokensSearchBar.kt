@@ -43,6 +43,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
+import app.cash.paging.compose.itemKey
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.valentinilk.shimmer.shimmer
@@ -140,7 +141,10 @@ internal fun TokensSearchBar(
             }
           }
           is LoadState.NotLoading -> {
-            items(tokens.itemCount, key = { tokens[it]?.id.orEmpty() }) { index ->
+            items(
+              count = tokens.itemCount,
+              key = tokens.itemKey(TokenListItemDTO::id),
+            ) { index ->
               tokens[index]?.let { token ->
                 ListItem(
                   modifier =
