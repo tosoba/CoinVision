@@ -5,7 +5,7 @@ import com.trm.coinvision.ui.tokensList.TokensListScreenModel
 import org.koin.dsl.module
 
 internal val uiModule = module {
-  factory { CompareTokensScreenModel(get()) }
+  factory { CompareTokensScreenModel(get(), get(), get()) }
   factory { TokensListScreenModel(get(), get()) }
   factory { MainScreenModel(get(), get()) }
 }

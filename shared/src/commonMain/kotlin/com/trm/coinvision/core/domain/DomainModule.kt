@@ -1,6 +1,6 @@
 package com.trm.coinvision.core.domain
 
-import com.trm.coinvision.core.domain.usecase.GetSelectedTokenFlowUseCase
+import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenFlowUseCase
 import org.koin.dsl.module
 
-internal val domainModule = module { factory { GetSelectedTokenFlowUseCase(get()) } }
+internal val domainModule = module { factory { GetSelectedMainTokenFlowUseCase(get()) } }

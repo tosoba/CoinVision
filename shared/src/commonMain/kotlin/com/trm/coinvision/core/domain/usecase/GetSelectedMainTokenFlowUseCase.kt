@@ -11,10 +11,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transformLatest
 
-internal class GetSelectedTokenFlowUseCase(private val repository: SelectedTokenRepository) {
+internal class GetSelectedMainTokenFlowUseCase(private val repository: SelectedTokenRepository) {
   @OptIn(ExperimentalCoroutinesApi::class)
   operator fun invoke(): Flow<Loadable<TokenDTO>> =
-    repository.getSelectedTokenIdFlow().transformLatest {
+    repository.getSelectedMainTokenIdFlow().transformLatest {
       emit(LoadingFirst)
       try {
         emit(Ready(repository.getTokenById(it)))

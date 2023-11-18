@@ -19,51 +19,90 @@ internal fun selectedTokenRepository(
   dataStore: DataStore<Preferences>
 ): SelectedTokenRepository =
   object : SelectedTokenRepository {
-    private val idKey = stringPreferencesKey("selected_token_id")
-    private val symbolKey = stringPreferencesKey("selected_token_symbol")
-    private val nameKey = stringPreferencesKey("selected_token_name")
-    private val imageKey = stringPreferencesKey("selected_token_image")
+    private val mainTokenIdKey = stringPreferencesKey("selected_main_token_id")
+    private val mainTokenSymbolKey = stringPreferencesKey("selected_main_token_symbol")
+    private val mainTokenNameKey = stringPreferencesKey("selected_main_token_name")
+    private val mainTokenImageKey = stringPreferencesKey("selected_main_token_image")
 
-    override suspend fun updateSelectedToken(token: SelectedToken) {
+    override suspend fun updateSelectedMainToken(token: SelectedToken) {
       dataStore.edit {
-        it[idKey] = token.id
-        it[symbolKey] = token.symbol
-        it[nameKey] = token.name
-        it[imageKey] = token.image.orEmpty()
+        it[mainTokenIdKey] = token.id
+        it[mainTokenSymbolKey] = token.symbol
+        it[mainTokenNameKey] = token.name
+        it[mainTokenImageKey] = token.image.orEmpty()
       }
     }
 
-    override suspend fun getSelectedToken(): SelectedToken =
-      dataStore.data.firstOrNull()?.mapToSelectedToken() ?: defaultSelectedToken()
+    override suspend fun getSelectedMainToken(): SelectedToken =
+      dataStore.data.firstOrNull()?.mapToSelectedMainToken() ?: defaultSelectedMainToken()
 
-    override fun getSelectedTokenFlow(): Flow<SelectedToken> =
-      dataStore.data.map { it.mapToSelectedToken() }
+    override fun getSelectedMainTokenIdFlow(): Flow<String> =
+      dataStore.data.map { it[mainTokenIdKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_ID }
 
-    override fun getSelectedTokenIdFlow(): Flow<String> =
-      dataStore.data.map { it[idKey] ?: DEFAULT_SELECTED_TOKEN_ID }
+    private fun Preferences.mapToSelectedMainToken(): SelectedToken =
+      SelectedToken(
+        id = this[mainTokenIdKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_ID,
+        symbol = this[mainTokenSymbolKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
+        name = this[mainTokenNameKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_NAME,
+        image = this[mainTokenImageKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
+      )
+
+    private val referenceTokenIdKey = stringPreferencesKey("selected_reference_token_id")
+    private val referenceTokenSymbolKey = stringPreferencesKey("selected_reference_token_symbol")
+    private val referenceTokenNameKey = stringPreferencesKey("selected_reference_token_name")
+    private val referenceTokenImageKey = stringPreferencesKey("selected_reference_token_image")
+
+    override suspend fun updateSelectedReferenceToken(token: SelectedToken) {
+      dataStore.edit {
+        it[referenceTokenIdKey] = token.id
+        it[referenceTokenSymbolKey] = token.symbol
+        it[referenceTokenNameKey] = token.name
+        it[referenceTokenImageKey] = token.image.orEmpty()
+      }
+    }
+
+    override suspend fun getSelectedReferenceToken(): SelectedToken =
+      dataStore.data.firstOrNull()?.mapToSelectedReferenceToken() ?: defaultSelectedReferenceToken()
+
+    override fun getSelectedReferenceTokenIdFlow(): Flow<String> =
+      dataStore.data.map { it[referenceTokenIdKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID }
+
+    private fun Preferences.mapToSelectedReferenceToken(): SelectedToken =
+      SelectedToken(
+        id = this[referenceTokenIdKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
+        symbol = this[referenceTokenSymbolKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
+        name = this[referenceTokenNameKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
+        image = this[referenceTokenImageKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
+      )
 
     override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
-
-    private fun Preferences.mapToSelectedToken(): SelectedToken =
-      SelectedToken(
-        id = this[idKey] ?: DEFAULT_SELECTED_TOKEN_ID,
-        symbol = this[symbolKey] ?: DEFAULT_SELECTED_TOKEN_SYMBOL,
-        name = this[nameKey] ?: DEFAULT_SELECTED_TOKEN_NAME,
-        image = this[imageKey] ?: DEFAULT_SELECTED_TOKEN_IMAGE
-      )
   }
 
-private const val DEFAULT_SELECTED_TOKEN_ID = "ethereum"
-private const val DEFAULT_SELECTED_TOKEN_SYMBOL = "ETH"
-private const val DEFAULT_SELECTED_TOKEN_NAME = "Ethereum"
-private const val DEFAULT_SELECTED_TOKEN_IMAGE =
+private const val DEFAULT_SELECTED_MAIN_TOKEN_ID = "ethereum"
+private const val DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL = "ETH"
+private const val DEFAULT_SELECTED_MAIN_TOKEN_NAME = "Ethereum"
+private const val DEFAULT_SELECTED_MAIN_TOKEN_IMAGE =
   "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
 
-private fun defaultSelectedToken(): SelectedToken =
+private fun defaultSelectedMainToken(): SelectedToken =
   SelectedToken(
-    id = DEFAULT_SELECTED_TOKEN_ID,
-    symbol = DEFAULT_SELECTED_TOKEN_SYMBOL,
-    name = DEFAULT_SELECTED_TOKEN_NAME,
-    image = DEFAULT_SELECTED_TOKEN_IMAGE
+    id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
+    symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
+    name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
+    image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
+  )
+
+private const val DEFAULT_SELECTED_REFERENCE_TOKEN_ID = "bitcoin"
+private const val DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL = "BTC"
+private const val DEFAULT_SELECTED_REFERENCE_TOKEN_NAME = "Bitcoin"
+private const val DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE =
+  "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
+
+private fun defaultSelectedReferenceToken(): SelectedToken =
+  SelectedToken(
+    id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
+    symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
+    name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
+    image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
   )

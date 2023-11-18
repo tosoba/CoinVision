@@ -27,12 +27,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class MainScreenModel(
-  private val tokenListRepository: TokenListPagingRepository,
-  private val selectedTokenRepository: SelectedTokenRepository
+  private val selectedTokenRepository: SelectedTokenRepository,
+  private val tokenListRepository: TokenListPagingRepository
 ) : ScreenModel {
   private val queryFlow = MutableSharedFlow<String>()
 
-  val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
+  val searchBarTokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
     queryFlow
       .map { it.takeIf { it.length > 2 } }
       .distinctUntilChanged()
@@ -44,10 +44,10 @@ internal class MainScreenModel(
         initialValue = PagingData.empty()
       )
 
-  val initialMainTokenSearchBarStateFlow: StateFlow<TokensSearchBarState> =
+  val initialTokenSearchBarStateFlow: StateFlow<TokensSearchBarState> =
     flow {
         emit(LoadingFirst)
-        emit(Ready(selectedTokenRepository.getSelectedToken()))
+        emit(Ready(selectedTokenRepository.getSelectedMainToken()))
       }
       .map {
         when (it) {
@@ -80,10 +80,14 @@ internal class MainScreenModel(
     coroutineScope.launch { queryFlow.emit(query) }
   }
 
+  private fun resetSearch() {
+    coroutineScope.launch { queryFlow.emit("") }
+  }
+
   fun onTokenSelected(token: TokenListItemDTO) {
     resetSearch()
     coroutineScope.launch {
-      selectedTokenRepository.updateSelectedToken(
+      selectedTokenRepository.updateSelectedMainToken(
         SelectedToken(
           id = token.id,
           symbol = token.symbol,
@@ -92,9 +96,5 @@ internal class MainScreenModel(
         )
       )
     }
-  }
-
-  private fun resetSearch() {
-    coroutineScope.launch { queryFlow.emit("") }
   }
 }
