@@ -77,19 +77,19 @@ internal object MainScreen : Screen {
                   TokensListTab -> TokensListTab.Content()
                 }
               }
-
-              TokensSearchBar(
-                modifier =
-                  Modifier.fillMaxWidth(
-                      if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) .5f else 1f
-                    )
-                    .fillMainSearchBarMaxHeight(
-                      scaffoldHeightPx = scaffoldHeightPx,
-                      bottomBarHeightPx = bottomBarHeightPx
-                    )
-                    .padding(mainSearchBarPadding)
-              )
             }
+
+            TokensSearchBar(
+              modifier =
+                Modifier.fillMaxWidth(
+                    if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) .5f else 1f
+                  )
+                  .fillMainSearchBarMaxHeight(
+                    scaffoldHeightPx = scaffoldHeightPx,
+                    bottomBarHeightPx = bottomBarHeightPx
+                  )
+                  .padding(mainSearchBarPadding)
+            )
           }
         }
       }
