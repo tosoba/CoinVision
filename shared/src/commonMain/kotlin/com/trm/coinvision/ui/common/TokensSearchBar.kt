@@ -45,7 +45,10 @@ import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.compose.itemKey
 import com.trm.coinvision.core.common.util.LocalStringResources
+import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
+import com.trm.coinvision.core.domain.model.WithData
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -302,6 +305,25 @@ internal fun rememberTokensSearchBarState(
   init: () -> TokensSearchBarState = { TokensSearchBarState() }
 ): TokensSearchBarState =
   rememberSaveable(inputs = inputs, saver = TokensSearchBarState.Saver, init = init)
+
+internal fun selectedTokenLoadableToTokensSearchBarState(
+  loadable: Loadable<SelectedToken>,
+): TokensSearchBarState =
+  when (loadable) {
+    is WithData -> {
+      val (id, symbol, name, image) = loadable.data
+      TokensSearchBarState(
+        query = name,
+        selectedTokenId = id,
+        selectedTokenSymbol = symbol,
+        selectedTokenImage = image,
+        isLoading = false
+      )
+    }
+    else -> {
+      TokensSearchBarState(isLoading = true)
+    }
+  }
 
 @Composable
 private fun Modifier.shimmerListItemContent() =

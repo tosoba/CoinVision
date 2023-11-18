@@ -30,7 +30,9 @@ internal object CompareTokensTab : Tab {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<CompareTokensScreenModel>()
-    val mainSelectedToken by screenModel.mainSelectedTokenFlow.collectAsState()
+
+    val selectedMainToken by screenModel.selectedMainTokenFlow.collectAsState()
+    val selectedReferenceToken by screenModel.selectedReferenceTokenFlow.collectAsState()
 
     val initialTokenSearchBarState by screenModel.initialTokenSearchBarStateFlow.collectAsState()
     val tokensSearchBarState =
@@ -56,19 +58,33 @@ internal object CompareTokensTab : Tab {
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBarVerticalSpacer()
-          SelectedTokenData(modifier = Modifier.fillMaxSize(), token = mainSelectedToken)
+          SelectedTokenData(
+            modifier = Modifier.fillMaxSize(),
+            token = selectedMainToken,
+          )
         }
+
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBar()
-          SelectedTokenData(modifier = Modifier.fillMaxSize(), token = mainSelectedToken)
+          SelectedTokenData(
+            modifier = Modifier.fillMaxSize(),
+            token = selectedReferenceToken,
+          )
         }
       }
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
         TokensSearchBarVerticalSpacer()
-        SelectedTokenData(modifier = Modifier.fillMaxWidth().weight(.5f), token = mainSelectedToken)
+        SelectedTokenData(
+          modifier = Modifier.fillMaxWidth().weight(.5f),
+          token = selectedMainToken,
+        )
+
         TokensSearchBar()
-        SelectedTokenData(modifier = Modifier.fillMaxWidth().weight(.5f), token = mainSelectedToken)
+        SelectedTokenData(
+          modifier = Modifier.fillMaxWidth().weight(.5f),
+          token = selectedReferenceToken
+        )
       }
     }
   }

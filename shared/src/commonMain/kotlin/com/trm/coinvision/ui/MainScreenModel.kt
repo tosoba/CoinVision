@@ -8,10 +8,10 @@ import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.core.domain.model.Ready
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
-import com.trm.coinvision.core.domain.model.WithData
 import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.ui.common.TokensSearchBarState
+import com.trm.coinvision.ui.common.selectedTokenLoadableToTokensSearchBarState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -49,23 +49,7 @@ internal class MainScreenModel(
         emit(LoadingFirst)
         emit(Ready(selectedTokenRepository.getSelectedMainToken()))
       }
-      .map {
-        when (it) {
-          is WithData -> {
-            val (id, symbol, name, image) = it.data
-            TokensSearchBarState(
-              query = name,
-              selectedTokenId = id,
-              selectedTokenSymbol = symbol,
-              selectedTokenImage = image,
-              isLoading = false
-            )
-          }
-          else -> {
-            TokensSearchBarState(isLoading = true)
-          }
-        }
-      }
+      .map(::selectedTokenLoadableToTokensSearchBarState)
       .stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
