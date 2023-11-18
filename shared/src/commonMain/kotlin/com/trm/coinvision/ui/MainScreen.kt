@@ -35,7 +35,6 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.common.TokensSearchBar
-import com.trm.coinvision.ui.common.TokensSearchBarState
 import com.trm.coinvision.ui.common.rememberTokensSearchBarState
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
@@ -57,40 +56,8 @@ internal object MainScreen : Screen {
         var scaffoldHeightPx by remember { mutableStateOf(0) }
         var bottomBarHeightPx by remember { mutableStateOf(0) }
 
-        val screenModel = getScreenModel<MainScreenModel>()
-        val mainTokensListState = rememberLazyListState()
-        val initialMainTokenSearchBarState by
-          screenModel.initialMainTokenSearchBarStateFlow.collectAsState(
-            TokensSearchBarState(isLoading = true)
-          )
-        val mainTokensSearchBarState =
-          rememberTokensSearchBarState(initialMainTokenSearchBarState) {
-            initialMainTokenSearchBarState
-          }
-
-        val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
-
         Scaffold(
           modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
-          topBar = {
-            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
-              TokensSearchBar(
-                modifier =
-                  Modifier.fillMaxWidth()
-                    .fillMainSearchBarMaxHeight(
-                      scaffoldHeightPx = scaffoldHeightPx,
-                      bottomBarHeightPx = bottomBarHeightPx
-                    )
-                    .padding(mainSearchBarPadding),
-                searchBarState = mainTokensSearchBarState,
-                tokensListState = mainTokensListState,
-                tokens = tokens,
-                onQueryChange = screenModel::onQueryChange,
-                onActiveChange = { screenModel.onActiveChange() },
-                onTokenSelected = screenModel::onTokenSelected
-              )
-            }
-          },
           bottomBar = {
             if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
               NavigationBar(
@@ -111,28 +78,47 @@ internal object MainScreen : Screen {
                 }
               }
 
-              if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-                TokensSearchBar(
-                  modifier =
-                    Modifier.fillMaxWidth(.5f)
-                      .fillMainSearchBarMaxHeight(
-                        scaffoldHeightPx = scaffoldHeightPx,
-                        bottomBarHeightPx = bottomBarHeightPx
-                      )
-                      .padding(mainSearchBarPadding),
-                  searchBarState = mainTokensSearchBarState,
-                  tokensListState = mainTokensListState,
-                  tokens = tokens,
-                  onQueryChange = screenModel::onQueryChange,
-                  onActiveChange = { screenModel.onActiveChange() },
-                  onTokenSelected = screenModel::onTokenSelected
-                )
-              }
+              TokensSearchBar(
+                modifier =
+                  Modifier.fillMaxWidth(
+                      if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) .5f else 1f
+                    )
+                    .fillMainSearchBarMaxHeight(
+                      scaffoldHeightPx = scaffoldHeightPx,
+                      bottomBarHeightPx = bottomBarHeightPx
+                    )
+                    .padding(mainSearchBarPadding)
+              )
             }
           }
         }
       }
     }
+  }
+
+  @Composable
+  private fun TokensSearchBar(modifier: Modifier = Modifier) {
+    val screenModel = getScreenModel<MainScreenModel>()
+
+    val initialMainTokenSearchBarState by
+      screenModel.initialMainTokenSearchBarStateFlow.collectAsState()
+    val mainTokensSearchBarState =
+      rememberTokensSearchBarState(initialMainTokenSearchBarState) {
+        initialMainTokenSearchBarState
+      }
+
+    val tokensListState = rememberLazyListState()
+    val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
+
+    TokensSearchBar(
+      modifier = modifier,
+      searchBarState = mainTokensSearchBarState,
+      tokensListState = tokensListState,
+      tokens = tokens,
+      onQueryChange = screenModel::onQueryChange,
+      onActiveChange = { screenModel.onActiveChange() },
+      onTokenSelected = screenModel::onTokenSelected
+    )
   }
 }
 
