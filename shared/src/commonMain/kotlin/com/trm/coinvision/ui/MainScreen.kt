@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
@@ -20,12 +18,8 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
@@ -34,7 +28,6 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.ui.common.TokensSearchBar
 import com.trm.coinvision.ui.common.rememberTokensSearchBarState
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
@@ -42,62 +35,6 @@ import com.trm.coinvision.ui.tokensList.TokensListTab
 internal object MainScreen : Screen {
   @Composable
   override fun Content() {
-    TabNavigator(tab = CompareTokensTab) { tabNavigator ->
-      Row {
-        if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-          NavigationRail {
-            Spacer(Modifier.weight(1f))
-            TabNavigationRailItem(CompareTokensTab)
-            TabNavigationRailItem(TokensListTab)
-            Spacer(Modifier.weight(1f))
-          }
-        }
-
-        var scaffoldHeightPx by remember { mutableStateOf(0) }
-        var bottomBarHeightPx by remember { mutableStateOf(0) }
-
-        Scaffold(
-          modifier = Modifier.onGloballyPositioned { scaffoldHeightPx = it.size.height },
-          bottomBar = {
-            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
-              NavigationBar(
-                modifier = Modifier.onGloballyPositioned { bottomBarHeightPx = it.size.height },
-              ) {
-                TabNavigationBarItem(CompareTokensTab)
-                TabNavigationBarItem(TokensListTab)
-              }
-            }
-          }
-        ) { paddingValues ->
-          Box(modifier = Modifier.padding(paddingValues)) {
-            Crossfade(tabNavigator.current) {
-              tabNavigator.saveableState(CURRENT_TAB_SAVE_STATE_KEY, it) {
-                when (it) {
-                  CompareTokensTab -> CompareTokensTab.Content()
-                  TokensListTab -> TokensListTab.Content()
-                }
-              }
-            }
-
-            TokensSearchBar(
-              modifier =
-                Modifier.fillMaxWidth(
-                    if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) .5f else 1f
-                  )
-                  .fillMainSearchBarMaxHeight(
-                    scaffoldHeightPx = scaffoldHeightPx,
-                    bottomBarHeightPx = bottomBarHeightPx
-                  )
-                  .padding(mainSearchBarPadding)
-            )
-          }
-        }
-      }
-    }
-  }
-
-  @Composable
-  private fun TokensSearchBar(modifier: Modifier = Modifier) {
     val screenModel = getScreenModel<MainScreenModel>()
 
     val initialTokenSearchBarState by screenModel.initialTokenSearchBarStateFlow.collectAsState()
@@ -107,31 +44,74 @@ internal object MainScreen : Screen {
     val tokensListState = rememberLazyListState()
     val tokens = screenModel.searchBarTokensPagingFlow.collectAsLazyPagingItems()
 
-    TokensSearchBar(
-      modifier = modifier,
-      searchBarState = tokensSearchBarState,
-      tokensListState = tokensListState,
-      tokens = tokens,
-      onQueryChange = screenModel::onQueryChange,
-      onActiveChange = { screenModel.onActiveChange() },
-      onTokenSelected = screenModel::onTokenSelected
-    )
+    val compareTokensTab =
+      remember(tokensSearchBarState, tokens, tokensListState) {
+        CompareTokensTab(
+          searchBarState = tokensSearchBarState,
+          tokensListState = tokensListState,
+          tokens = tokens,
+          onQueryChange = screenModel::onQueryChange,
+          onActiveChange = { screenModel.onActiveChange() },
+          onTokenSelected = screenModel::onTokenSelected
+        )
+      }
+
+    val tokensListTab =
+      remember(tokensSearchBarState, tokens, tokensListState) {
+        TokensListTab(
+          searchBarState = tokensSearchBarState,
+          tokensListState = tokensListState,
+          tokens = tokens,
+          onQueryChange = screenModel::onQueryChange,
+          onActiveChange = { screenModel.onActiveChange() },
+          onTokenSelected = screenModel::onTokenSelected
+        )
+      }
+
+    TabNavigator(tab = compareTokensTab) { tabNavigator ->
+      Row {
+        if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+          NavigationRail {
+            Spacer(Modifier.weight(1f))
+            TabNavigationRailItem(compareTokensTab)
+            TabNavigationRailItem(tokensListTab)
+            Spacer(Modifier.weight(1f))
+          }
+        }
+
+        Scaffold(
+          bottomBar = {
+            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
+              NavigationBar {
+                TabNavigationBarItem(compareTokensTab)
+                TabNavigationBarItem(tokensListTab)
+              }
+            }
+          }
+        ) { paddingValues ->
+          Box(modifier = Modifier.padding(paddingValues)) {
+            Crossfade(tabNavigator.current.key) {
+              tabNavigator.saveableState(
+                key = CURRENT_TAB_SAVE_STATE_KEY,
+                tab =
+                  when (it) {
+                    compareTokensTab.key -> compareTokensTab
+                    tokensListTab.key -> tokensListTab
+                    else -> throw IllegalStateException()
+                  }
+              ) {
+                when (it) {
+                  compareTokensTab.key -> compareTokensTab.Content()
+                  tokensListTab.key -> tokensListTab.Content()
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
-
-@Composable
-private fun Modifier.fillMainSearchBarMaxHeight(
-  scaffoldHeightPx: Int,
-  bottomBarHeightPx: Int
-): Modifier =
-  then(
-    Modifier.heightIn(
-      max =
-        with(LocalDensity.current) {
-          (scaffoldHeightPx - bottomBarHeightPx).toDouble().times(0.9).toInt().toDp()
-        }
-    )
-  )
 
 private const val CURRENT_TAB_SAVE_STATE_KEY = "currentTab"
 
