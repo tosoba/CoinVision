@@ -25,7 +25,7 @@ import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.common.TokensSearchBar
 import com.trm.coinvision.ui.common.TokensSearchBarState
 import com.trm.coinvision.ui.common.rememberTokensSearchBarState
-import com.trm.coinvision.ui.mainSearchBarPadding
+import com.trm.coinvision.ui.common.tokensSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -42,7 +42,7 @@ internal class CompareTokensTab(
     @Composable
     fun MainTokensSearchBar() {
       TokensSearchBar(
-        modifier = Modifier.fillMaxWidth().padding(mainSearchBarPadding),
+        modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
         searchBarState = searchBarState,
         tokensListState = tokensListState,
         tokens = tokens,
@@ -67,7 +67,7 @@ internal class CompareTokensTab(
     @Composable
     fun ReferenceTokensSearchBar() {
       TokensSearchBar(
-        modifier = Modifier.fillMaxWidth().padding(mainSearchBarPadding),
+        modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
         searchBarState = tokensSearchBarState,
         tokensListState = tokensListState,
         tokens = tokens,

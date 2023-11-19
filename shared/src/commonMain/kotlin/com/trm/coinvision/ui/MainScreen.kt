@@ -20,7 +20,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -141,6 +140,3 @@ private fun TabNavigationRailItem(tab: Tab) {
 private fun TabNavigationItemIcon(tab: Tab) {
   tab.options.icon?.let { Icon(painter = it, contentDescription = tab.options.title) }
 }
-
-internal val mainSearchBarPadding = 10.dp
-internal val mainSearchBarHeight = 56.dp

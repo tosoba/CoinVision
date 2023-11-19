@@ -60,12 +60,12 @@ import kotlinx.coroutines.flow.flowOf
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
-  onQueryChange: (String) -> Unit = {},
-  onActiveChange: (Boolean) -> Unit = {},
-  onTokenSelected: (TokenListItemDTO) -> Unit = {},
   tokensListState: LazyListState = rememberLazyListState(),
   tokens: LazyPagingItems<TokenListItemDTO> =
-    flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems()
+    flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
+  onQueryChange: (String) -> Unit = {},
+  onActiveChange: (Boolean) -> Unit = {},
+  onTokenSelected: (TokenListItemDTO) -> Unit = {}
 ) {
   Column(modifier = modifier) {
     DockedSearchBar(
@@ -334,3 +334,5 @@ private fun Modifier.shimmerListItemContent() =
       .shimmer()
       .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp))
   )
+
+internal val tokensSearchBarPadding = 10.dp
