@@ -30,7 +30,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,18 +58,13 @@ import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.ktor.http.Url
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @Composable
 internal fun TokensSearchBar(modifier: Modifier = Modifier, args: TokensSearchBarArgs) {
   TokensSearchBar(
     modifier = modifier,
     searchBarState = args.searchBarState,
-    deactivateFlow = args.deactivateFlow,
     tokensListState = args.tokensListState,
     tokens = args.tokens,
     onQueryChange = args.onQueryChange,
@@ -84,7 +78,6 @@ internal fun TokensSearchBar(modifier: Modifier = Modifier, args: TokensSearchBa
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
-  deactivateFlow: Flow<Unit> = emptyFlow(),
   tokensListState: LazyListState = rememberLazyListState(),
   tokens: LazyPagingItems<TokenListItemDTO> =
     flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
@@ -92,10 +85,6 @@ internal fun TokensSearchBar(
   onActiveChange: (Boolean) -> Unit = {},
   onTokenSelected: (TokenListItemDTO) -> Unit = {}
 ) {
-  LaunchedEffect(searchBarState) {
-    deactivateFlow.onEach { searchBarState.updateActive(false) }.launchIn(this)
-  }
-
   Column(modifier = modifier) {
     DockedSearchBar(
       modifier = Modifier.fillMaxWidth(),

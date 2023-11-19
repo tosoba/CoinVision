@@ -1,11 +1,11 @@
 package com.trm.coinvision.ui
 
-import com.trm.coinvision.core.domain.model.TokensSearchBarType
 import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.ui.compareTokens.CompareTokensScreenModel
 import com.trm.coinvision.ui.tokensList.TokensListScreenModel
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -19,11 +19,9 @@ internal val uiModule = module {
     val selectedTokenRepository = get<SelectedTokenRepository>()
     TokensSearchBarViewModel(
       coroutineScope = coroutineScope,
-      getSelectedTokenUseCase = selectedTokenRepository::getSelectedMainToken,
-      updateSelectedTokenUseCase = selectedTokenRepository::updateSelectedMainToken,
-      getTokenListPagingUseCase = get<TokenListPagingRepository>()::invoke,
-      deactivateSearchBarFlowUseCase = get(named(TokensSearchBarType.MAIN)),
-      searchBarActiveChangeFlowUseCase = get(named(TokensSearchBarType.MAIN))
+      getSelectedToken = selectedTokenRepository::getSelectedMainToken,
+      updateSelectedToken = selectedTokenRepository::updateSelectedMainToken,
+      getTokenListPaging = get<TokenListPagingRepository>()::invoke
     )
   }
 
@@ -31,11 +29,9 @@ internal val uiModule = module {
     val selectedTokenRepository = get<SelectedTokenRepository>()
     TokensSearchBarViewModel(
       coroutineScope = coroutineScope,
-      getSelectedTokenUseCase = selectedTokenRepository::getSelectedReferenceToken,
-      updateSelectedTokenUseCase = selectedTokenRepository::updateSelectedReferenceToken,
-      getTokenListPagingUseCase = get<TokenListPagingRepository>()::invoke,
-      deactivateSearchBarFlowUseCase = get(named(TokensSearchBarType.REFERENCE)),
-      searchBarActiveChangeFlowUseCase = get(named(TokensSearchBarType.REFERENCE))
+      getSelectedToken = selectedTokenRepository::getSelectedReferenceToken,
+      updateSelectedToken = selectedTokenRepository::updateSelectedReferenceToken,
+      getTokenListPaging = get<TokenListPagingRepository>()::invoke
     )
   }
 }
