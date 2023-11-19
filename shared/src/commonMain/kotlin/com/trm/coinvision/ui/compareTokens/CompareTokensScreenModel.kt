@@ -7,7 +7,7 @@ import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenFlowUseCase
 import com.trm.coinvision.core.domain.usecase.GetSelectedReferenceTokenFlowUseCase
-import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
+import com.trm.coinvision.core.domain.model.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

@@ -10,10 +10,12 @@ import androidx.compose.runtime.remember
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
+import kotlinx.coroutines.flow.Flow
 
 @Stable
 internal data class TokensSearchBarArgs(
   val searchBarState: TokensSearchBarState,
+  val deactivateFlow: Flow<Unit>,
   val tokensListState: LazyListState,
   val tokens: LazyPagingItems<TokenListItemDTO>,
   val onQueryChange: (String) -> Unit = {},
@@ -22,7 +24,9 @@ internal data class TokensSearchBarArgs(
 )
 
 @Composable
-internal fun rememberTokensSearchBarArgs(viewModel: TokensSearchBarViewModel): TokensSearchBarArgs {
+internal fun rememberTokensSearchBarArgs(
+  viewModel: TokensSearchBarViewModel,
+): TokensSearchBarArgs {
   val initialTokenSearchBarState by viewModel.initialSearchBarStateFlow.collectAsState()
   val tokensSearchBarState =
     rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
@@ -33,10 +37,11 @@ internal fun rememberTokensSearchBarArgs(viewModel: TokensSearchBarViewModel): T
   return remember(viewModel, tokensSearchBarState, tokens, tokensListState) {
     TokensSearchBarArgs(
       searchBarState = tokensSearchBarState,
+      deactivateFlow = viewModel.deactivateFlow,
       tokensListState = tokensListState,
       tokens = tokens,
       onQueryChange = viewModel::onQueryChange,
-      onActiveChange = { viewModel.onActiveChange() },
+      onActiveChange = viewModel::onActiveChange,
       onTokenSelected = viewModel::onTokenSelected
     )
   }

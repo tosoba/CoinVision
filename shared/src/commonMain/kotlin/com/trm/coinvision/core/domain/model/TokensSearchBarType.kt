@@ -1,4 +1,4 @@
-package com.trm.coinvision.ui.tokensSearchBar
+package com.trm.coinvision.core.domain.model
 
 enum class TokensSearchBarType {
   MAIN,
