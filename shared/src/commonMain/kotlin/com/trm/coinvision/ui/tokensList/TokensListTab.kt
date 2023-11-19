@@ -30,9 +30,9 @@ import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.SelectedTokenData
-import com.trm.coinvision.ui.common.TokensSearchBar
-import com.trm.coinvision.ui.common.TokensSearchBarState
-import com.trm.coinvision.ui.common.tokensSearchBarPadding
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarState
+import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 

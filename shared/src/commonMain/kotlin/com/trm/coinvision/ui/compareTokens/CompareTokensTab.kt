@@ -22,10 +22,10 @@ import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.common.SelectedTokenData
-import com.trm.coinvision.ui.common.TokensSearchBar
-import com.trm.coinvision.ui.common.TokensSearchBarState
-import com.trm.coinvision.ui.common.rememberTokensSearchBarState
-import com.trm.coinvision.ui.common.tokensSearchBarPadding
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarState
+import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarState
+import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -57,12 +57,14 @@ internal class CompareTokensTab(
     val selectedMainToken by screenModel.selectedMainTokenFlow.collectAsState()
     val selectedReferenceToken by screenModel.selectedReferenceTokenFlow.collectAsState()
 
-    val initialTokenSearchBarState by screenModel.initialTokenSearchBarStateFlow.collectAsState()
+    val initialTokenSearchBarState by
+      screenModel.referenceTokensSearchBarViewModel.initialSearchBarStateFlow.collectAsState()
     val tokensSearchBarState =
       rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
 
     val tokensListState = rememberLazyListState()
-    val tokens = screenModel.searchBarTokensPagingFlow.collectAsLazyPagingItems()
+    val tokens =
+      screenModel.referenceTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     @Composable
     fun ReferenceTokensSearchBar() {
@@ -71,9 +73,9 @@ internal class CompareTokensTab(
         searchBarState = tokensSearchBarState,
         tokensListState = tokensListState,
         tokens = tokens,
-        onQueryChange = screenModel::onQueryChange,
-        onActiveChange = { screenModel.onActiveChange() },
-        onTokenSelected = screenModel::onTokenSelected
+        onQueryChange = screenModel.referenceTokensSearchBarViewModel::onQueryChange,
+        onActiveChange = { screenModel.referenceTokensSearchBarViewModel.onActiveChange() },
+        onTokenSelected = screenModel.referenceTokensSearchBarViewModel::onTokenSelected
       )
     }
 

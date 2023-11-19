@@ -1,4 +1,4 @@
-package com.trm.coinvision.ui.common
+package com.trm.coinvision.ui.tokensSearchBar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -49,6 +49,11 @@ import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.model.WithData
+import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
+import com.trm.coinvision.ui.common.CoinVisionRetryColumn
+import com.trm.coinvision.ui.common.CoinVisionRetryRow
+import com.trm.coinvision.ui.common.TokenSymbol
+import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
