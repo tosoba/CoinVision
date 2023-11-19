@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,11 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -29,45 +25,18 @@ import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
-import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarState
+import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarArgs
 
 internal object MainScreen : Screen {
   @Composable
   override fun Content() {
     val screenModel = getScreenModel<MainScreenModel>()
-
-    val initialTokenSearchBarState by
-      screenModel.mainTokensSearchBarViewModel.initialSearchBarStateFlow.collectAsState()
-    val tokensSearchBarState =
-      rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
-
-    val tokensListState = rememberLazyListState()
-    val tokens =
-      screenModel.mainTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
+    val mainTokensSearchBarArgs =
+      rememberTokensSearchBarArgs(screenModel.mainTokensSearchBarViewModel)
 
     val compareTokensTab =
-      remember(tokensSearchBarState, tokens, tokensListState) {
-        CompareTokensTab(
-          searchBarState = tokensSearchBarState,
-          tokensListState = tokensListState,
-          tokens = tokens,
-          onQueryChange = screenModel.mainTokensSearchBarViewModel::onQueryChange,
-          onActiveChange = { screenModel.mainTokensSearchBarViewModel.onActiveChange() },
-          onTokenSelected = screenModel.mainTokensSearchBarViewModel::onTokenSelected
-        )
-      }
-
-    val tokensListTab =
-      remember(tokensSearchBarState, tokens, tokensListState) {
-        TokensListTab(
-          searchBarState = tokensSearchBarState,
-          tokensListState = tokensListState,
-          tokens = tokens,
-          onQueryChange = screenModel.mainTokensSearchBarViewModel::onQueryChange,
-          onActiveChange = { screenModel.mainTokensSearchBarViewModel.onActiveChange() },
-          onTokenSelected = screenModel.mainTokensSearchBarViewModel::onTokenSelected
-        )
-      }
+      remember(mainTokensSearchBarArgs) { CompareTokensTab(mainTokensSearchBarArgs) }
+    val tokensListTab = remember(mainTokensSearchBarArgs) { TokensListTab(mainTokensSearchBarArgs) }
 
     TabNavigator(tab = compareTokensTab) { tabNavigator ->
       Row {

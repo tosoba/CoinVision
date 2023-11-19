@@ -18,48 +18,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
-import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarState
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarArgs
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-internal class TokensListTab(
-  private val searchBarState: TokensSearchBarState,
-  private val tokensListState: LazyListState,
-  private val tokens: LazyPagingItems<TokenListItemDTO>,
-  private val onQueryChange: (String) -> Unit,
-  private val onActiveChange: (Boolean) -> Unit,
-  private val onTokenSelected: (TokenListItemDTO) -> Unit
-) : Tab {
+internal class TokensListTab(private val mainSearchBarArgs: TokensSearchBarArgs) : Tab {
   @Composable
   override fun Content() {
-    @Composable
-    fun MainTokensSearchBar() {
-      TokensSearchBar(
-        modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
-        searchBarState = searchBarState,
-        tokensListState = tokensListState,
-        tokens = tokens,
-        onQueryChange = onQueryChange,
-        onActiveChange = onActiveChange,
-        onTokenSelected = onTokenSelected
-      )
-    }
-
     val screenModel = getScreenModel<TokensListScreenModel>()
+
     val token by screenModel.selectedToken.collectAsState()
     val listState = rememberLazyListState()
 
@@ -69,18 +48,26 @@ internal class TokensListTab(
           MainTokensSearchBar()
           SelectedTokenData(modifier = Modifier.fillMaxSize(), token = token)
         }
-        CoinMarketsColumn(modifier = Modifier.weight(.5f).fillMaxHeight(), state = listState)
+        TokensLazyColumn(modifier = Modifier.weight(.5f).fillMaxHeight(), state = listState)
       }
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
         MainTokensSearchBar()
-        CoinMarketsColumn(modifier = Modifier.fillMaxSize(), state = listState)
+        TokensLazyColumn(modifier = Modifier.fillMaxSize(), state = listState)
       }
     }
   }
 
   @Composable
-  private fun CoinMarketsColumn(modifier: Modifier = Modifier, state: LazyListState) {
+  private fun MainTokensSearchBar() {
+    TokensSearchBar(
+      modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+      args = mainSearchBarArgs
+    )
+  }
+
+  @Composable
+  private fun TokensLazyColumn(modifier: Modifier = Modifier, state: LazyListState) {
     val screenModel = getScreenModel<TokensListScreenModel>()
     val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
     LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
