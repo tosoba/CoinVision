@@ -2,6 +2,7 @@ package com.trm.coinvision.core.network.client
 
 import androidx.annotation.IntRange
 import com.trm.coinvision.core.domain.model.FiatCurrency
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
@@ -53,6 +54,20 @@ internal class CoinGeckoApiClient(private val client: HttpClient) {
         parameters.append("community_data", "false")
         parameters.append("developer_data", "false")
         parameters.append("sparkline", "true")
+      }
+    }
+
+  suspend fun getMarketChart(
+    id: String,
+    vsFiatCurrency: FiatCurrency,
+    days: MarketChartDaysPeriod = MarketChartDaysPeriod.DAY
+  ): HttpResponse =
+    client.get(COIN_GECKO_API_BASE_URL) {
+      url {
+        appendPathSegments("coins", id, "market_chart")
+        parameters.append("vs_currency", vsFiatCurrency.queryParam)
+        parameters.append("days", days.queryParam)
+        parameters.append("precision", "full")
       }
     }
 }
