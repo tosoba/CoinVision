@@ -3,7 +3,15 @@ plugins {
   // in each subproject's classloader
   kotlin("multiplatform") apply false
   id("com.android.application") apply false
+  alias(libs.plugins.sqlDelight) apply false
   id("com.android.library") apply false
   id("org.jetbrains.compose") apply false
   alias(libs.plugins.kotlin.serialization) apply false
+}
+
+allprojects {
+  repositories {
+    google()
+    mavenCentral()
+  }
 }

@@ -1,0 +1,16 @@
+CREATE TABLE SelectedToken(
+	id TEXT NOT NULL PRIMARY KEY,
+	symbol TEXT NOT NULL,
+	name TEXT NOT NULL,
+	image TEXT,
+	updatedAt TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM SelectedToken;
+
+deleteAll:
+DELETE FROM SelectedToken;
+
+insertOne:
+INSERT OR REPLACE INTO SelectedToken(id, symbol, name, image, updatedAt) VALUES(?,?,?,?,?);

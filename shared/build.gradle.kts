@@ -3,6 +3,7 @@ plugins {
   kotlin("native.cocoapods")
   id("com.android.library")
   id("org.jetbrains.compose")
+  id("app.cash.sqldelight")
   alias(libs.plugins.kotlin.serialization)
 }
 
@@ -85,6 +86,8 @@ kotlin {
 
         implementation(libs.ktor.client.android)
         implementation(libs.ktor.client.okhttp)
+
+        implementation(libs.sqldelight.android.driver)
       }
     }
     val androidUnitTest by getting
@@ -98,7 +101,10 @@ kotlin {
       iosArm64Main.dependsOn(this)
       iosSimulatorArm64Main.dependsOn(this)
 
-      dependencies { implementation(libs.ktor.client.darwin) }
+      dependencies {
+        implementation(libs.ktor.client.darwin)
+        implementation(libs.sqldelight.native.driver)
+      }
     }
     val iosX64Test by getting
     val iosArm64Test by getting
@@ -132,5 +138,7 @@ android {
 
   kotlin { jvmToolchain(11) }
 
-  packagingOptions { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
+  packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 }
+
+sqldelight { databases { create("CoinVisionDb") { packageName.set("com.trm.coinvision.db") } } }
