@@ -1,16 +1,18 @@
-CREATE TABLE SelectedToken(
+import kotlinx.datetime.LocalDateTime;
+
+CREATE TABLE selectedToken(
 	id TEXT NOT NULL PRIMARY KEY,
 	symbol TEXT NOT NULL,
 	name TEXT NOT NULL,
 	image TEXT,
-	updatedAt TEXT NOT NULL
+	updatedAt TEXT AS LocalDateTime NOT NULL
 );
 
 selectAll:
-SELECT * FROM SelectedToken;
+SELECT * FROM selectedToken;
 
 deleteAll:
-DELETE FROM SelectedToken;
+DELETE FROM selectedToken;
 
 insertOne:
-INSERT OR REPLACE INTO SelectedToken(id, symbol, name, image, updatedAt) VALUES(?,?,?,?,?);
+INSERT OR REPLACE INTO selectedToken(id, symbol, name, image, updatedAt) VALUES(?,?,?,?,?);

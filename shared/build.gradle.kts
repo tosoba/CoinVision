@@ -43,6 +43,7 @@ kotlin {
 
         api(libs.koin.core)
 
+        implementation(libs.kotlinx.datetime)
         implementation(libs.kotlinx.serialization.json)
 
         implementation(libs.ktor.client.core)
