@@ -11,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
+import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarArgs
@@ -39,9 +41,8 @@ internal class CompareTokensTab(private val mainTokensSearchBarArgs: TokensSearc
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBar(mainTokensSearchBarArgs)
-          SelectedTokenData(
-            modifier = Modifier.fillMaxSize(),
-            token = selectedMainToken,
+          PriceChart(
+            modifier = Modifier.fillMaxSize().padding(10.dp),
           )
         }
 
@@ -56,9 +57,8 @@ internal class CompareTokensTab(private val mainTokensSearchBarArgs: TokensSearc
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
         TokensSearchBar(mainTokensSearchBarArgs)
-        SelectedTokenData(
-          modifier = Modifier.fillMaxWidth().weight(.5f),
-          token = selectedMainToken,
+        PriceChart(
+          modifier = Modifier.fillMaxWidth().weight(.5f).padding(10.dp),
         )
 
         TokensSearchBar(referenceTokensSearchBarArgs)

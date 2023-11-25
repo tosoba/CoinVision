@@ -80,6 +80,8 @@ kotlin {
         api(libs.appcompat)
         api(libs.core.ktx)
 
+        implementation(libs.tradingview.charts)
+
         implementation(libs.koin.android)
         implementation(libs.koin.core)
 
