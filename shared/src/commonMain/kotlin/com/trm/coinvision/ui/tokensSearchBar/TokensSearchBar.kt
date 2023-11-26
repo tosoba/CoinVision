@@ -30,12 +30,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -45,10 +40,8 @@ import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.compose.itemKey
 import com.trm.coinvision.core.common.util.LocalStringResources
-import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
-import com.trm.coinvision.core.domain.model.WithData
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
@@ -61,10 +54,32 @@ import io.ktor.http.Url
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
+internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSearchBarViewModel) {
+  val tokensListState = rememberSaveable(saver = LazyListState.Saver) { viewModel.tokensListState }
+  val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
+
+  TokensSearchBar(
+    modifier = modifier,
+    query = viewModel.query,
+    selectedToken = viewModel.selectedToken,
+    active = viewModel.active,
+    isLoading = viewModel.isLoading,
+    tokensListState = tokensListState,
+    tokens = tokens,
+    onQueryChange = viewModel::onQueryChange,
+    onActiveChange = viewModel::onActiveChange,
+    onTokenSelected = viewModel::onTokenSelected
+  )
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
-  searchBarState: TokensSearchBarState = rememberTokensSearchBarState(),
+  query: String = "",
+  selectedToken: SelectedToken,
+  active: Boolean = false,
+  isLoading: Boolean = false,
   tokensListState: LazyListState = rememberLazyListState(),
   tokens: LazyPagingItems<TokenListItemDTO> =
     flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
@@ -75,27 +90,21 @@ internal fun TokensSearchBar(
   Column(modifier = modifier) {
     DockedSearchBar(
       modifier = Modifier.fillMaxWidth(),
-      enabled = !searchBarState.isLoading,
-      query = searchBarState.query,
-      onQueryChange = {
-        searchBarState.updateQuery(it)
-        onQueryChange(it)
-      },
+      enabled = !isLoading,
+      query = query,
+      onQueryChange = { onQueryChange(it) },
       onSearch = {},
-      active = searchBarState.active,
-      onActiveChange = {
-        searchBarState.updateActive(it)
-        onActiveChange(it)
-      },
+      active = active,
+      onActiveChange = { onActiveChange(it) },
       placeholder = {
         Text(
-          if (searchBarState.isLoading) LocalStringResources.current.loading
+          if (isLoading) LocalStringResources.current.loading
           else LocalStringResources.current.searchForTokens
         )
       },
       leadingIcon = {
-        IconButton({ searchBarState.updateActive(!searchBarState.active) }) {
-          if (searchBarState.active) {
+        IconButton({ onActiveChange(!active) }) {
+          if (active) {
             Icon(Icons.Rounded.ArrowBack, contentDescription = null)
           } else {
             Icon(Icons.Rounded.Search, contentDescription = null)
@@ -104,15 +113,15 @@ internal fun TokensSearchBar(
       },
       trailingIcon = {
         AnimatedVisibility(
-          visible = searchBarState.selectedTokenImage != null,
+          visible = selectedToken.image != null,
           enter = fadeIn(),
           exit = fadeOut(),
         ) {
           TokenImageOrSymbol(
             modifier = Modifier.size(40.dp).clip(CircleShape),
-            image = searchBarState.selectedTokenImage,
-            symbol = searchBarState.selectedTokenSymbol,
-            name = searchBarState.selectedTokenName
+            image = selectedToken.image,
+            symbol = selectedToken.symbol,
+            name = selectedToken.name
           )
         }
       },
@@ -155,12 +164,7 @@ internal fun TokensSearchBar(
             ) { index ->
               tokens[index]?.let { token ->
                 ListItem(
-                  modifier =
-                    Modifier.clickable {
-                        searchBarState.onTokenSelected(token)
-                        onTokenSelected(token)
-                      }
-                      .animateItemPlacement(),
+                  modifier = Modifier.clickable { onTokenSelected(token) }.animateItemPlacement(),
                   headlineContent = {
                     Text(text = token.name, style = MaterialTheme.typography.titleMedium)
                   },
@@ -179,7 +183,7 @@ internal fun TokensSearchBar(
                     )
                   },
                   trailingContent = {
-                    AnimatedVisibility(visible = searchBarState.selectedTokenId == token.id) {
+                    AnimatedVisibility(visible = selectedToken.id == token.id) {
                       Icon(Icons.Default.Check, contentDescription = null)
                     }
                   }
@@ -205,7 +209,7 @@ internal fun TokensSearchBar(
     }
 
     AnimatedVisibility(
-      visible = searchBarState.isLoading,
+      visible = isLoading,
       enter = fadeIn(),
       exit = fadeOut(),
     ) {
@@ -231,104 +235,6 @@ private fun TokenImageOrSymbol(
     )
   } ?: run { TokenSymbol(symbol = symbol) }
 }
-
-@Stable
-internal class TokensSearchBarState(
-  query: String = "",
-  selectedTokenId: String = "",
-  selectedTokenSymbol: String = "",
-  selectedTokenImage: String? = null,
-  active: Boolean = false,
-  val isLoading: Boolean = false,
-) {
-  var selectedTokenName by mutableStateOf(query)
-    private set
-
-  var query by mutableStateOf(query)
-    private set
-
-  var selectedTokenId by mutableStateOf(selectedTokenId)
-    private set
-
-  var selectedTokenSymbol by mutableStateOf(selectedTokenSymbol)
-    private set
-
-  var selectedTokenImage by mutableStateOf(selectedTokenImage)
-    private set
-
-  var active by mutableStateOf(active)
-    private set
-
-  fun updateQuery(query: String) {
-    this.query = query
-  }
-
-  fun updateActive(active: Boolean) {
-    this.active = active
-    if (!active) query = selectedTokenName
-  }
-
-  fun onTokenSelected(token: TokenListItemDTO) {
-    query = token.name
-    selectedTokenId = token.id
-    selectedTokenSymbol = token.symbol
-    selectedTokenImage = token.image
-    selectedTokenName = token.name
-    active = false
-  }
-
-  companion object {
-    val Saver =
-      Saver<TokensSearchBarState, List<Any>>(
-        save = {
-          listOf(
-            it.query,
-            it.selectedTokenId,
-            it.selectedTokenSymbol,
-            it.selectedTokenImage.orEmpty(),
-            it.active,
-            it.isLoading
-          )
-        },
-        restore = {
-          TokensSearchBarState(
-            query = it[0] as String,
-            selectedTokenId = it[1] as String,
-            selectedTokenSymbol = it[2] as String,
-            selectedTokenImage = (it[3] as String).takeIf(String::isNotBlank),
-            active = it[4] as Boolean,
-            isLoading = it[5] as Boolean
-          )
-        }
-      )
-  }
-}
-
-@Composable
-internal fun rememberTokensSearchBarState(
-  vararg inputs: Any?,
-  init: () -> TokensSearchBarState = { TokensSearchBarState() }
-): TokensSearchBarState =
-  rememberSaveable(inputs = inputs, saver = TokensSearchBarState.Saver, init = init)
-
-internal fun selectedTokenLoadableToTokensSearchBarState(
-  loadable: Loadable<SelectedToken>
-): TokensSearchBarState =
-  when (loadable) {
-    is WithData -> {
-      val (id, symbol, name, image) = loadable.data
-      TokensSearchBarState(
-        query = name,
-        selectedTokenId = id,
-        selectedTokenSymbol = symbol,
-        selectedTokenImage = image,
-        isLoading = false
-      )
-    }
-    else -> {
-      TokensSearchBarState(isLoading = true)
-    }
-  }
 
 @Composable
 private fun Modifier.shimmerListItemContent() =

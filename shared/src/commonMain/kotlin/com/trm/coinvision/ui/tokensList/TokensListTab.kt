@@ -15,7 +15,6 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -39,15 +38,20 @@ import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
-import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarState
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 object TokensListTab : Tab {
+  @OptIn(ExperimentalVoyagerApi::class)
   @Composable
   override fun Content() {
+    val mainTokensSearchBarViewModel =
+      LocalNavigator.currentOrThrow
+        .root()
+        .getNavigatorScreenModel<MainNavigatorScreenModel>()
+        .mainTokensSearchBarViewModel
     val tokensListScreenModel = getScreenModel<TokensListScreenModel>()
 
     val listState = rememberLazyListState()
@@ -58,7 +62,10 @@ object TokensListTab : Tab {
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
-          MainTokensSearchBar()
+          TokensSearchBar(
+            modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+            viewModel = mainTokensSearchBarViewModel
+          )
           SelectedTokenData(modifier = Modifier.fillMaxSize(), token = token)
         }
         TokensLazyColumn(
@@ -69,7 +76,10 @@ object TokensListTab : Tab {
       }
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
-        MainTokensSearchBar()
+        TokensSearchBar(
+          modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+          viewModel = mainTokensSearchBarViewModel
+        )
         TokensLazyColumn(
           modifier = Modifier.fillMaxSize(),
           state = listState,
@@ -77,35 +87,6 @@ object TokensListTab : Tab {
         )
       }
     }
-  }
-
-  @OptIn(ExperimentalVoyagerApi::class)
-  @Composable
-  private fun MainTokensSearchBar() {
-    val viewModel =
-      LocalNavigator.currentOrThrow
-        .root()
-        .getNavigatorScreenModel<MainNavigatorScreenModel>()
-        .mainTokensSearchBarViewModel
-
-    val initialTokenSearchBarState by viewModel.searchBarStateFlow.collectAsState()
-    val tokensSearchBarState =
-      rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
-
-    val tokensListState =
-      rememberSaveable(saver = LazyListState.Saver) { viewModel.tokensListState }
-
-    val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
-
-    TokensSearchBar(
-      modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
-      searchBarState = tokensSearchBarState,
-      tokensListState = tokensListState,
-      tokens = tokens,
-      onQueryChange = viewModel::onQueryChange,
-      onActiveChange = { viewModel.onActiveChange() },
-      onTokenSelected = viewModel::onTokenSelected
-    )
   }
 
   @OptIn(ExperimentalResourceApi::class)
