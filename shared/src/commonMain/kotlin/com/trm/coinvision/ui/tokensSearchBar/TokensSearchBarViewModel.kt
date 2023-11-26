@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class TokensSearchBarViewModel(
   private val coroutineScope: CoroutineScope,
-  private val getSelectedTokenFlow: suspend () -> Flow<SelectedToken>,
+  private val getSelectedTokenFlow: () -> Flow<SelectedToken>,
   private val updateSelectedToken: suspend (SelectedToken) -> Unit,
   private val getTokenListPaging: (String?) -> Flow<PagingData<TokenListItemDTO>>
 ) {
