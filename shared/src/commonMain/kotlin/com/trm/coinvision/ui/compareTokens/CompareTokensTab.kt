@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.collectAsLazyPagingItems
@@ -88,7 +89,9 @@ object CompareTokensTab : Tab {
     val tokensSearchBarState =
       rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
 
-    val tokensListState = rememberLazyListState()
+    val tokensListState =
+      rememberSaveable(saver = LazyListState.Saver) { viewModel.tokensListState }
+
     val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     TokensSearchBar(

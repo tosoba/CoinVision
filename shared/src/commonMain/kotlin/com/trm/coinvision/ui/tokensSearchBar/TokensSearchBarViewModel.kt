@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui.tokensSearchBar
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.trm.coinvision.core.domain.model.LoadingFirst
@@ -30,6 +31,8 @@ internal class TokensSearchBarViewModel(
   private val getTokenListPaging: (String?) -> Flow<PagingData<TokenListItemDTO>>
 ) {
   private val queryFlow = MutableSharedFlow<String>()
+
+  val tokensListState = LazyListState(0, 0)
 
   val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
     queryFlow
