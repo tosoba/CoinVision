@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class TokensSearchBarViewModel(
   private val coroutineScope: CoroutineScope,
-  private val getSelectedToken: suspend () -> SelectedToken,
+  private val getSelectedTokenFlow: suspend () -> Flow<SelectedToken>,
   private val updateSelectedToken: suspend (SelectedToken) -> Unit,
   private val getTokenListPaging: (String?) -> Flow<PagingData<TokenListItemDTO>>
 ) {
@@ -42,10 +43,10 @@ internal class TokensSearchBarViewModel(
         initialValue = PagingData.empty()
       )
 
-  val initialSearchBarStateFlow: StateFlow<TokensSearchBarState> =
+  val searchBarStateFlow: StateFlow<TokensSearchBarState> =
     flow {
         emit(LoadingFirst)
-        emit(Ready(getSelectedToken()))
+        emitAll(getSelectedTokenFlow().map(::Ready))
       }
       .map(::selectedTokenLoadableToTokensSearchBarState)
       .stateIn(

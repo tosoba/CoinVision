@@ -21,33 +21,39 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
+import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
+import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
+import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
+import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
-import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarArgs
+import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarState
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-internal class TokensListTab(private val mainSearchBarArgs: TokensSearchBarArgs) : Tab {
+object TokensListTab : Tab {
   @Composable
   override fun Content() {
-    val screenModel = getScreenModel<TokensListScreenModel>()
+    val tokensListScreenModel = getScreenModel<TokensListScreenModel>()
 
     val listState = rememberLazyListState()
-    val tokens = screenModel.tokensPagingFlow.collectAsLazyPagingItems()
+    val tokens = tokensListScreenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      val token by screenModel.selectedToken.collectAsState()
+      val token by tokensListScreenModel.selectedToken.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -72,11 +78,30 @@ internal class TokensListTab(private val mainSearchBarArgs: TokensSearchBarArgs)
     }
   }
 
+  @OptIn(ExperimentalVoyagerApi::class)
   @Composable
   private fun MainTokensSearchBar() {
+    val viewModel =
+      LocalNavigator.currentOrThrow
+        .root()
+        .getNavigatorScreenModel<MainNavigatorScreenModel>()
+        .mainTokensSearchBarViewModel
+
+    val initialTokenSearchBarState by viewModel.searchBarStateFlow.collectAsState()
+    val tokensSearchBarState =
+      rememberTokensSearchBarState(initialTokenSearchBarState) { initialTokenSearchBarState }
+
+    val tokensListState = rememberLazyListState()
+    val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
+
     TokensSearchBar(
       modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
-      args = mainSearchBarArgs
+      searchBarState = tokensSearchBarState,
+      tokensListState = tokensListState,
+      tokens = tokens,
+      onQueryChange = viewModel::onQueryChange,
+      onActiveChange = { viewModel.onActiveChange() },
+      onTokenSelected = viewModel::onTokenSelected
     )
   }
 

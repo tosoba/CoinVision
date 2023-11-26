@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.Flow
 internal interface SelectedTokenRepository {
   suspend fun updateSelectedMainToken(token: SelectedToken)
 
-  suspend fun getSelectedMainToken(): SelectedToken
+  fun getSelectedMainTokenFlow(): Flow<SelectedToken>
 
   fun getSelectedMainTokenIdFlow(): Flow<String>
 
   suspend fun updateSelectedReferenceToken(token: SelectedToken)
 
-  suspend fun getSelectedReferenceToken(): SelectedToken
+  fun getSelectedReferenceTokenFlow(): Flow<SelectedToken>
 
   fun getSelectedReferenceTokenIdFlow(): Flow<String>
 

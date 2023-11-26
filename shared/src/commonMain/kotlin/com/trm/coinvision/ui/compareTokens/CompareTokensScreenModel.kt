@@ -1,7 +1,7 @@
 package com.trm.coinvision.ui.compareTokens
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.core.domain.model.TokenDTO
@@ -24,7 +24,7 @@ internal class CompareTokensScreenModel(
   val selectedMainTokenFlow: StateFlow<Loadable<TokenDTO>> =
     getSelectedMainTokenFlowUseCase()
       .stateIn(
-        scope = coroutineScope,
+        scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = LoadingFirst
       )
@@ -32,11 +32,11 @@ internal class CompareTokensScreenModel(
   val selectedReferenceTokenFlow: StateFlow<Loadable<TokenDTO>> =
     getSelectedReferenceTokenFlowUseCase()
       .stateIn(
-        scope = coroutineScope,
+        scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = LoadingFirst
       )
 
   val referenceTokensSearchBarViewModel: TokensSearchBarViewModel by
-    inject(named(TokensSearchBarType.REFERENCE)) { parametersOf(coroutineScope) }
+    inject(named(TokensSearchBarType.REFERENCE)) { parametersOf(screenModelScope) }
 }

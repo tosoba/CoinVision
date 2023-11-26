@@ -11,7 +11,6 @@ import com.trm.coinvision.core.network.client.CoinGeckoApiClient
 import com.trm.coinvision.core.network.model.CoinResponse
 import io.ktor.client.call.body
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 internal fun selectedTokenRepository(
@@ -33,8 +32,8 @@ internal fun selectedTokenRepository(
       }
     }
 
-    override suspend fun getSelectedMainToken(): SelectedToken =
-      dataStore.data.firstOrNull()?.mapToSelectedMainToken() ?: defaultSelectedMainToken()
+    override fun getSelectedMainTokenFlow(): Flow<SelectedToken> =
+      dataStore.data.map { it.mapToSelectedMainToken() }
 
     override fun getSelectedMainTokenIdFlow(): Flow<String> =
       dataStore.data.map { it[mainTokenIdKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_ID }
@@ -61,8 +60,8 @@ internal fun selectedTokenRepository(
       }
     }
 
-    override suspend fun getSelectedReferenceToken(): SelectedToken =
-      dataStore.data.firstOrNull()?.mapToSelectedReferenceToken() ?: defaultSelectedReferenceToken()
+    override fun getSelectedReferenceTokenFlow(): Flow<SelectedToken> =
+      dataStore.data.map { it.mapToSelectedReferenceToken() }
 
     override fun getSelectedReferenceTokenIdFlow(): Flow<String> =
       dataStore.data.map { it[referenceTokenIdKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID }

@@ -15,36 +15,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.trm.coinvision.core.common.di.getScreenModel
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
-import com.trm.coinvision.ui.tokensSearchBar.rememberTokensSearchBarArgs
 
 internal object MainScreen : Screen {
   @Composable
   override fun Content() {
-    val screenModel = getScreenModel<MainScreenModel>()
-    val mainTokensSearchBarArgs =
-      rememberTokensSearchBarArgs(screenModel.mainTokensSearchBarViewModel)
-
-    val compareTokensTab =
-      remember(mainTokensSearchBarArgs) { CompareTokensTab(mainTokensSearchBarArgs) }
-    val tokensListTab = remember(mainTokensSearchBarArgs) { TokensListTab(mainTokensSearchBarArgs) }
-
-    TabNavigator(tab = compareTokensTab) { tabNavigator ->
+    TabNavigator(tab = CompareTokensTab) { tabNavigator ->
       Row {
         if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
           NavigationRail {
             Spacer(Modifier.weight(1f))
-            TabNavigationRailItem(compareTokensTab)
-            TabNavigationRailItem(tokensListTab)
+            TabNavigationRailItem(CompareTokensTab)
+            TabNavigationRailItem(TokensListTab)
             Spacer(Modifier.weight(1f))
           }
         }
@@ -53,26 +42,18 @@ internal object MainScreen : Screen {
           bottomBar = {
             if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
               NavigationBar {
-                TabNavigationBarItem(compareTokensTab)
-                TabNavigationBarItem(tokensListTab)
+                TabNavigationBarItem(CompareTokensTab)
+                TabNavigationBarItem(TokensListTab)
               }
             }
           }
         ) { paddingValues ->
           Box(modifier = Modifier.padding(paddingValues)) {
-            Crossfade(tabNavigator.current.key) {
-              tabNavigator.saveableState(
-                key = CURRENT_TAB_SAVE_STATE_KEY,
-                tab =
-                  when (it) {
-                    compareTokensTab.key -> compareTokensTab
-                    tokensListTab.key -> tokensListTab
-                    else -> throw IllegalStateException()
-                  }
-              ) {
+            Crossfade(tabNavigator.current) {
+              tabNavigator.saveableState(CURRENT_TAB_SAVE_STATE_KEY, it) {
                 when (it) {
-                  compareTokensTab.key -> compareTokensTab.Content()
-                  tokensListTab.key -> tokensListTab.Content()
+                  CompareTokensTab -> CompareTokensTab.Content()
+                  TokensListTab -> TokensListTab.Content()
                 }
               }
             }

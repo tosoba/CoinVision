@@ -61,19 +61,6 @@ import io.ktor.http.Url
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-internal fun TokensSearchBar(modifier: Modifier = Modifier, args: TokensSearchBarArgs) {
-  TokensSearchBar(
-    modifier = modifier,
-    searchBarState = args.searchBarState,
-    tokensListState = args.tokensListState,
-    tokens = args.tokens,
-    onQueryChange = args.onQueryChange,
-    onActiveChange = args.onActiveChange,
-    onTokenSelected = args.onTokenSelected
-  )
-}
-
-@Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
@@ -325,7 +312,7 @@ internal fun rememberTokensSearchBarState(
   rememberSaveable(inputs = inputs, saver = TokensSearchBarState.Saver, init = init)
 
 internal fun selectedTokenLoadableToTokensSearchBarState(
-  loadable: Loadable<SelectedToken>,
+  loadable: Loadable<SelectedToken>
 ): TokensSearchBarState =
   when (loadable) {
     is WithData -> {
