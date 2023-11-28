@@ -4,20 +4,24 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.trm.coinvision.core.domain.model.FiatCurrency
+import com.trm.coinvision.core.domain.model.MarketChartDTO
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenDTO
-import com.trm.coinvision.core.domain.repo.SelectedTokenRepository
+import com.trm.coinvision.core.domain.repo.TokenRepository
 import com.trm.coinvision.core.network.client.CoinGeckoApiClient
 import com.trm.coinvision.core.network.model.CoinResponse
+import com.trm.coinvision.core.network.model.MarketChartResponse
 import io.ktor.client.call.body
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal fun selectedTokenRepository(
+internal fun tokenRepository(
   client: CoinGeckoApiClient,
   dataStore: DataStore<Preferences>
-): SelectedTokenRepository =
-  object : SelectedTokenRepository {
+): TokenRepository =
+  object : TokenRepository {
     private val mainTokenIdKey = stringPreferencesKey("selected_main_token_id")
     private val mainTokenSymbolKey = stringPreferencesKey("selected_main_token_symbol")
     private val mainTokenNameKey = stringPreferencesKey("selected_main_token_name")
@@ -76,6 +80,15 @@ internal fun selectedTokenRepository(
 
     override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
+
+    override suspend fun getTokenChart(
+      id: String,
+      vsFiatCurrency: FiatCurrency,
+      days: MarketChartDaysPeriod
+    ): MarketChartDTO =
+      client
+        .getMarketChart(id = id, vsFiatCurrency = vsFiatCurrency, days = days)
+        .body<MarketChartResponse>()
   }
 
 private const val DEFAULT_SELECTED_MAIN_TOKEN_ID = "ethereum"
@@ -84,24 +97,8 @@ private const val DEFAULT_SELECTED_MAIN_TOKEN_NAME = "Ethereum"
 private const val DEFAULT_SELECTED_MAIN_TOKEN_IMAGE =
   "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
 
-private fun defaultSelectedMainToken(): SelectedToken =
-  SelectedToken(
-    id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
-    symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
-    name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
-    image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
-  )
-
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_ID = "bitcoin"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL = "BTC"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_NAME = "Bitcoin"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE =
   "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
-
-private fun defaultSelectedReferenceToken(): SelectedToken =
-  SelectedToken(
-    id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
-    symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
-    name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
-    image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
-  )

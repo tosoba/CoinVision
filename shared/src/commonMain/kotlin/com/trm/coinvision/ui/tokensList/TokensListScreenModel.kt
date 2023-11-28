@@ -3,24 +3,28 @@ package com.trm.coinvision.ui.tokensList
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
-import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenFlowUseCase
+import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenWithChartFlowUseCase
+import com.trm.coinvision.ui.chart.PriceChartPoint
+import com.trm.coinvision.ui.chart.toPriceChartPoints
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 internal class TokensListScreenModel(
   tokenListPagingRepository: TokenListPagingRepository,
-  getSelectedMainTokenFlowUseCase: GetSelectedMainTokenFlowUseCase,
+  getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
 ) : ScreenModel {
-  val selectedToken: StateFlow<Loadable<TokenDTO>> =
-    getSelectedMainTokenFlowUseCase()
+  val selectedMainTokenWithChartFlow: StateFlow<Loadable<Pair<TokenDTO, List<PriceChartPoint>>>> =
+    getSelectedMainTokenWithChartFlowUseCase(MarketChartDaysPeriod.DAY)
+      .map { it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() } }
       .stateIn(
         scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),

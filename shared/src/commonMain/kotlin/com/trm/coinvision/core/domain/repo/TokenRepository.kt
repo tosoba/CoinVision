@@ -1,10 +1,13 @@
 package com.trm.coinvision.core.domain.repo
 
+import com.trm.coinvision.core.domain.model.FiatCurrency
+import com.trm.coinvision.core.domain.model.MarketChartDTO
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenDTO
 import kotlinx.coroutines.flow.Flow
 
-internal interface SelectedTokenRepository {
+internal interface TokenRepository {
   suspend fun updateSelectedMainToken(token: SelectedToken)
 
   fun getSelectedMainTokenFlow(): Flow<SelectedToken>
@@ -18,4 +21,10 @@ internal interface SelectedTokenRepository {
   fun getSelectedReferenceTokenIdFlow(): Flow<String>
 
   suspend fun getTokenById(id: String): TokenDTO
+
+  suspend fun getTokenChart(
+    id: String,
+    vsFiatCurrency: FiatCurrency,
+    days: MarketChartDaysPeriod
+  ): MarketChartDTO
 }

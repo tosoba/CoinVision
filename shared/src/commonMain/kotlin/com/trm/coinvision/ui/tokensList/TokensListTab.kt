@@ -36,6 +36,7 @@ import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
+import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
@@ -58,7 +59,7 @@ object TokensListTab : Tab {
     val tokens = tokensListScreenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      val token by tokensListScreenModel.selectedToken.collectAsState()
+      val tokenWithChart by tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -66,7 +67,15 @@ object TokensListTab : Tab {
             modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
             viewModel = mainTokensSearchBarViewModel
           )
-          SelectedTokenData(modifier = Modifier.fillMaxSize(), token = token)
+          LoadableView(
+            modifier = Modifier.fillMaxSize(),
+            loadable = tokenWithChart.map { (token) -> token },
+            onRetryClick = {
+              // TODO:
+            }
+          ) {
+            SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+          }
         }
         TokensLazyColumn(
           modifier = Modifier.weight(.5f).fillMaxHeight(),

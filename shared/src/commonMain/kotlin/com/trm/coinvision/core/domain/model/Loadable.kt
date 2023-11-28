@@ -1,9 +1,10 @@
 package com.trm.coinvision.core.domain.model
 
+import com.trm.coinvision.core.common.model.Serializable
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-sealed interface Loadable<out T : Any> {
+sealed interface Loadable<out T : Any> : Serializable {
   val copyWithLoadingInProgress: Loadable<T>
     get() = LoadingFirst
 

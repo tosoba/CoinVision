@@ -10,6 +10,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
@@ -24,6 +25,7 @@ import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
+import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
@@ -41,9 +43,8 @@ object CompareTokensTab : Tab {
         .mainTokensSearchBarViewModel
     val compareTokensScreenModel = getScreenModel<CompareTokensScreenModel>()
 
-    val selectedMainToken by compareTokensScreenModel.selectedMainTokenFlow.collectAsState()
-    val selectedReferenceToken by
-      compareTokensScreenModel.selectedReferenceTokenFlow.collectAsState()
+    val mainTokenWithChart by compareTokensScreenModel.mainTokenWithChartFlow.collectAsState()
+    val selectedReferenceToken by compareTokensScreenModel.referenceTokenFlow.collectAsState()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       Row(modifier = Modifier.fillMaxSize()) {
@@ -52,9 +53,15 @@ object CompareTokensTab : Tab {
             modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
             viewModel = mainTokensSearchBarViewModel
           )
-          PriceChart(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
-          )
+          LoadableView(
+            modifier = Modifier.fillMaxSize(),
+            loadable = mainTokenWithChart.map { (_, chart) -> chart },
+            onRetryClick = {
+              // TODO:
+            }
+          ) {
+            PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
+          }
         }
 
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -62,10 +69,15 @@ object CompareTokensTab : Tab {
             modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
             viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
           )
-          SelectedTokenData(
+          LoadableView(
             modifier = Modifier.fillMaxSize(),
-            token = selectedReferenceToken,
-          )
+            loadable = selectedReferenceToken,
+            onRetryClick = {
+              // TODO:
+            }
+          ) {
+            SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+          }
         }
       }
     } else {
@@ -74,18 +86,33 @@ object CompareTokensTab : Tab {
           modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
           viewModel = mainTokensSearchBarViewModel
         )
-        PriceChart(
-          modifier = Modifier.fillMaxWidth().weight(.5f).padding(10.dp),
-        )
+
+        LoadableView(
+          modifier = Modifier.fillMaxWidth().weight(.5f),
+          loadable = mainTokenWithChart.map { (_, chart) -> chart },
+          onRetryClick = {
+            // TODO:
+          }
+        ) {
+          PriceChart(
+            modifier = Modifier.fillMaxSize().padding(10.dp),
+            points = it
+          )
+        }
 
         TokensSearchBar(
           modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
           viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
         )
-        SelectedTokenData(
+        LoadableView(
           modifier = Modifier.fillMaxWidth().weight(.5f),
-          token = selectedReferenceToken
-        )
+          loadable = selectedReferenceToken,
+          onRetryClick = {
+            // TODO:
+          }
+        ) {
+          SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+        }
       }
     }
   }

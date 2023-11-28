@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-internal actual fun PriceChart(modifier: Modifier) {
+internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
   Box(modifier)
 }
