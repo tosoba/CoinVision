@@ -1,18 +1,48 @@
 import kotlinx.datetime.LocalDateTime;
 
-CREATE TABLE selectedToken(
+CREATE TABLE token(
 	id TEXT NOT NULL PRIMARY KEY,
 	symbol TEXT NOT NULL,
 	name TEXT NOT NULL,
-	image TEXT,
+	image TEXT
+);
+
+CREATE TABLE mainToken(
+	id TEXT NOT NULL PRIMARY KEY,
 	updatedAt TEXT AS LocalDateTime NOT NULL
 );
 
-selectAll:
-SELECT * FROM selectedToken;
+CREATE TABLE referenceToken(
+	id TEXT NOT NULL PRIMARY KEY,
+	updatedAt TEXT AS LocalDateTime NOT NULL
+);
 
-deleteAll:
-DELETE FROM selectedToken;
+selectAllMainTokens:
+SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id ORDER BY updatedAt DESC;
 
-insertOne:
-INSERT OR REPLACE INTO selectedToken(id, symbol, name, image, updatedAt) VALUES(?,?,?,?,?);
+selectAllReferenceTokens:
+SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id ORDER BY updatedAt DESC;
+
+selectMostRecentMainToken:
+SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
+
+selectMostRecentReferenceToken:
+SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id WHERE rt.updatedAt = (SELECT MAX(updatedAt) FROM referenceToken);
+
+deleteAllTokens:
+DELETE FROM token;
+
+deleteAllMainTokens:
+DELETE FROM mainToken;
+
+deleteAllReferenceTokens:
+DELETE FROM referenceToken;
+
+insertToken:
+INSERT OR REPLACE INTO token(id, symbol, name, image) VALUES(?,?,?,?);
+
+insertMainToken:
+INSERT OR REPLACE INTO mainToken(id, updatedAt) VALUES (?,?);
+
+insertReferenceToken:
+INSERT OR REPLACE INTO referenceToken(id, updatedAt) VALUES (?,?);
