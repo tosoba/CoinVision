@@ -35,8 +35,6 @@ kotlin {
         implementation(compose.components.resources)
         implementation(compose.runtime)
 
-        implementation(libs.datastore.preferences.core)
-
         implementation(libs.logback.classic)
 
         implementation(libs.kamel)

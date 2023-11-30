@@ -1,9 +1,6 @@
 package com.trm.coinvision.core.data.repo
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import com.trm.coinvision.core.database.CoinVisionDatabase
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.domain.model.MarketChartDTO
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
@@ -19,64 +16,46 @@ import kotlinx.coroutines.flow.map
 
 internal fun tokenRepository(
   client: CoinGeckoApiClient,
-  dataStore: DataStore<Preferences>
+  database: CoinVisionDatabase
 ): TokenRepository =
   object : TokenRepository {
-    private val mainTokenIdKey = stringPreferencesKey("selected_main_token_id")
-    private val mainTokenSymbolKey = stringPreferencesKey("selected_main_token_symbol")
-    private val mainTokenNameKey = stringPreferencesKey("selected_main_token_name")
-    private val mainTokenImageKey = stringPreferencesKey("selected_main_token_image")
-
     override suspend fun updateSelectedMainToken(token: SelectedToken) {
-      dataStore.edit {
-        it[mainTokenIdKey] = token.id
-        it[mainTokenSymbolKey] = token.symbol
-        it[mainTokenNameKey] = token.name
-        it[mainTokenImageKey] = token.image.orEmpty()
-      }
+      database.insertSelectedMainToken(token)
     }
 
     override fun getSelectedMainTokenFlow(): Flow<SelectedToken> =
-      dataStore.data.map { it.mapToSelectedMainToken() }
+      database.selectMostRecentMainTokenFlow().map {
+        it
+          ?: SelectedToken(
+            id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
+            symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
+            name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
+            image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
+          )
+      }
 
     override fun getSelectedMainTokenIdFlow(): Flow<String> =
-      dataStore.data.map { it[mainTokenIdKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_ID }
-
-    private fun Preferences.mapToSelectedMainToken(): SelectedToken =
-      SelectedToken(
-        id = this[mainTokenIdKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_ID,
-        symbol = this[mainTokenSymbolKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
-        name = this[mainTokenNameKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_NAME,
-        image = this[mainTokenImageKey] ?: DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
-      )
-
-    private val referenceTokenIdKey = stringPreferencesKey("selected_reference_token_id")
-    private val referenceTokenSymbolKey = stringPreferencesKey("selected_reference_token_symbol")
-    private val referenceTokenNameKey = stringPreferencesKey("selected_reference_token_name")
-    private val referenceTokenImageKey = stringPreferencesKey("selected_reference_token_image")
+      database.selectMostRecentMainTokenFlow().map { it?.id ?: DEFAULT_SELECTED_MAIN_TOKEN_ID }
 
     override suspend fun updateSelectedReferenceToken(token: SelectedToken) {
-      dataStore.edit {
-        it[referenceTokenIdKey] = token.id
-        it[referenceTokenSymbolKey] = token.symbol
-        it[referenceTokenNameKey] = token.name
-        it[referenceTokenImageKey] = token.image.orEmpty()
-      }
+      database.insertSelectedReferenceToken(token)
     }
 
     override fun getSelectedReferenceTokenFlow(): Flow<SelectedToken> =
-      dataStore.data.map { it.mapToSelectedReferenceToken() }
+      database.selectMostRecentReferenceTokenFlow().map {
+        it
+          ?: SelectedToken(
+            id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
+            symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
+            name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
+            image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
+          )
+      }
 
     override fun getSelectedReferenceTokenIdFlow(): Flow<String> =
-      dataStore.data.map { it[referenceTokenIdKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID }
-
-    private fun Preferences.mapToSelectedReferenceToken(): SelectedToken =
-      SelectedToken(
-        id = this[referenceTokenIdKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
-        symbol = this[referenceTokenSymbolKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
-        name = this[referenceTokenNameKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
-        image = this[referenceTokenImageKey] ?: DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
-      )
+      database.selectMostRecentReferenceTokenFlow().map {
+        it?.id ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID
+      }
 
     override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
