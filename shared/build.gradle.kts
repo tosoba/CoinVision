@@ -61,6 +61,8 @@ kotlin {
 
         implementation(libs.shimmer)
 
+        implementation(libs.sqldelight.coroutines.extensions)
+
         implementation(libs.voyager.koin)
         implementation(libs.voyager.navigator)
         implementation(libs.voyager.tab.navigator)

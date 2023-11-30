@@ -29,20 +29,18 @@ SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id WHERE mt.updated
 selectMostRecentReferenceToken:
 SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id WHERE rt.updatedAt = (SELECT MAX(updatedAt) FROM referenceToken);
 
-deleteAllTokens:
+deleteAll {
 DELETE FROM token;
-
-deleteAllMainTokens:
 DELETE FROM mainToken;
-
-deleteAllReferenceTokens:
 DELETE FROM referenceToken;
+}
 
-insertToken:
+insertMainToken {
 INSERT OR REPLACE INTO token(id, symbol, name, image) VALUES(?,?,?,?);
-
-insertMainToken:
 INSERT OR REPLACE INTO mainToken(id, updatedAt) VALUES (?,?);
+}
 
-insertReferenceToken:
+insertReferenceToken {
+INSERT OR REPLACE INTO token(id, symbol, name, image) VALUES(?,?,?,?);
 INSERT OR REPLACE INTO referenceToken(id, updatedAt) VALUES (?,?);
+}
