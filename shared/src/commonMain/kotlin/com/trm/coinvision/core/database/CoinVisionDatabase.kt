@@ -57,4 +57,14 @@ internal class CoinVisionDatabase(
 
   fun selectMostRecentReferenceTokenFlow(): Flow<SelectedToken?> =
     dbQueries.selectMostRecentReferenceToken(::SelectedToken).asFlow().mapToOneOrNull(dispatcher)
+
+  suspend fun selectMostRecentMainToken() =
+    withContext(dispatcher) {
+      dbQueries.selectMostRecentMainToken(::SelectedToken).executeAsOneOrNull()
+    }
+
+  suspend fun selectMostRecentReferenceToken() =
+    withContext(dispatcher) {
+      dbQueries.selectMostRecentReferenceToken(::SelectedToken).executeAsOneOrNull()
+    }
 }

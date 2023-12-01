@@ -11,8 +11,11 @@ import com.trm.coinvision.core.network.client.CoinGeckoApiClient
 import com.trm.coinvision.core.network.model.CoinResponse
 import com.trm.coinvision.core.network.model.MarketChartResponse
 import io.ktor.client.call.body
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 internal fun tokenRepository(
   client: CoinGeckoApiClient,
@@ -24,15 +27,7 @@ internal fun tokenRepository(
     }
 
     override fun getSelectedMainTokenFlow(): Flow<SelectedToken> =
-      database.selectMostRecentMainTokenFlow().map {
-        it
-          ?: SelectedToken(
-            id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
-            symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
-            name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
-            image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
-          )
-      }
+      database.selectMostRecentMainTokenFlow().map { it ?: defaultMainToken() }
 
     override fun getSelectedMainTokenIdFlow(): Flow<String> =
       database.selectMostRecentMainTokenFlow().map { it?.id ?: DEFAULT_SELECTED_MAIN_TOKEN_ID }
@@ -42,20 +37,23 @@ internal fun tokenRepository(
     }
 
     override fun getSelectedReferenceTokenFlow(): Flow<SelectedToken> =
-      database.selectMostRecentReferenceTokenFlow().map {
-        it
-          ?: SelectedToken(
-            id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
-            symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
-            name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
-            image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
-          )
-      }
+      database.selectMostRecentReferenceTokenFlow().map { it ?: defaultReferenceToken() }
 
     override fun getSelectedReferenceTokenIdFlow(): Flow<String> =
       database.selectMostRecentReferenceTokenFlow().map {
         it?.id ?: DEFAULT_SELECTED_REFERENCE_TOKEN_ID
       }
+
+    override suspend fun swapSelectedTokens() {
+      coroutineScope {
+        val mainToken = async { database.selectMostRecentMainToken() ?: defaultMainToken() }
+        val referenceToken = async {
+          database.selectMostRecentReferenceToken() ?: defaultReferenceToken()
+        }
+        launch { database.insertSelectedMainToken(referenceToken.await()) }
+        launch { database.insertSelectedReferenceToken(mainToken.await()) }
+      }
+    }
 
     override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
@@ -76,8 +74,24 @@ private const val DEFAULT_SELECTED_MAIN_TOKEN_NAME = "Ethereum"
 private const val DEFAULT_SELECTED_MAIN_TOKEN_IMAGE =
   "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628"
 
+private fun defaultMainToken(): SelectedToken =
+  SelectedToken(
+    id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
+    symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
+    name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
+    image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
+  )
+
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_ID = "bitcoin"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL = "BTC"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_NAME = "Bitcoin"
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE =
   "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
+
+private fun defaultReferenceToken(): SelectedToken =
+  SelectedToken(
+    id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
+    symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
+    name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
+    image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
+  )

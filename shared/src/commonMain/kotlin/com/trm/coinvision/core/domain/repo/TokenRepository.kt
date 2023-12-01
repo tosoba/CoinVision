@@ -20,6 +20,8 @@ internal interface TokenRepository {
 
   fun getSelectedReferenceTokenIdFlow(): Flow<String>
 
+  suspend fun swapSelectedTokens()
+
   suspend fun getTokenById(id: String): TokenDTO
 
   suspend fun getTokenChart(

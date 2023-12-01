@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -24,6 +25,7 @@ import org.koin.core.qualifier.named
 internal class CompareTokensScreenModel(
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
   getSelectedReferenceTokenFlowUseCase: GetSelectedReferenceTokenFlowUseCase,
+  private val swapSelectedTokens: suspend () -> Unit
 ) : ScreenModel, KoinComponent {
   val mainTokenWithChartFlow: StateFlow<Loadable<Pair<TokenDTO, List<PriceChartPoint>>>> =
     getSelectedMainTokenWithChartFlowUseCase(MarketChartDaysPeriod.DAY)
@@ -44,4 +46,8 @@ internal class CompareTokensScreenModel(
 
   val referenceTokensSearchBarViewModel: TokensSearchBarViewModel by
     inject(named(TokensSearchBarType.REFERENCE)) { parametersOf(screenModelScope) }
+
+  fun onSwapTokensClick() {
+    screenModelScope.launch { swapSelectedTokens() }
+  }
 }

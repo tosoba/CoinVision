@@ -1,11 +1,14 @@
 package com.trm.coinvision.ui.compareTokens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,7 +36,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 object CompareTokensTab : Tab {
-  @OptIn(ExperimentalVoyagerApi::class)
+  @OptIn(ExperimentalVoyagerApi::class, ExperimentalResourceApi::class)
   @Composable
   override fun Content() {
     val mainTokensSearchBarViewModel =
@@ -46,15 +49,50 @@ object CompareTokensTab : Tab {
     val mainTokenWithChart by compareTokensScreenModel.mainTokenWithChartFlow.collectAsState()
     val selectedReferenceToken by compareTokensScreenModel.referenceTokenFlow.collectAsState()
 
-    if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      Row(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+      if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+        Row(modifier = Modifier.fillMaxSize()) {
+          Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
+            TokensSearchBar(
+              modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+              viewModel = mainTokensSearchBarViewModel
+            )
+            LoadableView(
+              modifier = Modifier.fillMaxSize(),
+              loadable = mainTokenWithChart.map { (_, chart) -> chart },
+              onRetryClick = {
+                // TODO:
+              }
+            ) {
+              PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
+            }
+          }
+
+          Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
+            TokensSearchBar(
+              modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+              viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
+            )
+            LoadableView(
+              modifier = Modifier.fillMaxSize(),
+              loadable = selectedReferenceToken,
+              onRetryClick = {
+                // TODO:
+              }
+            ) {
+              SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+            }
+          }
+        }
+      } else {
+        Column(modifier = Modifier.fillMaxSize()) {
           TokensSearchBar(
             modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
             viewModel = mainTokensSearchBarViewModel
           )
+
           LoadableView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().weight(.5f),
             loadable = mainTokenWithChart.map { (_, chart) -> chart },
             onRetryClick = {
               // TODO:
@@ -62,15 +100,13 @@ object CompareTokensTab : Tab {
           ) {
             PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
           }
-        }
 
-        Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBar(
             modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
             viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
           )
           LoadableView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().weight(.5f),
             loadable = selectedReferenceToken,
             onRetryClick = {
               // TODO:
@@ -80,39 +116,19 @@ object CompareTokensTab : Tab {
           }
         }
       }
-    } else {
-      Column(modifier = Modifier.fillMaxSize()) {
-        TokensSearchBar(
-          modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
-          viewModel = mainTokensSearchBarViewModel
-        )
 
-        LoadableView(
-          modifier = Modifier.fillMaxWidth().weight(.5f),
-          loadable = mainTokenWithChart.map { (_, chart) -> chart },
-          onRetryClick = {
-            // TODO:
-          }
-        ) {
-          PriceChart(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
-            points = it
-          )
-        }
-
-        TokensSearchBar(
-          modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
-          viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
+      FloatingActionButton(
+        modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+        onClick = compareTokensScreenModel::onSwapTokensClick
+      ) {
+        Image(
+          painter =
+            painterResource(
+              if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) "swap_horizontal.xml"
+              else "swap_vertical.xml"
+            ),
+          contentDescription = null
         )
-        LoadableView(
-          modifier = Modifier.fillMaxWidth().weight(.5f),
-          loadable = selectedReferenceToken,
-          onRetryClick = {
-            // TODO:
-          }
-        ) {
-          SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
-        }
       }
     }
   }
