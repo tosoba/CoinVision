@@ -5,5 +5,10 @@ enum class MarketChartDaysPeriod(val queryParam: String) {
   WEEK("7"),
   MONTH("30"),
   THREE_MONTHS("90"),
-  MAX("max")
+  MAX("max");
+
+  companion object {
+    val default: MarketChartDaysPeriod
+      get() = DAY
+  }
 }

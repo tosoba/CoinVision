@@ -5,7 +5,6 @@ import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.core.domain.model.MarketChartDTO
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.Ready
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.repo.TokenRepository
@@ -18,16 +17,19 @@ import kotlinx.coroutines.flow.transformLatest
 
 internal class GetSelectedMainTokenWithChartFlowUseCase(private val repository: TokenRepository) {
   @OptIn(ExperimentalCoroutinesApi::class)
-  operator fun invoke(
-    daysPeriod: MarketChartDaysPeriod
-  ): Flow<Loadable<Pair<TokenDTO, MarketChartDTO>>> =
-    repository.getSelectedMainTokenIdFlow().transformLatest {
+  operator fun invoke(): Flow<Loadable<Pair<TokenDTO, MarketChartDTO>>> =
+    repository.getSelectedMainTokenIdWithChartPeriodFlow().transformLatest { (tokenId, daysPeriod)
+      ->
       emit(LoadingFirst)
       coroutineScope {
         try {
-          val token = async { repository.getTokenById(it) }
+          val token = async { repository.getTokenById(tokenId) }
           val chart = async {
-            repository.getTokenChart(id = it, vsFiatCurrency = FiatCurrency.USD, days = daysPeriod)
+            repository.getTokenChart(
+              id = tokenId,
+              vsFiatCurrency = FiatCurrency.USD,
+              days = daysPeriod
+            )
           }
           emit(Ready(token.await() to chart.await()))
         } catch (ex: CancellationException) {

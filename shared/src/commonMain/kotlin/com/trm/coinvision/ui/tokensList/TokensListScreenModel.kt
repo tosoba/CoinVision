@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
@@ -34,7 +33,7 @@ internal class TokensListScreenModel(
     retryMainTokenWithChartFlow
       .onStart { emit(Unit) }
       .flatMapLatest {
-        getSelectedMainTokenWithChartFlowUseCase(MarketChartDaysPeriod.DAY).map {
+        getSelectedMainTokenWithChartFlowUseCase().map {
           it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() }
         }
       }

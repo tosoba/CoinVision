@@ -12,7 +12,7 @@ internal interface TokenRepository {
 
   fun getSelectedMainTokenFlow(): Flow<SelectedToken>
 
-  fun getSelectedMainTokenIdFlow(): Flow<String>
+  fun getSelectedMainTokenIdWithChartPeriodFlow(): Flow<Pair<String, MarketChartDaysPeriod>>
 
   suspend fun updateSelectedReferenceToken(token: SelectedToken)
 

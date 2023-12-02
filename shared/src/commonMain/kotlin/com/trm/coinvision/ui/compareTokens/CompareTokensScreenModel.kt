@@ -1,10 +1,9 @@
 package com.trm.coinvision.ui.compareTokens
 
-import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenWithChartFlowUseCase
 import com.trm.coinvision.core.domain.usecase.GetSelectedReferenceTokenFlowUseCase
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -32,15 +30,14 @@ internal class CompareTokensScreenModel(
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
   getSelectedReferenceTokenFlowUseCase: GetSelectedReferenceTokenFlowUseCase,
   private val swapSelectedTokens: suspend () -> Unit
-) :
-  StateScreenModel<CompareTokensScreenState>(CompareTokensScreenState(MarketChartDaysPeriod.DAY)),
-  KoinComponent {
+) : ScreenModel, KoinComponent {
   private val retryMainTokenWithChartFlow = MutableSharedFlow<Unit>()
 
   val mainTokenWithChartFlow: StateFlow<Loadable<Pair<TokenDTO, List<PriceChartPoint>>>> =
-    merge(state, retryMainTokenWithChartFlow.map { state.value })
-      .flatMapLatest { (chartPeriod) ->
-        getSelectedMainTokenWithChartFlowUseCase(chartPeriod).map {
+    retryMainTokenWithChartFlow
+      .onStart { emit(Unit) }
+      .flatMapLatest {
+        getSelectedMainTokenWithChartFlowUseCase().map {
           it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() }
         }
       }

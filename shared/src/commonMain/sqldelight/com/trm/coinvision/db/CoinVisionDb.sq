@@ -1,4 +1,5 @@
 import kotlinx.datetime.LocalDateTime;
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod;
 
 CREATE TABLE token(
 	id TEXT NOT NULL PRIMARY KEY,
@@ -17,6 +18,11 @@ CREATE TABLE referenceToken(
 	updatedAt TEXT AS LocalDateTime NOT NULL
 );
 
+CREATE TABLE chartPeriod(
+    id TEXT NOT NULL PRIMARY KEY,
+    period TEXT AS MarketChartDaysPeriod NOT NULL
+);
+
 selectAllMainTokens:
 SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id ORDER BY updatedAt DESC;
 
@@ -24,15 +30,26 @@ selectAllReferenceTokens:
 SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id ORDER BY updatedAt DESC;
 
 selectMostRecentMainToken:
-SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
+SELECT t.* FROM token t
+INNER JOIN mainToken mt ON t.id = mt.id
+WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
+
+selectMostRecentMainTokenIdWithChartPeriod:
+SELECT t.id, cp.period FROM token t
+INNER JOIN mainToken mt ON t.id = mt.id
+CROSS JOIN chartPeriod cp
+WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
 
 selectMostRecentReferenceToken:
-SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id WHERE rt.updatedAt = (SELECT MAX(updatedAt) FROM referenceToken);
+SELECT t.* FROM token t
+INNER JOIN referenceToken rt ON t.id = rt.id
+WHERE rt.updatedAt = (SELECT MAX(updatedAt) FROM referenceToken);
 
 deleteAll {
 DELETE FROM token;
 DELETE FROM mainToken;
 DELETE FROM referenceToken;
+DELETE FROM chartPeriod;
 }
 
 insertMainToken {
@@ -44,3 +61,6 @@ insertReferenceToken {
 INSERT OR REPLACE INTO token(id, symbol, name, image) VALUES(?,?,?,?);
 INSERT OR REPLACE INTO referenceToken(id, updatedAt) VALUES (?,?);
 }
+
+insertChartPeriod:
+INSERT OR REPLACE INTO chartPeriod(id, period) VALUES (1,?);
