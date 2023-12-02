@@ -13,23 +13,40 @@ import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenWithChartFlowUseCase
 import com.trm.coinvision.ui.chart.PriceChartPoint
 import com.trm.coinvision.ui.chart.toPriceChartPoints
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class TokensListScreenModel(
   tokenListPagingRepository: TokenListPagingRepository,
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
 ) : ScreenModel {
+  private val retryMainTokenWithChartFlow = MutableSharedFlow<Unit>()
+
   val selectedMainTokenWithChartFlow: StateFlow<Loadable<Pair<TokenDTO, List<PriceChartPoint>>>> =
-    getSelectedMainTokenWithChartFlowUseCase(MarketChartDaysPeriod.DAY)
-      .map { it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() } }
+    retryMainTokenWithChartFlow
+      .onStart { emit(Unit) }
+      .flatMapLatest {
+        getSelectedMainTokenWithChartFlowUseCase(MarketChartDaysPeriod.DAY).map {
+          it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() }
+        }
+      }
       .stateIn(
         scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = LoadingFirst
       )
+
+  fun onRetryMainTokenWithChartClick() {
+    screenModelScope.launch { retryMainTokenWithChartFlow.emit(Unit) }
+  }
 
   val tokensPagingFlow: StateFlow<PagingData<TokenListItemDTO>> =
     tokenListPagingRepository(null)

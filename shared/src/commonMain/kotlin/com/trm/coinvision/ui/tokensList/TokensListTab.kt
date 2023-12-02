@@ -33,11 +33,11 @@ import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.MainNavigatorScreenModel
+import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
-import com.trm.coinvision.ui.common.SelectedTokenData
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
 import kotlinx.coroutines.flow.flowOf
@@ -59,7 +59,7 @@ object TokensListTab : Tab {
     val tokens = tokensListScreenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      val tokenWithChart by tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
+      val mainTokenWithChart by tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -69,12 +69,10 @@ object TokensListTab : Tab {
           )
           LoadableView(
             modifier = Modifier.fillMaxSize(),
-            loadable = tokenWithChart.map { (token) -> token },
-            onRetryClick = {
-              // TODO:
-            }
+            loadable = mainTokenWithChart.map { (_, chart) -> chart },
+            onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
           ) {
-            SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+            PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
           }
         }
         TokensLazyColumn(
