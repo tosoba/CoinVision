@@ -246,4 +246,4 @@ private fun Modifier.shimmerListItemContent() =
       .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp))
   )
 
-internal val tokensSearchBarPadding = 10.dp
+internal val tabElementPadding = 10.dp

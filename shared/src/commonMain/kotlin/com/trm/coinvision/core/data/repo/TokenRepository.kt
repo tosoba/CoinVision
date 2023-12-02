@@ -58,6 +58,9 @@ internal fun tokenRepository(
       }
     }
 
+    override fun getChartPeriodFlow(): Flow<MarketChartDaysPeriod> =
+      database.selectChartPeriodFlow().map { it ?: MarketChartDaysPeriod.default }
+
     override suspend fun getTokenById(id: String): TokenDTO =
       client.getTokenById(id).body<CoinResponse>()
 

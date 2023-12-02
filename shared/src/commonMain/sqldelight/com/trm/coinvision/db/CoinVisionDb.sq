@@ -45,6 +45,9 @@ SELECT t.* FROM token t
 INNER JOIN referenceToken rt ON t.id = rt.id
 WHERE rt.updatedAt = (SELECT MAX(updatedAt) FROM referenceToken);
 
+selectChartPeriod:
+SELECT period FROM chartPeriod;
+
 deleteAll {
 DELETE FROM token;
 DELETE FROM mainToken;

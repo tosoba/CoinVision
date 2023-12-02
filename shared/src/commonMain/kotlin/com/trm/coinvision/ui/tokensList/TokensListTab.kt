@@ -1,5 +1,6 @@
 package com.trm.coinvision.ui.tokensList
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
@@ -38,8 +41,9 @@ import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
+import com.trm.coinvision.ui.common.SegmentedButton
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
-import com.trm.coinvision.ui.tokensSearchBar.tokensSearchBarPadding
+import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -59,22 +63,36 @@ object TokensListTab : Tab {
     val tokens = tokensListScreenModel.tokensPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      val mainTokenWithChart by tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
+      val mainTokenWithChart by
+        tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBar(
-            modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+            modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
             viewModel = mainTokensSearchBarViewModel
           )
+
+          SegmentedButton(
+            modifier =
+              Modifier.fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = tabElementPadding),
+            items = MarketChartDaysPeriod.entries.toList(),
+            selectedItem = MarketChartDaysPeriod.default,
+            label = MarketChartDaysPeriod::label,
+            onSegmentClick = {}
+          )
+
           LoadableView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(tabElementPadding),
             loadable = mainTokenWithChart.map { (_, chart) -> chart },
             onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
           ) {
-            PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
+            PriceChart(modifier = Modifier.fillMaxSize(), points = it)
           }
         }
+
         TokensLazyColumn(
           modifier = Modifier.weight(.5f).fillMaxHeight(),
           state = listState,
@@ -84,9 +102,10 @@ object TokensListTab : Tab {
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
         TokensSearchBar(
-          modifier = Modifier.fillMaxWidth().padding(tokensSearchBarPadding),
+          modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
           viewModel = mainTokensSearchBarViewModel
         )
+
         TokensLazyColumn(
           modifier = Modifier.fillMaxSize(),
           state = listState,
