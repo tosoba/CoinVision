@@ -4,12 +4,12 @@ import com.trm.coinvision.core.domain.model.MarketChartDTO
 
 internal fun MarketChartDTO.toPriceChartPoints(): List<PriceChartPoint> =
   prices
-    ?.mapNotNull {
-      if (it.size != 2) {
+    ?.mapNotNull { pricePoint ->
+      if (pricePoint.size != 2 || pricePoint.any { it == null }) {
         null
       } else {
-        val (timestamp, value) = it
-        PriceChartPoint(timestamp.toLong(), value.toFloat())
+        val (timestamp, value) = pricePoint
+        PriceChartPoint(requireNotNull(timestamp).toLong(), requireNotNull(value).toFloat())
       }
     }
     .orEmpty()

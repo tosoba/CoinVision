@@ -18,7 +18,7 @@ fun <T : Any> SegmentedButton(
   items: List<T> = emptyList(),
   selectedItem: T? = null,
   label: (T) -> String = { it.toString() },
-  onSegmentClick: (T) -> Unit = {}
+  onItemClick: (T) -> Unit = {}
 ) {
   Row(modifier = modifier) {
     val cornerRadius = 16.dp
@@ -29,7 +29,7 @@ fun <T : Any> SegmentedButton(
 
     items.forEachIndexed { index, item ->
       OutlinedButton(
-        onClick = { onSegmentClick(item) },
+        onClick = { onItemClick(item) },
         contentPadding = PaddingValues(0.dp),
         shape =
           when (index) {

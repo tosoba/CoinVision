@@ -54,6 +54,7 @@ object CompareTokensTab : Tab {
     val selectedReferenceToken by compareTokensScreenModel.referenceTokenFlow.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
+      val chartPeriod by compareTokensScreenModel.chartPeriod.collectAsState()
       val chartPeriodButtonScrollState = rememberScrollState()
 
       if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
@@ -70,9 +71,9 @@ object CompareTokensTab : Tab {
                   .horizontalScroll(chartPeriodButtonScrollState)
                   .padding(horizontal = tabElementPadding),
               items = MarketChartDaysPeriod.entries.toList(),
-              selectedItem = MarketChartDaysPeriod.default,
+              selectedItem = chartPeriod,
               label = MarketChartDaysPeriod::label,
-              onSegmentClick = {}
+              onItemClick = compareTokensScreenModel::onChartPeriodClick
             )
 
             LoadableView(
@@ -112,9 +113,9 @@ object CompareTokensTab : Tab {
                 .horizontalScroll(chartPeriodButtonScrollState)
                 .padding(horizontal = tabElementPadding),
             items = MarketChartDaysPeriod.entries.toList(),
-            selectedItem = MarketChartDaysPeriod.default,
+            selectedItem = chartPeriod,
             label = MarketChartDaysPeriod::label,
-            onSegmentClick = {}
+            onItemClick = compareTokensScreenModel::onChartPeriodClick
           )
 
           LoadableView(

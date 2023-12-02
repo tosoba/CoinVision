@@ -13,9 +13,25 @@ import org.koin.dsl.module
 internal val uiModule = module {
   factory {
     val tokenRepository = get<TokenRepository>()
-    CompareTokensScreenModel(get(), get(), tokenRepository::swapSelectedTokens)
+    CompareTokensScreenModel(
+      getSelectedMainTokenWithChartFlowUseCase = get(),
+      getSelectedReferenceTokenFlowUseCase = get(),
+      swapSelectedTokens = tokenRepository::swapSelectedTokens,
+      updateChartPeriod = tokenRepository::updateChartPeriod,
+      getChartPeriodFlow = tokenRepository::getChartPeriodFlow
+    )
   }
-  factory { TokensListScreenModel(get(), get()) }
+
+  factory {
+    val tokenRepository = get<TokenRepository>()
+    TokensListScreenModel(
+      tokenListPagingRepository = get(),
+      getSelectedMainTokenWithChartFlowUseCase = get(),
+      updateChartPeriod = tokenRepository::updateChartPeriod,
+      getChartPeriodFlow = tokenRepository::getChartPeriodFlow
+    )
+  }
+
   factory { MainNavigatorScreenModel() }
 
   factory(named(TokensSearchBarType.MAIN)) { (coroutineScope: CoroutineScope) ->

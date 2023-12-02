@@ -65,6 +65,7 @@ object TokensListTab : Tab {
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       val mainTokenWithChart by
         tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
+      val chartPeriod by tokensListScreenModel.chartPeriod.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
@@ -79,9 +80,9 @@ object TokensListTab : Tab {
                 .horizontalScroll(rememberScrollState())
                 .padding(horizontal = tabElementPadding),
             items = MarketChartDaysPeriod.entries.toList(),
-            selectedItem = MarketChartDaysPeriod.default,
+            selectedItem = chartPeriod,
             label = MarketChartDaysPeriod::label,
-            onSegmentClick = {}
+            onItemClick = tokensListScreenModel::onChartPeriodClick
           )
 
           LoadableView(

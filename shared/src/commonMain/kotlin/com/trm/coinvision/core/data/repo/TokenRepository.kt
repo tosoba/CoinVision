@@ -58,6 +58,10 @@ internal fun tokenRepository(
       }
     }
 
+    override suspend fun updateChartPeriod(period: MarketChartDaysPeriod) {
+      database.insertChartPeriod(period)
+    }
+
     override fun getChartPeriodFlow(): Flow<MarketChartDaysPeriod> =
       database.selectChartPeriodFlow().map { it ?: MarketChartDaysPeriod.default }
 

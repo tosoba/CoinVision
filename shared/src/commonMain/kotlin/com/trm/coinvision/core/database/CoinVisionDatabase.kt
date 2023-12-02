@@ -78,6 +78,10 @@ internal class CoinVisionDatabase(
       dbQueries.selectMostRecentReferenceToken(::SelectedToken).executeAsOneOrNull()
     }
 
+  suspend fun insertChartPeriod(period: MarketChartDaysPeriod) {
+    withContext(dispatcher) { dbQueries.insertChartPeriod(period) }
+  }
+
   fun selectChartPeriodFlow(): Flow<MarketChartDaysPeriod?> =
     dbQueries.selectChartPeriod().asFlow().mapToOneOrNull(dispatcher)
 }

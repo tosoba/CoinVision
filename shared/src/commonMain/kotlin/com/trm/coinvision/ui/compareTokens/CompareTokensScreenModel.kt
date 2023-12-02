@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.LoadingFirst
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenWithChartFlowUseCase
 import com.trm.coinvision.core.domain.usecase.GetSelectedReferenceTokenFlowUseCase
@@ -12,6 +13,7 @@ import com.trm.coinvision.ui.chart.toPriceChartPoints
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +31,9 @@ import org.koin.core.qualifier.named
 internal class CompareTokensScreenModel(
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
   getSelectedReferenceTokenFlowUseCase: GetSelectedReferenceTokenFlowUseCase,
-  private val swapSelectedTokens: suspend () -> Unit
+  private val swapSelectedTokens: suspend () -> Unit,
+  private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
+  getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
 ) : ScreenModel, KoinComponent {
   private val retryMainTokenWithChartFlow = MutableSharedFlow<Unit>()
 
@@ -72,5 +76,17 @@ internal class CompareTokensScreenModel(
 
   fun onSwapTokensClick() {
     screenModelScope.launch { swapSelectedTokens() }
+  }
+
+  val chartPeriod: StateFlow<MarketChartDaysPeriod> =
+    getChartPeriodFlow()
+      .stateIn(
+        screenModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = MarketChartDaysPeriod.default
+      )
+
+  fun onChartPeriodClick(period: MarketChartDaysPeriod) {
+    screenModelScope.launch { updateChartPeriod(period) }
   }
 }

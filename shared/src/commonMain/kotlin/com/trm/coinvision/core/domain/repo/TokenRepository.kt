@@ -22,6 +22,8 @@ internal interface TokenRepository {
 
   suspend fun swapSelectedTokens()
 
+  suspend fun updateChartPeriod(period: MarketChartDaysPeriod)
+
   fun getChartPeriodFlow(): Flow<MarketChartDaysPeriod>
 
   suspend fun getTokenById(id: String): TokenDTO
