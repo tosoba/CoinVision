@@ -60,9 +60,7 @@ object CompareTokensTab : Tab {
             LoadableView(
               modifier = Modifier.fillMaxSize(),
               loadable = mainTokenWithChart.map { (_, chart) -> chart },
-              onRetryClick = {
-                // TODO:
-              }
+              onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick
             ) {
               PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
             }
@@ -76,9 +74,7 @@ object CompareTokensTab : Tab {
             LoadableView(
               modifier = Modifier.fillMaxSize(),
               loadable = selectedReferenceToken,
-              onRetryClick = {
-                // TODO:
-              }
+              onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
             ) {
               SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
             }
@@ -94,9 +90,7 @@ object CompareTokensTab : Tab {
           LoadableView(
             modifier = Modifier.fillMaxWidth().weight(.5f),
             loadable = mainTokenWithChart.map { (_, chart) -> chart },
-            onRetryClick = {
-              // TODO:
-            }
+            onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick
           ) {
             PriceChart(modifier = Modifier.fillMaxSize().padding(10.dp), points = it)
           }
@@ -108,9 +102,7 @@ object CompareTokensTab : Tab {
           LoadableView(
             modifier = Modifier.fillMaxWidth().weight(.5f),
             loadable = selectedReferenceToken,
-            onRetryClick = {
-              // TODO:
-            }
+            onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
           ) {
             SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
           }
