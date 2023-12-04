@@ -105,9 +105,9 @@ internal fun TokensSearchBar(
       leadingIcon = {
         IconButton({ onActiveChange(!active) }) {
           if (active) {
-            Icon(Icons.Rounded.ArrowBack, contentDescription = null)
+            Icon(Icons.Rounded.ArrowBack, contentDescription = LocalStringResources.current.back)
           } else {
-            Icon(Icons.Rounded.Search, contentDescription = null)
+            Icon(Icons.Rounded.Search, contentDescription = LocalStringResources.current.search)
           }
         }
       },

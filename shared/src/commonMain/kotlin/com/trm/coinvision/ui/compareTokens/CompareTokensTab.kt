@@ -151,7 +151,7 @@ object CompareTokensTab : Tab {
               if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) "swap_horizontal.xml"
               else "swap_vertical.xml"
             ),
-          contentDescription = null
+          contentDescription = LocalStringResources.current.swapTokens
         )
       }
     }
