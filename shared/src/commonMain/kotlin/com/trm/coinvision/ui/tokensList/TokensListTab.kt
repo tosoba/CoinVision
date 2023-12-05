@@ -17,12 +17,14 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
+import app.cash.paging.compose.itemKey
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.koin.getScreenModel
@@ -34,7 +36,6 @@ import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
-import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
@@ -60,7 +61,8 @@ object TokensListTab : Tab {
     val tokensListScreenModel = getScreenModel<TokensListScreenModel>()
 
     val listState = rememberLazyListState()
-    val tokens = tokensListScreenModel.tokensPagingFlow.collectAsLazyPagingItems()
+    val tokenPotentialItems =
+      tokensListScreenModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
       val mainTokenWithChart by
@@ -94,10 +96,10 @@ object TokensListTab : Tab {
           }
         }
 
-        TokensLazyColumn(
+        TokenPotentialComparisonLazyColumn(
           modifier = Modifier.weight(.5f).fillMaxHeight(),
           state = listState,
-          tokens = tokens
+          comparisonItems = tokenPotentialItems
         )
       }
     } else {
@@ -107,10 +109,10 @@ object TokensListTab : Tab {
           viewModel = mainTokensSearchBarViewModel
         )
 
-        TokensLazyColumn(
+        TokenPotentialComparisonLazyColumn(
           modifier = Modifier.fillMaxSize(),
           state = listState,
-          tokens = tokens,
+          comparisonItems = tokenPotentialItems,
         )
       }
     }
@@ -128,30 +130,30 @@ object TokensListTab : Tab {
 }
 
 @Composable
-private fun TokensLazyColumn(
+private fun TokenPotentialComparisonLazyColumn(
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  tokens: LazyPagingItems<TokenListItemDTO> =
-    flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
+  comparisonItems: LazyPagingItems<TokenPotentialComparison> =
+    flowOf(PagingData.empty<TokenPotentialComparison>()).collectAsLazyPagingItems(),
 ) {
   LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
-    if (tokens.loadState.prepend is LoadState.Error) {
+    if (comparisonItems.loadState.prepend is LoadState.Error) {
       item {
         CoinVisionRetryRow(
           modifier = Modifier.fillMaxWidth().padding(20.dp),
-          onRetryClick = tokens::retry
+          onRetryClick = comparisonItems::retry
         )
       }
-    } else if (tokens.loadState.prepend == LoadState.Loading) {
+    } else if (comparisonItems.loadState.prepend == LoadState.Loading) {
       item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
     }
 
-    when (tokens.loadState.refresh) {
+    when (comparisonItems.loadState.refresh) {
       is LoadState.Error -> {
         item {
           CoinVisionRetryColumn(
             modifier = Modifier.fillParentMaxSize(),
-            onRetryClick = tokens::retry
+            onRetryClick = comparisonItems::retry
           )
         }
       }
@@ -159,18 +161,36 @@ private fun TokensLazyColumn(
         item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
       }
       is LoadState.NotLoading -> {
-        items(tokens.itemCount) { index -> tokens[index]?.let { Text(text = it.name) } }
+        items(
+          count = comparisonItems.itemCount,
+          key = comparisonItems.itemKey { it.subjectToken.id }
+        ) { index ->
+          val (subjectToken, potential) = comparisonItems[index] ?: return@items
+          Row(
+            verticalAlignment = Alignment.CenterVertically
+          ) { // TODO: different layouts depending on width
+            Text(text = subjectToken.name)
+            Text(text = subjectToken.marketCap?.toString().orEmpty()) // TODO: format
+            potential?.let {
+              Text(text = it.token.name.orEmpty())
+              Column {
+                Text(text = it.potentialPrice.toString()) // TODO: format
+                Text(text = it.potentialUpsidePercentage.toString()) // TODO: format
+              }
+            }
+          }
+        }
       }
     }
 
-    if (tokens.loadState.append is LoadState.Error) {
+    if (comparisonItems.loadState.append is LoadState.Error) {
       item {
         CoinVisionRetryRow(
           modifier = Modifier.fillMaxWidth().padding(20.dp),
-          onRetryClick = tokens::retry
+          onRetryClick = comparisonItems::retry
         )
       }
-    } else if (tokens.loadState.prepend == LoadState.Loading) {
+    } else if (comparisonItems.loadState.prepend == LoadState.Loading) {
       item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
     }
   }
