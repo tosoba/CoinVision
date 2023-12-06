@@ -65,8 +65,7 @@ object TokensListTab : Tab {
       tokensListScreenModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
-      val mainTokenWithChart by
-        tokensListScreenModel.selectedMainTokenWithChartFlow.collectAsState()
+      val chartPoints by tokensListScreenModel.mainTokenChartPointsFlow.collectAsState()
       val chartPeriod by tokensListScreenModel.chartPeriod.collectAsState()
 
       Row(modifier = Modifier.fillMaxSize()) {
@@ -89,7 +88,7 @@ object TokensListTab : Tab {
 
           LoadableView(
             modifier = Modifier.fillMaxSize().padding(tabElementPadding),
-            loadable = mainTokenWithChart.map { (_, chart) -> chart },
+            loadable = chartPoints,
             onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
           ) {
             PriceChart(modifier = Modifier.fillMaxSize(), points = it)
@@ -163,7 +162,7 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.NotLoading -> {
         items(
           count = comparisonItems.itemCount,
-          key = comparisonItems.itemKey { it.subjectToken.id }
+          key = comparisonItems.itemKey { it.referenceToken.id }
         ) { index ->
           val (subjectToken, potential) = comparisonItems[index] ?: return@items
           Row(

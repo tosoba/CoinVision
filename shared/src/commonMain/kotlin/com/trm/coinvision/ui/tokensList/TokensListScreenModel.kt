@@ -11,6 +11,7 @@ import com.trm.coinvision.core.domain.model.LoadingFirst
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.WithData
+import com.trm.coinvision.core.domain.model.WithoutData
 import com.trm.coinvision.core.domain.model.dataOrNull
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.core.domain.usecase.GetSelectedMainTokenWithChartFlowUseCase
@@ -19,13 +20,17 @@ import com.trm.coinvision.ui.chart.toPriceChartPoints
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.withIndex
@@ -38,9 +43,16 @@ internal class TokensListScreenModel(
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
   getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
 ) : ScreenModel {
+  private val _mainTokenFlow = MutableSharedFlow<Loadable<TokenDTO>>()
+
+  private val _mainTokenChartPointsFlow =
+    MutableStateFlow<Loadable<List<PriceChartPoint>>>(LoadingFirst)
+  val mainTokenChartPointsFlow: StateFlow<Loadable<List<PriceChartPoint>>> =
+    _mainTokenChartPointsFlow.asStateFlow()
+
   private val retryMainTokenWithChartFlow = MutableSharedFlow<Unit>()
 
-  val selectedMainTokenWithChartFlow: StateFlow<Loadable<Pair<TokenDTO, List<PriceChartPoint>>>> =
+  init {
     retryMainTokenWithChartFlow
       .onStart { emit(Unit) }
       .flatMapLatest {
@@ -48,11 +60,12 @@ internal class TokensListScreenModel(
           it.map { (token, marketChart) -> token to marketChart.toPriceChartPoints() }
         }
       }
-      .stateIn(
-        scope = screenModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = LoadingFirst
-      )
+      .onEach {
+        _mainTokenFlow.emit(it.map { (token) -> token })
+        _mainTokenChartPointsFlow.value = it.map { (_, chartPoints) -> chartPoints }
+      }
+      .launchIn(screenModelScope)
+  }
 
   fun onRetryMainTokenWithChartClick() {
     screenModelScope.launch { retryMainTokenWithChartFlow.emit(Unit) }
@@ -62,30 +75,46 @@ internal class TokensListScreenModel(
     tokenListPagingRepository(null)
       .cachedIn(screenModelScope)
       .combine(
-        selectedMainTokenWithChartFlow
-          .map { it.map { (token) -> token } }
+        _mainTokenFlow
           .withIndex()
           .filter { (index, value) -> index == 0 || value !is Loading }
           .map { it.value }
           .distinctUntilChangedBy(Loadable<TokenDTO>::dataOrNull)
-      ) { paging, token ->
-        with(paging) {
-          if (token is WithData) {
-            map {
-              TokenPotentialComparison(
-                subjectToken = it,
-                potential =
-                  TokenPotential(
-                    token = token.data,
-                    potentialPrice = 0.0,
-                    potentialUpsidePercentage = 0.0
-                  )
-              )
+      ) { paging, mainToken ->
+        paging.map(
+          when (mainToken) {
+            is WithData -> {
+              { referenceToken ->
+                // TODO: currency selection from settings
+                val mainTokenMarketCap = mainToken.data.marketData?.marketCap?.usd
+                val mainTokenPrice = mainToken.data.marketData?.currentPrice?.usd
+                val referenceTokenMarketCap = referenceToken.marketCap
+                TokenPotentialComparison(
+                  referenceToken = referenceToken,
+                  potential =
+                    if (
+                      mainTokenMarketCap == null ||
+                        mainTokenPrice == null ||
+                        referenceTokenMarketCap == null
+                    ) {
+                      null
+                    } else {
+                      TokenPotential(
+                        token = mainToken.data,
+                        potentialPrice =
+                          referenceTokenMarketCap / mainTokenMarketCap * mainTokenPrice,
+                        potentialUpsidePercentage =
+                          (referenceTokenMarketCap / mainTokenMarketCap - 1.0) * 100.0
+                      )
+                    }
+                )
+              }
             }
-          } else {
-            map { TokenPotentialComparison(subjectToken = it, potential = null) }
+            is WithoutData -> {
+              { TokenPotentialComparison(referenceToken = it, potential = null) }
+            }
           }
-        }
+        )
       }
       .stateIn(
         scope = screenModelScope,
