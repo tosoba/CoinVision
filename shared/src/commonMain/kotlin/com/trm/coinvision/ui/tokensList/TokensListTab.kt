@@ -1,17 +1,23 @@
 package com.trm.coinvision.ui.tokensList
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -129,6 +135,7 @@ object TokensListTab : Tab {
       )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TokenPotentialComparisonLazyColumn(
   modifier: Modifier = Modifier,
@@ -161,6 +168,29 @@ private fun TokenPotentialComparisonLazyColumn(
         item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
       }
       is LoadState.NotLoading -> {
+        comparisonItems[0]?.potential?.token?.symbol?.let {
+          stickyHeader {
+            Row(
+              modifier =
+                Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.background),
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Text(
+                "With market cap of:",
+                modifier = Modifier.weight(1f).basicMarquee(),
+                style = MaterialTheme.typography.headlineMedium
+              ) // TODO: style
+
+              Spacer(modifier = Modifier.width(10.dp))
+
+              Text(
+                "${it.uppercase()} price potential:",
+                modifier = Modifier.weight(1f).basicMarquee(),
+                style = MaterialTheme.typography.headlineMedium
+              ) // TODO: style
+            }
+          }
+        }
         items(
           count = comparisonItems.itemCount,
           key = comparisonItems.itemKey { it.referenceToken.id }

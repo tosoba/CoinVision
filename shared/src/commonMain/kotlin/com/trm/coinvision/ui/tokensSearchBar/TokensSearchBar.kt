@@ -45,12 +45,10 @@ import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
+import com.trm.coinvision.ui.common.TokenImageOrSymbol
 import com.trm.coinvision.ui.common.TokenSymbol
 import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import io.ktor.http.Url
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -216,24 +214,6 @@ internal fun TokensSearchBar(
       LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     }
   }
-}
-
-@Composable
-private fun TokenImageOrSymbol(
-  modifier: Modifier = Modifier,
-  image: String?,
-  symbol: String,
-  name: String
-) {
-  image?.let {
-    KamelImage(
-      modifier = modifier,
-      resource = asyncPainterResource(data = Url(it)),
-      contentDescription = name,
-      onFailure = { TokenSymbol(symbol = symbol) },
-      onLoading = { TokenSymbol(symbol = symbol, modifier = Modifier.tokenSymbolShape().shimmer()) }
-    )
-  } ?: run { TokenSymbol(symbol = symbol) }
 }
 
 @Composable
