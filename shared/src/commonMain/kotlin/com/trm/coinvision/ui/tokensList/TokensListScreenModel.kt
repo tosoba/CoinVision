@@ -43,7 +43,7 @@ internal class TokensListScreenModel(
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
   getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
 ) : ScreenModel {
-  private val _mainTokenFlow = MutableSharedFlow<Loadable<TokenDTO>>()
+  private val _mainTokenFlow = MutableSharedFlow<Loadable<TokenDTO>>(replay = 1)
 
   private val _mainTokenChartPointsFlow =
     MutableStateFlow<Loadable<List<PriceChartPoint>>>(LoadingFirst)
