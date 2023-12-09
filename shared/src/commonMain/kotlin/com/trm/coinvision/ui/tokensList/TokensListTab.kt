@@ -2,7 +2,6 @@ package com.trm.coinvision.ui.tokensList
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,6 +49,7 @@ import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SegmentedButton
+import com.trm.coinvision.ui.common.SingleLineAutoSizeText
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
@@ -172,22 +172,24 @@ private fun TokenPotentialComparisonLazyColumn(
           stickyHeader {
             Row(
               modifier =
-                Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.background),
+                Modifier.fillMaxWidth()
+                  .background(color = MaterialTheme.colorScheme.background)
+                  .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
               verticalAlignment = Alignment.CenterVertically
             ) {
-              Text(
-                "With market cap of:",
-                modifier = Modifier.weight(1f).basicMarquee(),
+              SingleLineAutoSizeText(
+                modifier = Modifier.weight(1f),
+                text = "With market cap of:",
                 style = MaterialTheme.typography.headlineMedium
-              ) // TODO: style
+              )
 
               Spacer(modifier = Modifier.width(10.dp))
 
-              Text(
-                "${it.uppercase()} price potential:",
-                modifier = Modifier.weight(1f).basicMarquee(),
+              SingleLineAutoSizeText(
+                modifier = Modifier.weight(1f),
+                text = "Potential ${it.uppercase()} price:",
                 style = MaterialTheme.typography.headlineMedium
-              ) // TODO: style
+              )
             }
           }
         }
