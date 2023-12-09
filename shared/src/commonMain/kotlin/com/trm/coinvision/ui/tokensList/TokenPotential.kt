@@ -4,6 +4,6 @@ import com.trm.coinvision.core.domain.model.TokenDTO
 
 internal data class TokenPotential(
   val token: TokenDTO,
-  val potentialPrice: Double,
-  val potentialUpsidePercentage: Double
+  val potentialPriceFormatted: String,
+  val potentialUpsideFormatted: String
 )

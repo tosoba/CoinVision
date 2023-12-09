@@ -3,6 +3,7 @@ package com.trm.coinvision.ui.tokensList
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,6 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
-import com.trm.coinvision.core.common.util.ext.formatPrice
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
@@ -202,14 +202,18 @@ private fun TokenPotentialComparisonLazyColumn(
           Row(
             verticalAlignment = Alignment.CenterVertically
           ) { // TODO: different layouts depending on width
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+              modifier = Modifier.weight(1f),
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.SpaceBetween
+            ) {
               Text(text = subjectToken.name)
               Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
             }
             potential?.let {
-              Column(modifier = Modifier.weight(1f)) {
-                Text(text = it.potentialPrice.formatPrice())
-                Text(text = it.potentialUpsidePercentage.toString()) // TODO: format
+              Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+                Text(text = it.potentialPriceFormatted)
+                Text(text = it.potentialUpsideFormatted)
               }
             }
           }
