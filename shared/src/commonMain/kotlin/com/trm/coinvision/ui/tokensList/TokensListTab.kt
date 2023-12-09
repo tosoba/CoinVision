@@ -2,6 +2,7 @@ package com.trm.coinvision.ui.tokensList
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -199,18 +200,29 @@ private fun TokenPotentialComparisonLazyColumn(
           key = comparisonItems.itemKey { it.referenceToken.id }
         ) { index ->
           val (subjectToken, potential) = comparisonItems[index] ?: return@items
-          Row(
-            verticalAlignment = Alignment.CenterVertically
-          ) { // TODO: different layouts depending on width
+          Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Row(
               modifier = Modifier.weight(1f),
               verticalAlignment = Alignment.CenterVertically,
               horizontalArrangement = Arrangement.SpaceBetween
             ) {
-              Text(text = subjectToken.name)
+              Text(text = index.toString())
+
+              Spacer(modifier = Modifier.width(5.dp))
+
+              Column(modifier = Modifier.weight(1f)) {
+                Text(modifier = Modifier.basicMarquee(), text = subjectToken.symbol.uppercase())
+                Text(modifier = Modifier.basicMarquee(), text = subjectToken.name)
+              }
+
+              Spacer(modifier = Modifier.width(5.dp))
+
               Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
             }
+
             potential?.let {
+              Spacer(modifier = Modifier.width(5.dp))
+
               Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
                 Text(text = it.potentialPriceFormatted)
                 Text(text = it.potentialUpsideFormatted)
