@@ -39,6 +39,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
+import com.trm.coinvision.core.common.util.ext.formatPrice
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
@@ -201,12 +202,13 @@ private fun TokenPotentialComparisonLazyColumn(
           Row(
             verticalAlignment = Alignment.CenterVertically
           ) { // TODO: different layouts depending on width
-            Text(text = subjectToken.name)
-            Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
+            Row(verticalAlignment = Alignment.CenterVertically) {
+              Text(text = subjectToken.name)
+              Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
+            }
             potential?.let {
-              Text(text = it.token.name.orEmpty())
-              Column {
-                Text(text = it.potentialPrice.toString()) // TODO: format
+              Column(modifier = Modifier.weight(1f)) {
+                Text(text = it.potentialPrice.formatPrice())
                 Text(text = it.potentialUpsidePercentage.toString()) // TODO: format
               }
             }

@@ -35,7 +35,7 @@ kotlin {
         implementation(compose.components.resources)
         implementation(compose.runtime)
 
-        implementation(libs.logback.classic)
+        implementation(libs.bignum)
 
         implementation(libs.kamel)
 
@@ -48,6 +48,8 @@ kotlin {
         implementation(libs.ktor.client.logging)
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization.kotlinx.json)
+
+        implementation(libs.logback.classic)
 
         implementation(libs.material3.windowSizeClass)
 
