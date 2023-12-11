@@ -268,12 +268,12 @@ private fun TokenPotentialComparisonItem(
         Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
       }
 
-      potential?.let {
+      potential?.let { (_, potentialPriceFormatted, potentialUpsideFormatted) ->
         Spacer(modifier = Modifier.width(5.dp))
 
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-          Text(text = it.potentialPriceFormatted)
-          Text(text = it.potentialUpsideFormatted)
+          Text(text = potentialPriceFormatted)
+          potentialUpsideFormatted?.let { Text(text = it) }
         }
       }
     }

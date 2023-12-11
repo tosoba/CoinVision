@@ -102,12 +102,14 @@ internal class TokensListScreenModel(
                       null
                     } else {
                       TokenPotential(
-                        mainToken.data,
-                        (referenceTokenMarketCap / mainTokenMarketCap * mainTokenPrice)
+                        token = mainToken.data,
+                        potentialPriceFormatted = (referenceTokenMarketCap / mainTokenMarketCap * mainTokenPrice)
                           .formatPrice(),
-                        when {
+                        potentialUpsideFormatted = when {
+                          mainToken.data.id == referenceToken.id -> null
                           referenceTokenMarketCap / mainTokenMarketCap > 10.0 ->
                             "${(referenceTokenMarketCap / mainTokenMarketCap).format(2)}x"
+
                           referenceTokenMarketCap / mainTokenMarketCap > 1.0 -> {
                             "+${((referenceTokenMarketCap / mainTokenMarketCap - 1.0) * 100.0).format(2)}%"
                           }
