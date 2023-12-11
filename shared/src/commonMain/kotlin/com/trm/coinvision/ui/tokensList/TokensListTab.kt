@@ -18,6 +18,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -172,62 +175,26 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.NotLoading -> {
         comparisonItems[0]?.potential?.token?.symbol?.let {
           stickyHeader {
-            Row(
+            TokenPotentialComparisonHeader(
               modifier =
                 Modifier.fillMaxWidth()
                   .background(color = MaterialTheme.colorScheme.background)
                   .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              SingleLineAutoSizeText(
-                modifier = Modifier.weight(1f),
-                text = "With market cap of:",
-                style = MaterialTheme.typography.headlineMedium
-              )
-
-              Spacer(modifier = Modifier.width(10.dp))
-
-              SingleLineAutoSizeText(
-                modifier = Modifier.weight(1f),
-                text = "Potential ${it.uppercase()} price:",
-                style = MaterialTheme.typography.headlineMedium
-              )
-            }
+              tokenSymbol = it
+            )
           }
         }
+
         items(
           count = comparisonItems.itemCount,
           key = comparisonItems.itemKey { it.referenceToken.id }
         ) { index ->
-          val (subjectToken, potential) = comparisonItems[index] ?: return@items
-          Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Row(
-              modifier = Modifier.weight(1f),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-              Text(text = index.toString())
-
-              Spacer(modifier = Modifier.width(5.dp))
-
-              Column(modifier = Modifier.weight(1f)) {
-                Text(modifier = Modifier.basicMarquee(), text = subjectToken.symbol.uppercase())
-                Text(modifier = Modifier.basicMarquee(), text = subjectToken.name)
-              }
-
-              Spacer(modifier = Modifier.width(5.dp))
-
-              Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
-            }
-
-            potential?.let {
-              Spacer(modifier = Modifier.width(5.dp))
-
-              Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                Text(text = it.potentialPriceFormatted)
-                Text(text = it.potentialUpsideFormatted)
-              }
-            }
+          comparisonItems[index]?.let {
+            TokenPotentialComparisonItem(
+              modifier = Modifier.fillMaxWidth().padding(5.dp),
+              index = index,
+              item = it
+            )
           }
         }
       }
@@ -242,6 +209,73 @@ private fun TokenPotentialComparisonLazyColumn(
       }
     } else if (comparisonItems.loadState.prepend == LoadState.Loading) {
       item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+    }
+  }
+}
+
+@Composable
+private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
+  Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    SingleLineAutoSizeText(
+      modifier = Modifier.weight(1f),
+      text = "With market cap of:",
+      style = MaterialTheme.typography.headlineMedium
+    )
+
+    Spacer(modifier = Modifier.width(10.dp))
+
+    SingleLineAutoSizeText(
+      modifier = Modifier.weight(1f),
+      text = "Potential ${tokenSymbol.uppercase()} price:",
+      style = MaterialTheme.typography.headlineMedium
+    )
+  }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TokenPotentialComparisonItem(
+  modifier: Modifier = Modifier,
+  index: Int,
+  item: TokenPotentialComparison
+) {
+  val (subjectToken, potential) = item
+  Card(
+    modifier = modifier,
+    shape = RoundedCornerShape(5.dp),
+    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+  ) {
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(5.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Row(
+        modifier = Modifier.weight(1f),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+      ) {
+        Text(text = index.toString())
+
+        Spacer(modifier = Modifier.width(5.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+          Text(modifier = Modifier.basicMarquee(), text = subjectToken.symbol.uppercase())
+          Text(modifier = Modifier.basicMarquee(), text = subjectToken.name)
+        }
+
+        Spacer(modifier = Modifier.width(5.dp))
+
+        Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
+      }
+
+      potential?.let {
+        Spacer(modifier = Modifier.width(5.dp))
+
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+          Text(text = it.potentialPriceFormatted)
+          Text(text = it.potentialUpsideFormatted)
+        }
+      }
     }
   }
 }
