@@ -22,6 +22,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
+import com.trm.coinvision.ui.portfolio.PortfolioTab
 import com.trm.coinvision.ui.tokensList.TokensListTab
 
 internal object MainScreen : Screen {
@@ -44,6 +45,7 @@ internal object MainScreen : Screen {
               NavigationBar {
                 TabNavigationBarItem(CompareTokensTab)
                 TabNavigationBarItem(TokensListTab)
+                TabNavigationBarItem(PortfolioTab)
               }
             }
           }
@@ -54,6 +56,7 @@ internal object MainScreen : Screen {
                 when (it) {
                   CompareTokensTab -> CompareTokensTab.Content()
                   TokensListTab -> TokensListTab.Content()
+                  PortfolioTab -> PortfolioTab.Content()
                 }
               }
             }
