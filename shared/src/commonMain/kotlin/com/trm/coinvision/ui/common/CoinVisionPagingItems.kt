@@ -10,16 +10,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import com.trm.coinvision.core.common.util.LocalStringResources
+import com.trm.coinvision.core.domain.exception.HttpException
+import io.ktor.utils.io.errors.IOException
 
 @Composable
-internal fun CoinVisionRetryRow(modifier: Modifier = Modifier, onRetryClick: () -> Unit = {}) {
+internal fun CoinVisionRetryRow(
+  modifier: Modifier = Modifier,
+  text: String = LocalStringResources.current.errorOccurred,
+  onRetryClick: () -> Unit = {}
+) {
   Row(
     modifier = modifier,
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
-    Text(text = LocalStringResources.current.errorOccurred)
+    Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
     Button(onRetryClick) { Text(text = LocalStringResources.current.retry) }
   }
 }
@@ -32,13 +39,27 @@ internal fun CoinVisionProgressIndicator(modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun CoinVisionRetryColumn(modifier: Modifier = Modifier, onRetryClick: () -> Unit = {}) {
+internal fun CoinVisionRetryColumn(
+  modifier: Modifier = Modifier,
+  text: String = LocalStringResources.current.errorOccurred,
+  onRetryClick: () -> Unit = {}
+) {
   Column(
     modifier = modifier,
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text(text = LocalStringResources.current.errorOccurred)
+    Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
     Button(onRetryClick) { Text(text = LocalStringResources.current.retry) }
   }
 }
+
+@Composable
+fun Throwable.errorText(): String =
+  when (this) {
+    is HttpException -> {
+      if (status.value == 429) "Exceeded request rate limit." else "Backend error occurred."
+    }
+    is IOException -> "No internet connection."
+    else -> LocalStringResources.current.errorOccurred
+  }

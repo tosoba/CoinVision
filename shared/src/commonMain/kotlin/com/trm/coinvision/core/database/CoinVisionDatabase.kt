@@ -1,17 +1,17 @@
 package com.trm.coinvision.core.database
 
-import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.trm.coinvision.core.database.adapter.LocalDateTimeAdapter
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.SelectedToken
-import com.trm.coinvision.db.ChartPeriod
 import com.trm.coinvision.db.CoinVisionDb
 import com.trm.coinvision.db.MainToken
 import com.trm.coinvision.db.ReferenceToken
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -26,7 +26,6 @@ internal class CoinVisionDatabase(
       driver = databaseDriverFactory.createDriver(),
       mainTokenAdapter = MainToken.Adapter(LocalDateTimeAdapter),
       referenceTokenAdapter = ReferenceToken.Adapter(LocalDateTimeAdapter),
-      chartPeriodAdapter = ChartPeriod.Adapter(EnumColumnAdapter())
     )
   private val dbQueries = database.coinVisionDbQueries
 
@@ -59,11 +58,13 @@ internal class CoinVisionDatabase(
   fun selectMostRecentMainTokenFlow(): Flow<SelectedToken?> =
     dbQueries.selectMostRecentMainToken(::SelectedToken).asFlow().mapToOneOrNull(dispatcher)
 
-  fun selectMostRecentMainTokenIdWithChartPeriodFlow(): Flow<Pair<String, MarketChartDaysPeriod>?> =
+  fun selectMostRecentMainTokenIdWithChartPeriodFlow(): Flow<Pair<String, MarketChartDaysPeriod>> =
     dbQueries
-      .selectMostRecentMainTokenIdWithChartPeriod { id, period -> id to period }
+      .selectMostRecentMainTokenIdWithChartPeriod { id, period ->
+        id to MarketChartDaysPeriod.valueOf(period)
+      }
       .asFlow()
-      .mapToOneOrNull(dispatcher)
+      .mapToOne(dispatcher)
 
   suspend fun selectMostRecentMainToken(): SelectedToken? =
     withContext(dispatcher) {
@@ -79,9 +80,11 @@ internal class CoinVisionDatabase(
     }
 
   suspend fun insertChartPeriod(period: MarketChartDaysPeriod) {
-    withContext(dispatcher) { dbQueries.insertChartPeriod(period) }
+    withContext(dispatcher) { dbQueries.insertChartPeriod(period.name) }
   }
 
   fun selectChartPeriodFlow(): Flow<MarketChartDaysPeriod?> =
-    dbQueries.selectChartPeriod().asFlow().mapToOneOrNull(dispatcher)
+    dbQueries.selectChartPeriod().asFlow().mapToOneOrNull(dispatcher).map { period ->
+      period?.let { MarketChartDaysPeriod.valueOf(it) }
+    }
 }

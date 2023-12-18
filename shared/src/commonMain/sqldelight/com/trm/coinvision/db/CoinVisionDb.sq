@@ -1,5 +1,4 @@
 import kotlinx.datetime.LocalDateTime;
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod;
 
 CREATE TABLE token(
 	id TEXT NOT NULL PRIMARY KEY,
@@ -20,14 +19,18 @@ CREATE TABLE referenceToken(
 
 CREATE TABLE chartPeriod(
     id TEXT NOT NULL PRIMARY KEY,
-    period TEXT AS MarketChartDaysPeriod NOT NULL
+    period TEXT NOT NULL
 );
 
 selectAllMainTokens:
-SELECT t.* FROM token t INNER JOIN mainToken mt ON t.id = mt.id ORDER BY updatedAt DESC;
+SELECT t.* FROM token t
+INNER JOIN mainToken mt ON t.id = mt.id
+ORDER BY updatedAt DESC;
 
 selectAllReferenceTokens:
-SELECT t.* FROM token t INNER JOIN referenceToken rt ON t.id = rt.id ORDER BY updatedAt DESC;
+SELECT t.* FROM token t
+INNER JOIN referenceToken rt ON t.id = rt.id
+ORDER BY updatedAt DESC;
 
 selectMostRecentMainToken:
 SELECT t.* FROM token t
@@ -35,9 +38,8 @@ INNER JOIN mainToken mt ON t.id = mt.id
 WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
 
 selectMostRecentMainTokenIdWithChartPeriod:
-SELECT t.id, cp.period FROM token t
-INNER JOIN mainToken mt ON t.id = mt.id
-CROSS JOIN chartPeriod cp
+SELECT COALESCE(t.id, 'ethereum'), COALESCE((SELECT cp.period FROM chartPeriod cp), 'DAY') FROM token t
+LEFT JOIN mainToken mt ON t.id = mt.id
 WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
 
 selectMostRecentReferenceToken:

@@ -4,6 +4,7 @@ import androidx.paging.PagingState
 import app.cash.paging.PagingSource
 import app.cash.paging.PagingSourceLoadResultError
 import app.cash.paging.PagingSourceLoadResultPage
+import com.trm.coinvision.core.domain.exception.HttpException
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.network.client.CoinGeckoApiClient
@@ -55,7 +56,7 @@ internal class TokenListNetworkPagingSource(
           nextKey = (page + 1).takeIf { tokens.size == params.loadSize }
         )
       } else {
-        PagingSourceLoadResultError(Exception("Received a ${response.status}."))
+        PagingSourceLoadResultError(HttpException(response.status))
       }
     } catch (ex: CancellationException) {
       throw ex

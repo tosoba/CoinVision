@@ -47,6 +47,7 @@ import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.TokenImageOrSymbol
 import com.trm.coinvision.ui.common.TokenSymbol
+import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.flowOf
@@ -125,22 +126,28 @@ internal fun TokensSearchBar(
       },
     ) {
       LazyColumn(modifier = Modifier.fillMaxWidth(), state = tokensListState) {
-        if (tokens.loadState.prepend is LoadState.Error) {
-          item {
-            CoinVisionRetryRow(
-              modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
-              onRetryClick = tokens::retry
-            )
+        when (val prepend = tokens.loadState.prepend) {
+          is LoadState.Error -> {
+            item {
+              CoinVisionRetryRow(
+                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
+                text = prepend.error.errorText(),
+                onRetryClick = tokens::retry
+              )
+            }
           }
-        } else if (tokens.loadState.prepend == LoadState.Loading) {
-          item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+          LoadState.Loading -> {
+            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+          }
+          else -> {}
         }
 
-        when (tokens.loadState.refresh) {
+        when (val refresh = tokens.loadState.refresh) {
           is LoadState.Error -> {
             item {
               CoinVisionRetryColumn(
                 modifier = Modifier.fillParentMaxSize().animateItemPlacement(),
+                text = refresh.error.errorText(),
                 onRetryClick = tokens::retry
               )
             }
@@ -191,17 +198,22 @@ internal fun TokensSearchBar(
           }
         }
 
-        if (tokens.loadState.append is LoadState.Error) {
-          item {
-            CoinVisionRetryRow(
-              modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
-              onRetryClick = tokens::retry
-            )
+        when (val append = tokens.loadState.append) {
+          is LoadState.Error -> {
+            item {
+              CoinVisionRetryRow(
+                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
+                text = append.error.errorText(),
+                onRetryClick = tokens::retry
+              )
+            }
           }
-        } else if (tokens.loadState.prepend == LoadState.Loading) {
-          item {
-            CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItemPlacement())
+          LoadState.Loading -> {
+            item {
+              CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItemPlacement())
+            }
           }
+          else -> {}
         }
       }
     }

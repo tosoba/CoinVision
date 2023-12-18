@@ -31,9 +31,7 @@ internal fun tokenRepository(
 
     override fun getSelectedMainTokenIdWithChartPeriodFlow():
       Flow<Pair<String, MarketChartDaysPeriod>> =
-      database.selectMostRecentMainTokenIdWithChartPeriodFlow().map {
-        it ?: (DEFAULT_SELECTED_MAIN_TOKEN_ID to MarketChartDaysPeriod.default)
-      }
+      database.selectMostRecentMainTokenIdWithChartPeriodFlow()
 
     override suspend fun updateSelectedReferenceToken(token: SelectedToken) {
       database.insertSelectedReferenceToken(token)

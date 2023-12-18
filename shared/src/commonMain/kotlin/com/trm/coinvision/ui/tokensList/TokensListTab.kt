@@ -55,6 +55,7 @@ import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SegmentedButton
 import com.trm.coinvision.ui.common.SingleLineAutoSizeText
+import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
@@ -149,22 +150,28 @@ private fun TokenPotentialComparisonLazyColumn(
     flowOf(PagingData.empty<TokenPotentialComparison>()).collectAsLazyPagingItems(),
 ) {
   LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
-    if (comparisonItems.loadState.prepend is LoadState.Error) {
-      item {
-        CoinVisionRetryRow(
-          modifier = Modifier.fillMaxWidth().padding(20.dp),
-          onRetryClick = comparisonItems::retry
-        )
+    when (val prepend = comparisonItems.loadState.prepend) {
+      is LoadState.Error -> {
+        item {
+          CoinVisionRetryRow(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            text = prepend.error.errorText(),
+            onRetryClick = comparisonItems::retry
+          )
+        }
       }
-    } else if (comparisonItems.loadState.prepend == LoadState.Loading) {
-      item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+      LoadState.Loading -> {
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+      }
+      else -> {}
     }
 
-    when (comparisonItems.loadState.refresh) {
+    when (val refresh = comparisonItems.loadState.refresh) {
       is LoadState.Error -> {
         item {
           CoinVisionRetryColumn(
             modifier = Modifier.fillParentMaxSize(),
+            text = refresh.error.errorText(),
             onRetryClick = comparisonItems::retry
           )
         }
@@ -200,15 +207,20 @@ private fun TokenPotentialComparisonLazyColumn(
       }
     }
 
-    if (comparisonItems.loadState.append is LoadState.Error) {
-      item {
-        CoinVisionRetryRow(
-          modifier = Modifier.fillMaxWidth().padding(20.dp),
-          onRetryClick = comparisonItems::retry
-        )
+    when (val append = comparisonItems.loadState.append) {
+      is LoadState.Error -> {
+        item {
+          CoinVisionRetryRow(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            text = append.error.errorText(),
+            onRetryClick = comparisonItems::retry
+          )
+        }
       }
-    } else if (comparisonItems.loadState.prepend == LoadState.Loading) {
-      item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+      LoadState.Loading -> {
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+      }
+      else -> {}
     }
   }
 }
