@@ -9,7 +9,7 @@ import org.koin.dsl.module
 internal val networkModule = module {
   single {
     coinGeckoHttpClient {
-      coinGeckoHttpClientDefaultConfig(logLevel = LogLevel.ALL, cacheStorage = get())()
+      coinGeckoHttpClientDefaultConfig(logLevel = LogLevel.INFO, cacheStorage = get())()
     }
   }
   factory { CoinGeckoApiClient(get()) }
