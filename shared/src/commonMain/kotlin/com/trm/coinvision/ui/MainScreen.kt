@@ -35,6 +35,7 @@ internal object MainScreen : Screen {
             Spacer(Modifier.weight(1f))
             TabNavigationRailItem(CompareTokensTab)
             TabNavigationRailItem(TokensListTab)
+            TabNavigationRailItem(PortfolioTab)
             Spacer(Modifier.weight(1f))
           }
         }
