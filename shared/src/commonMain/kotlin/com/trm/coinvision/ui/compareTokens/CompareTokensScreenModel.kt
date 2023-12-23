@@ -47,7 +47,7 @@ internal class CompareTokensScreenModel(
       }
       .stateIn(
         scope = screenModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
+        started = SharingStarted.Eagerly,
         initialValue = LoadingFirst
       )
 
@@ -63,7 +63,7 @@ internal class CompareTokensScreenModel(
       .flatMapLatest { getSelectedReferenceTokenFlowUseCase() }
       .stateIn(
         scope = screenModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
+        started = SharingStarted.Eagerly,
         initialValue = LoadingFirst
       )
 
