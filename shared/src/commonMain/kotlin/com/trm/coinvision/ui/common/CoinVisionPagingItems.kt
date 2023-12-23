@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.domain.exception.HttpException
+import io.ktor.client.plugins.ResponseException
 import io.ktor.utils.io.errors.IOException
 
 @Composable
@@ -63,6 +64,10 @@ internal fun CoinVisionRetryColumn(
 @Composable
 fun Throwable.errorText(): String =
   when (this) {
+    is ResponseException -> {
+      if (response.status.value == 429) "Exceeded request rate limit."
+      else "Backend error occurred."
+    }
     is HttpException -> {
       if (status.value == 429) "Exceeded request rate limit." else "Backend error occurred."
     }

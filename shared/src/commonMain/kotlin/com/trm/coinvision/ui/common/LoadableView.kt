@@ -7,6 +7,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.domain.model.Empty
 import com.trm.coinvision.core.domain.model.Failed
 import com.trm.coinvision.core.domain.model.Loadable
@@ -31,7 +32,11 @@ fun <T : Any> LoadableView(
         content(loadable.data)
       }
       is Failed -> {
-        CoinVisionRetryColumn(modifier = Modifier.fillMaxSize(), onRetryClick = onRetryClick)
+        CoinVisionRetryColumn(
+          modifier = Modifier.fillMaxSize(),
+          text = loadable.throwable?.errorText() ?: LocalStringResources.current.errorOccurred,
+          onRetryClick = onRetryClick
+        )
       }
       Empty -> {}
     }

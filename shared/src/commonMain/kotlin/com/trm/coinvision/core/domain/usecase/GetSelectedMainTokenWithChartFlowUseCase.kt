@@ -8,21 +8,21 @@ import com.trm.coinvision.core.domain.model.MarketChartDTO
 import com.trm.coinvision.core.domain.model.Ready
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.repo.TokenRepository
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.transformLatest
 
 internal class GetSelectedMainTokenWithChartFlowUseCase(private val repository: TokenRepository) {
   @OptIn(ExperimentalCoroutinesApi::class)
   operator fun invoke(): Flow<Loadable<Pair<TokenDTO, MarketChartDTO>>> =
-    repository.getSelectedMainTokenIdWithChartPeriodFlow().transformLatest { (tokenId, daysPeriod)
-      ->
-      emit(LoadingFirst)
-      coroutineScope {
-        try {
+    repository
+      .getSelectedMainTokenIdWithChartPeriodFlow()
+      .transformLatest { (tokenId, daysPeriod) ->
+        emit(LoadingFirst)
+        coroutineScope {
           val token = async { repository.getTokenById(tokenId) }
           val chart = async {
             repository.getTokenChart(
@@ -32,11 +32,7 @@ internal class GetSelectedMainTokenWithChartFlowUseCase(private val repository: 
             )
           }
           emit(Ready(token.await() to chart.await()))
-        } catch (ex: CancellationException) {
-          throw ex
-        } catch (ex: Exception) {
-          emit(FailedFirst(ex))
         }
       }
-    }
+      .catch { emit(FailedFirst(it)) }
 }

@@ -73,8 +73,9 @@ object TokensListTab : Tab {
         .mainTokensSearchBarViewModel
     val tokensListScreenModel = getScreenModel<TokensListScreenModel>()
 
+    val mainToken by tokensListScreenModel.mainTokenFlow.collectAsState()
     val listState = rememberLazyListState()
-    val tokenPotentialItems =
+    val tokenPotentialComparisonItems =
       tokensListScreenModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
 
     if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
@@ -108,11 +109,17 @@ object TokensListTab : Tab {
           }
         }
 
-        TokenPotentialComparisonLazyColumn(
+        LoadableView(
           modifier = Modifier.weight(.5f).fillMaxHeight(),
-          state = listState,
-          comparisonItems = tokenPotentialItems
-        )
+          loadable = mainToken,
+          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
+        ) {
+          TokenPotentialComparisonLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState,
+            comparisonItems = tokenPotentialComparisonItems
+          )
+        }
       }
     } else {
       Column(modifier = Modifier.fillMaxSize()) {
@@ -121,11 +128,17 @@ object TokensListTab : Tab {
           viewModel = mainTokensSearchBarViewModel
         )
 
-        TokenPotentialComparisonLazyColumn(
+        LoadableView(
           modifier = Modifier.fillMaxSize(),
-          state = listState,
-          comparisonItems = tokenPotentialItems,
-        )
+          loadable = mainToken,
+          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
+        ) {
+          TokenPotentialComparisonLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState,
+            comparisonItems = tokenPotentialComparisonItems,
+          )
+        }
       }
     }
   }
@@ -180,17 +193,23 @@ private fun TokenPotentialComparisonLazyColumn(
         item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
       }
       is LoadState.NotLoading -> {
-        comparisonItems[0]?.potential?.token?.symbol?.let {
-          stickyHeader {
-            TokenPotentialComparisonHeader(
-              modifier =
-                Modifier.fillMaxWidth()
-                  .background(color = MaterialTheme.colorScheme.background)
-                  .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-              tokenSymbol = it
-            )
+        comparisonItems
+          .takeIf { it.itemCount > 0 }
+          ?.get(0)
+          ?.potential
+          ?.token
+          ?.symbol
+          ?.let {
+            stickyHeader {
+              TokenPotentialComparisonHeader(
+                modifier =
+                  Modifier.fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.background)
+                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                tokenSymbol = it
+              )
+            }
           }
-        }
 
         items(
           count = comparisonItems.itemCount,

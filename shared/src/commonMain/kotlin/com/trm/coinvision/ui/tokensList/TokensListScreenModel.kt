@@ -41,7 +41,7 @@ internal class TokensListScreenModel(
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
   getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
 ) : ScreenModel {
-  private val _mainTokenFlow = MutableSharedFlow<Loadable<TokenDTO>>(replay = 1)
+  val mainTokenFlow = MutableStateFlow<Loadable<TokenDTO>>(LoadingFirst)
 
   private val _mainTokenChartPointsFlow =
     MutableStateFlow<Loadable<List<PriceChartPoint>>>(LoadingFirst)
@@ -59,7 +59,7 @@ internal class TokensListScreenModel(
         }
       }
       .onEach {
-        _mainTokenFlow.emit(it.map { (token) -> token })
+        mainTokenFlow.value = it.map { (token) -> token }
         _mainTokenChartPointsFlow.value = it.map { (_, chartPoints) -> chartPoints }
       }
       .launchIn(screenModelScope)
@@ -73,7 +73,7 @@ internal class TokensListScreenModel(
     tokenListPagingRepository(null)
       .cachedIn(screenModelScope)
       .combine(
-        _mainTokenFlow
+        mainTokenFlow
           .withIndex()
           .filter { (index, value) -> index == 0 || value !is Loading }
           .map { it.value }

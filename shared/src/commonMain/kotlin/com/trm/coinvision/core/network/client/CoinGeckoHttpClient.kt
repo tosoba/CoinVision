@@ -41,6 +41,8 @@ internal fun coinGeckoHttpClientDefaultConfig(
     retryOnServerErrors(maxRetries = 3)
     exponentialDelay()
   }
+
+  expectSuccess = true
 }
 
 internal const val COIN_GECKO_API_BASE_URL = "https://api.coingecko.com/api/v3"
