@@ -38,9 +38,19 @@ INNER JOIN mainToken mt ON t.id = mt.id
 WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
 
 selectMostRecentMainTokenIdWithChartPeriod:
-SELECT COALESCE(t.id, 'ethereum'), COALESCE((SELECT cp.period FROM chartPeriod cp), 'DAY') FROM token t
-LEFT JOIN mainToken mt ON t.id = mt.id
-WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken);
+SELECT
+COALESCE(
+    (
+        SELECT t.id FROM token t
+        LEFT JOIN mainToken mt ON t.id = mt.id
+        WHERE mt.updatedAt = (SELECT MAX(updatedAt) FROM mainToken)
+    ),
+    'ethereum'
+),
+COALESCE(
+    (SELECT cp.period FROM chartPeriod cp),
+    'DAY'
+);
 
 selectMostRecentReferenceToken:
 SELECT t.* FROM token t
