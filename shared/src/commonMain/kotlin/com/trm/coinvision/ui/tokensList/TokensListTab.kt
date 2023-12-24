@@ -23,7 +23,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,7 +42,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.util.LocalStringResources
-import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
@@ -56,6 +54,7 @@ import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SegmentedButton
 import com.trm.coinvision.ui.common.SingleLineAutoSizeText
 import com.trm.coinvision.ui.common.errorText
+import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
@@ -78,7 +77,7 @@ object TokensListTab : Tab {
     val tokenPotentialComparisonItems =
       tokensListScreenModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
 
-    if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+    if (usingHorizontalTabSplit) {
       val chartPoints by tokensListScreenModel.mainTokenChartPointsFlow.collectAsState()
       val chartPeriod by tokensListScreenModel.chartPeriod.collectAsState()
 
