@@ -16,7 +16,10 @@ internal data class StringResources(
   val loading: String,
   val swapTokens: String,
   val search: String,
-  val back: String
+  val back: String,
+  val exceededRateLimit: String,
+  val apiErrorOccurred: String,
+  val noInternetConnection: String
 )
 
 internal fun stringResourcesEn() =
@@ -32,6 +35,9 @@ internal fun stringResourcesEn() =
     swapTokens = "Swap tokens",
     search = "Search",
     back = "Back",
+    exceededRateLimit = "Exceeded request rate limit. Try again later.",
+    apiErrorOccurred = "API error occurred.",
+    noInternetConnection = "No internet connection."
   )
 
 internal fun stringResourcesPl() =
@@ -47,6 +53,9 @@ internal fun stringResourcesPl() =
     swapTokens = "Zamień tokeny",
     search = "Szukaj",
     back = "Wstecz",
+    exceededRateLimit = "Przekroczono limit API. Spróbuj później.",
+    apiErrorOccurred = "Wystąpił błąd API.",
+    noInternetConnection = "Brak połączenia z internetem."
   )
 
 internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }

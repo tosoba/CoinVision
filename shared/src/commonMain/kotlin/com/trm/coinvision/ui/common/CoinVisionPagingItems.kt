@@ -65,13 +65,13 @@ internal fun CoinVisionRetryColumn(
 fun Throwable.errorText(): String =
   when (this) {
     is ResponseException -> {
-      if (response.status.value == 429) "Exceeded request rate limit. Try again later."
-      else "Backend error occurred."
+      if (response.status.value == 429) LocalStringResources.current.exceededRateLimit
+      else LocalStringResources.current.apiErrorOccurred
     }
     is HttpException -> {
-      if (status.value == 429) "Exceeded request rate limit. Try again later."
-      else "Backend error occurred."
+      if (status.value == 429) LocalStringResources.current.exceededRateLimit
+      else LocalStringResources.current.apiErrorOccurred
     }
-    is IOException -> "No internet connection."
+    is IOException -> LocalStringResources.current.noInternetConnection
     else -> LocalStringResources.current.errorOccurred
   }
