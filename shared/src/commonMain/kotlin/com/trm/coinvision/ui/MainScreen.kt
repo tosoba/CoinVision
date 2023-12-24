@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.trm.coinvision.core.common.util.LocalHeightSizeClass
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.compareTokens.CompareTokensTab
 import com.trm.coinvision.ui.portfolio.PortfolioTab
@@ -30,7 +32,7 @@ internal object MainScreen : Screen {
   override fun Content() {
     TabNavigator(tab = CompareTokensTab) { tabNavigator ->
       Row {
-        if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+        if (!usingNavigationBar) {
           NavigationRail {
             Spacer(Modifier.weight(1f))
             TabNavigationRailItem(CompareTokensTab)
@@ -42,7 +44,7 @@ internal object MainScreen : Screen {
 
         Scaffold(
           bottomBar = {
-            if (LocalWidthSizeClass.current == WindowWidthSizeClass.Compact) {
+            if (usingNavigationBar) {
               NavigationBar {
                 TabNavigationBarItem(CompareTokensTab)
                 TabNavigationBarItem(TokensListTab)
@@ -69,6 +71,13 @@ internal object MainScreen : Screen {
 }
 
 private const val CURRENT_TAB_SAVE_STATE_KEY = "currentTab"
+
+private val usingNavigationBar
+  @Composable
+  get() =
+    LocalWidthSizeClass.current == WindowWidthSizeClass.Compact ||
+      LocalHeightSizeClass.current == WindowHeightSizeClass.Medium ||
+      LocalHeightSizeClass.current == WindowHeightSizeClass.Expanded
 
 @Composable
 private fun RowScope.TabNavigationBarItem(tab: Tab) {

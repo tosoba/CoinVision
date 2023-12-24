@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +26,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.trm.coinvision.core.common.util.LocalHeightSizeClass
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
@@ -57,7 +59,10 @@ object CompareTokensTab : Tab {
       val chartPeriod by compareTokensScreenModel.chartPeriod.collectAsState()
       val chartPeriodButtonScrollState = rememberScrollState()
 
-      if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+      if (
+        LocalWidthSizeClass.current != WindowWidthSizeClass.Compact &&
+          LocalHeightSizeClass.current != WindowHeightSizeClass.Expanded
+      ) {
         Row(modifier = Modifier.fillMaxSize()) {
           Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
             TokensSearchBar(
