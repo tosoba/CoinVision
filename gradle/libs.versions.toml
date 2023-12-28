@@ -18,6 +18,7 @@ paging = "3.3.0-alpha02-0.4.0"
 resources = "0.23.0"
 shimmer = "1.2.0"
 sqlDelight = "2.0.1"
+stately = "2.0.6"
 tradingview-charts = "4.0.0"
 voyager = "1.0.0-rc08"
 
@@ -54,6 +55,7 @@ sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sq
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
 tradingview-charts = { group = "com.tradingview", name = "lightweightcharts", version.ref = "tradingview-charts" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }

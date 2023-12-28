@@ -107,6 +107,7 @@ kotlin {
       iosSimulatorArm64Main.dependsOn(this)
 
       dependencies {
+        implementation(libs.stately.common)
         implementation(libs.ktor.client.darwin)
         implementation(libs.sqldelight.native.driver)
       }
