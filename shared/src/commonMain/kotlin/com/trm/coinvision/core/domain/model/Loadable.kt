@@ -14,6 +14,8 @@ sealed interface Loadable<out T : Any> : Serializable {
   fun copyWithError(error: Throwable?): Loadable<T> = FailedFirst(error)
 
   fun <R : Any> map(block: (T) -> R): Loadable<R>
+
+  fun <R : Any> mapNullable(orElse: (T) -> Loadable<R> = { Empty }, block: (T) -> R?): Loadable<R>
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -30,12 +32,22 @@ sealed interface WithoutData : Loadable<Nothing>
 
 data object Empty : WithoutData {
   override fun <R : Any> map(block: (Nothing) -> R): Loadable<R> = this
+
+  override fun <R : Any> mapNullable(
+    orElse: (Nothing) -> Loadable<R>,
+    block: (Nothing) -> R?
+  ): Loadable<R> = this
 }
 
 sealed interface Loading
 
 data object LoadingFirst : WithoutData, Loading {
   override fun <R : Any> map(block: (Nothing) -> R): Loadable<R> = this
+
+  override fun <R : Any> mapNullable(
+    orElse: (Nothing) -> Loadable<R>,
+    block: (Nothing) -> R?
+  ): Loadable<R> = this
 }
 
 data class LoadingNext<T : Any>(override val data: T) : WithData<T>, Loading {
@@ -48,6 +60,9 @@ data class LoadingNext<T : Any>(override val data: T) : WithData<T>, Loading {
   override fun copyWithError(error: Throwable?): FailedNext<T> = FailedNext(data, error)
 
   override fun <R : Any> map(block: (T) -> R): LoadingNext<R> = LoadingNext(block(data))
+
+  override fun <R : Any> mapNullable(orElse: (T) -> Loadable<R>, block: (T) -> R?): Loadable<R> =
+    block(data)?.let(::LoadingNext) ?: Empty
 }
 
 sealed interface Failed {
@@ -59,6 +74,11 @@ data class FailedFirst(override val throwable: Throwable?) : WithoutData, Failed
     get() = LoadingFirst
 
   override fun <R : Any> map(block: (Nothing) -> R): Loadable<R> = this
+
+  override fun <R : Any> mapNullable(
+    orElse: (Nothing) -> Loadable<R>,
+    block: (Nothing) -> R?
+  ): Loadable<R> = this
 }
 
 data class FailedNext<T : Any>(
@@ -74,6 +94,9 @@ data class FailedNext<T : Any>(
   override fun copyWithError(error: Throwable?): FailedNext<T> = FailedNext(data, error)
 
   override fun <R : Any> map(block: (T) -> R): FailedNext<R> = FailedNext(block(data), throwable)
+
+  override fun <R : Any> mapNullable(orElse: (T) -> Loadable<R>, block: (T) -> R?): Loadable<R> =
+    block(data)?.let { FailedNext(it, throwable) } ?: Empty
 }
 
 data class Ready<T : Any>(override val data: T) : WithData<T> {
@@ -86,6 +109,9 @@ data class Ready<T : Any>(override val data: T) : WithData<T> {
   override fun copyWithError(error: Throwable?): FailedNext<T> = FailedNext(data, error)
 
   override fun <R : Any> map(block: (T) -> R): WithData<R> = Ready(block(data))
+
+  override fun <R : Any> mapNullable(orElse: (T) -> Loadable<R>, block: (T) -> R?): Loadable<R> =
+    block(data)?.let(::Ready) ?: Empty
 }
 
 inline fun <reified T : Any> T?.asLoadable(): Loadable<T> = if (this == null) Empty else Ready(this)

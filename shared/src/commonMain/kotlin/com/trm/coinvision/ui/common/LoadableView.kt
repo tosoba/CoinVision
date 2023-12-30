@@ -19,26 +19,27 @@ fun <T : Any> LoadableView(
   modifier: Modifier = Modifier,
   loadable: Loadable<T> = Empty,
   onRetryClick: () -> Unit = {},
-  content: @Composable (T) -> Unit = {}
+  loadingContent: @Composable () -> Unit = {
+    Box(modifier = Modifier.fillMaxSize()) {
+      CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+  },
+  failedContent: @Composable (Throwable?) -> Unit = {
+    CoinVisionRetryColumn(
+      modifier = Modifier.fillMaxSize(),
+      text = it?.errorText() ?: LocalStringResources.current.errorOccurred,
+      onRetryClick = onRetryClick
+    )
+  },
+  emptyContent: @Composable () -> Unit = {},
+  readyContent: @Composable (T) -> Unit = {}
 ) {
   Crossfade(targetState = loadable, modifier = modifier) {
     when (loadable) {
-      is Loading -> {
-        Box(modifier = Modifier.fillMaxSize()) {
-          CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        }
-      }
-      is Ready -> {
-        content(loadable.data)
-      }
-      is Failed -> {
-        CoinVisionRetryColumn(
-          modifier = Modifier.fillMaxSize(),
-          text = loadable.throwable?.errorText() ?: LocalStringResources.current.errorOccurred,
-          onRetryClick = onRetryClick
-        )
-      }
-      Empty -> {}
+      is Loading -> loadingContent()
+      is Ready -> readyContent(loadable.data)
+      is Failed -> failedContent(loadable.throwable)
+      Empty -> emptyContent()
     }
   }
 }

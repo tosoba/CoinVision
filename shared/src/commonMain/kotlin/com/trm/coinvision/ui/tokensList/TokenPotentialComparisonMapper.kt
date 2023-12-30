@@ -1,7 +1,7 @@
 package com.trm.coinvision.ui.tokensList
 
 import com.trm.coinvision.core.common.util.ext.format
-import com.trm.coinvision.core.common.util.ext.formatPrice
+import com.trm.coinvision.core.common.util.ext.decimalFormat
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
@@ -30,7 +30,7 @@ internal class TokenPotentialComparisonMapper(
               TokenPotential(
                 token = mainToken.data,
                 potentialPriceFormatted =
-                  (referenceTokenMarketCap / mainTokenMarketCap * mainTokenPrice).formatPrice(),
+                  (referenceTokenMarketCap / mainTokenMarketCap * mainTokenPrice).decimalFormat(),
                 potentialUpsideFormatted =
                   when {
                     mainToken.data.id == referenceToken.id -> null

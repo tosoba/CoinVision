@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,16 +25,15 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.trm.coinvision.core.common.util.LocalHeightSizeClass
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
+import com.trm.coinvision.ui.chart.PriceChartHeader
 import com.trm.coinvision.ui.common.LoadableView
-import com.trm.coinvision.ui.common.SegmentedButton
 import com.trm.coinvision.ui.common.SelectedTokenData
+import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -59,10 +57,7 @@ object CompareTokensTab : Tab {
       val chartPeriod by compareTokensScreenModel.chartPeriod.collectAsState()
       val chartPeriodButtonScrollState = rememberScrollState()
 
-      if (
-        LocalWidthSizeClass.current != WindowWidthSizeClass.Compact &&
-          LocalHeightSizeClass.current != WindowHeightSizeClass.Expanded
-      ) {
+      if (usingHorizontalTabSplit) {
         Row(modifier = Modifier.fillMaxSize()) {
           Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
             TokensSearchBar(
@@ -70,15 +65,12 @@ object CompareTokensTab : Tab {
               viewModel = mainTokensSearchBarViewModel
             )
 
-            SegmentedButton(
-              modifier =
-                Modifier.fillMaxWidth()
-                  .horizontalScroll(chartPeriodButtonScrollState)
-                  .padding(horizontal = tabElementPadding),
-              items = MarketChartDaysPeriod.entries.toList(),
-              selectedItem = chartPeriod,
-              label = MarketChartDaysPeriod::label,
-              onItemClick = compareTokensScreenModel::onChartPeriodClick
+            PriceChartHeader(
+              modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
+              daysPeriodScrollState = chartPeriodButtonScrollState,
+              marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
+              chartPeriod = chartPeriod,
+              onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick
             )
 
             LoadableView(
@@ -112,15 +104,15 @@ object CompareTokensTab : Tab {
             viewModel = mainTokensSearchBarViewModel
           )
 
-          SegmentedButton(
+          PriceChartHeader(
             modifier =
               Modifier.fillMaxWidth()
                 .horizontalScroll(chartPeriodButtonScrollState)
                 .padding(horizontal = tabElementPadding),
-            items = MarketChartDaysPeriod.entries.toList(),
-            selectedItem = chartPeriod,
-            label = MarketChartDaysPeriod::label,
-            onItemClick = compareTokensScreenModel::onChartPeriodClick
+            daysPeriodScrollState = chartPeriodButtonScrollState,
+            marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
+            chartPeriod = chartPeriod,
+            onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick
           )
 
           LoadableView(

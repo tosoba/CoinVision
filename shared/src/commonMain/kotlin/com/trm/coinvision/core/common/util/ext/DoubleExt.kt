@@ -24,15 +24,19 @@ fun Double.format(digits: Int): String {
   return rounded.toString()
 }
 
-fun Double.formatPrice(significantDecimals: Int = 3): String =
-  if (this > 1) {
-    format(2)
-  } else {
-    buildString {
+fun Double.decimalFormat(significantDecimals: Int = 3, signed: Boolean = false): String =
+  buildString {
+    if (this@decimalFormat > 1) {
+      if (signed) append("+")
+      append(format(significantDecimals))
+    } else {
+      if (signed) {
+        if (this@decimalFormat > 0) append("+") else if (this@decimalFormat < 0) append("-")
+      }
       append("0.")
       var nonZeroFound = false
       var significant = 0
-      BigDecimal.fromDouble(this@formatPrice).toPlainString().substring(2).forEach {
+      BigDecimal.fromDouble(this@decimalFormat).toPlainString().substring(2).forEach {
         if (significant >= significantDecimals) return@forEach
         nonZeroFound = nonZeroFound || it != '0'
         if (nonZeroFound) {
@@ -40,7 +44,7 @@ fun Double.formatPrice(significantDecimals: Int = 3): String =
           append(it)
         }
       }
-      for (index in this.lastIndex downTo 3) {
+      for (index in this.lastIndex downTo if (signed) 4 else 3) {
         if (this[index] != '0') break
         deleteAt(index)
       }

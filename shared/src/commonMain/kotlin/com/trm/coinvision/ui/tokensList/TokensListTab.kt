@@ -44,14 +44,14 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
-import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
+import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
+import com.trm.coinvision.ui.chart.PriceChartHeader
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
-import com.trm.coinvision.ui.common.SegmentedButton
 import com.trm.coinvision.ui.common.SingleLineAutoSizeText
 import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
@@ -88,15 +88,14 @@ object TokensListTab : Tab {
             viewModel = mainTokensSearchBarViewModel
           )
 
-          SegmentedButton(
+          PriceChartHeader(
             modifier =
               Modifier.fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
                 .padding(horizontal = tabElementPadding),
-            items = MarketChartDaysPeriod.entries.toList(),
-            selectedItem = chartPeriod,
-            label = MarketChartDaysPeriod::label,
-            onItemClick = tokensListScreenModel::onChartPeriodClick
+            marketData = mainToken.mapNullable(block = TokenDTO::marketData),
+            chartPeriod = chartPeriod,
+            onChartPeriodClick = tokensListScreenModel::onChartPeriodClick
           )
 
           LoadableView(
