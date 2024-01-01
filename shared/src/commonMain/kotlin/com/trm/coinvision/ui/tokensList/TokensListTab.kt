@@ -3,7 +3,6 @@ package com.trm.coinvision.ui.tokensList
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -89,10 +87,7 @@ object TokensListTab : Tab {
           )
 
           PriceChartHeader(
-            modifier =
-              Modifier.fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = tabElementPadding),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
             marketData = mainToken.mapNullable(block = TokenDTO::marketData),
             chartPeriod = chartPeriod,
             onChartPeriodClick = tokensListScreenModel::onChartPeriodClick
