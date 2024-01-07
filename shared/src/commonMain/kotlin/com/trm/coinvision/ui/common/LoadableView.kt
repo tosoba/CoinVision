@@ -43,3 +43,46 @@ fun <T : Any> LoadableView(
     }
   }
 }
+
+@Composable
+fun <T : Any, S : Any> LoadableView(
+  modifier: Modifier = Modifier,
+  loadable1: Loadable<T>,
+  loadable2: Loadable<S>,
+  onRetryClick1: () -> Unit = {},
+  onRetryClick2: () -> Unit = {},
+  loadingContent: @Composable () -> Unit = {
+    Box(modifier = Modifier.fillMaxSize()) {
+      CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+  },
+  failedContent: @Composable (Throwable?, Throwable?) -> Unit = { throwable1, throwable2 ->
+    val errorText1 = throwable1?.errorText()
+    val errorText2 = throwable2?.errorText()
+    CoinVisionRetryColumn(
+      modifier = Modifier.fillMaxSize(),
+      text =
+        errorText1?.takeIf { errorText1 == errorText2 }
+          ?: LocalStringResources.current.errorOccurred,
+      onRetryClick = {
+        if (loadable1 is Failed) onRetryClick1()
+        if (loadable2 is Failed) onRetryClick2()
+      }
+    )
+  },
+  emptyContent: @Composable () -> Unit = {},
+  readyContent: @Composable (T, S) -> Unit = { _, _ -> }
+) {
+  Crossfade(targetState = listOf(loadable1, loadable2), modifier = modifier) { loadables ->
+    when {
+      loadables.any { it is Loading } -> loadingContent()
+      loadables.any { it is Failed } -> {
+        failedContent((loadable1 as? Failed)?.throwable, (loadable2 as? Failed)?.throwable)
+      }
+      loadables.any { it is Empty } -> emptyContent()
+      loadables.all { it is Ready } -> {
+        readyContent((loadable1 as Ready).data, (loadable2 as Ready).data)
+      }
+    }
+  }
+}

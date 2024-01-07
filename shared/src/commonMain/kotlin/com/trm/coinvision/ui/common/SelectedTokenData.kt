@@ -8,11 +8,16 @@ import androidx.compose.ui.Modifier
 import com.trm.coinvision.core.domain.model.TokenDTO
 
 @Composable
-internal fun SelectedTokenData(modifier: Modifier = Modifier, token: TokenDTO) {
+internal fun SelectedTokenData(
+  modifier: Modifier = Modifier,
+  mainToken: TokenDTO,
+  referenceToken: TokenDTO,
+) {
+  // TODO: layout
   Box(modifier = modifier) {
     Text(
       modifier = Modifier.align(Alignment.Center),
-      text = "${token.name.orEmpty()} ${token.marketData?.priceChange24h}"
+      text = "${referenceToken.name.orEmpty()} ${referenceToken.marketData?.priceChange24h}"
     )
   }
 }

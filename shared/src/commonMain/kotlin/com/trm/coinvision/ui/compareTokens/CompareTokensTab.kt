@@ -93,7 +93,11 @@ object CompareTokensTab : Tab {
               loadable = selectedReferenceToken,
               onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
             ) {
-              SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+              SelectedTokenData(
+                modifier = Modifier.fillMaxSize(),
+                mainToken = TODO(), // use new LoadableView with 2 args
+                referenceToken = it
+              )
             }
           }
         }
@@ -133,7 +137,11 @@ object CompareTokensTab : Tab {
             loadable = selectedReferenceToken,
             onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
           ) {
-            SelectedTokenData(modifier = Modifier.fillMaxSize(), token = it)
+            SelectedTokenData(
+              modifier = Modifier.fillMaxSize(),
+              mainToken = TODO(), // use new LoadableView with 2 args
+              referenceToken = it
+            )
           }
         }
       }
