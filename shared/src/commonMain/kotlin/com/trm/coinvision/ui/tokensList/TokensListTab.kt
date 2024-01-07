@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,13 +13,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +28,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -51,6 +58,7 @@ import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SingleLineAutoSizeText
+import com.trm.coinvision.ui.common.TokenImageOrSymbol
 import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
@@ -239,21 +247,21 @@ private fun TokenPotentialComparisonLazyColumn(
 
 @Composable
 private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
-  Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-    SingleLineAutoSizeText(
-      modifier = Modifier.weight(1f),
-      text = "With market cap of:",
-      style = MaterialTheme.typography.headlineMedium
-    )
-
-    Spacer(modifier = Modifier.width(10.dp))
-
-    SingleLineAutoSizeText(
-      modifier = Modifier.weight(1f),
-      text = "Potential ${tokenSymbol.uppercase()} price:",
-      style = MaterialTheme.typography.headlineMedium
-    )
-  }
+  SingleLineAutoSizeText(
+    modifier = modifier,
+    text =
+      buildAnnotatedString {
+        append(LocalStringResources.current.`if`)
+        append(' ')
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        append(tokenSymbol.uppercase())
+        pop()
+        append(' ')
+        append(LocalStringResources.current.reachedMarketCapOf)
+        append('…')
+      },
+    style = MaterialTheme.typography.headlineMedium
+  )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -264,40 +272,88 @@ private fun TokenPotentialComparisonItem(
   item: TokenPotentialComparison
 ) {
   val (subjectToken, potential) = item
-  Card(
-    modifier = modifier,
-    shape = RoundedCornerShape(5.dp),
-    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-  ) {
+  Card(modifier = modifier) {
     Row(
       modifier = Modifier.fillMaxWidth().padding(5.dp),
-      verticalAlignment = Alignment.CenterVertically
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceBetween
     ) {
-      Row(
-        modifier = Modifier.weight(1f),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-      ) {
-        Text(text = index.toString())
+      Text(
+        text = "${index + 1}",
+        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+        maxLines = 1
+      )
 
-        Spacer(modifier = Modifier.width(5.dp))
+      Spacer(modifier = Modifier.width(10.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
-          Text(modifier = Modifier.basicMarquee(), text = subjectToken.symbol.uppercase())
-          Text(modifier = Modifier.basicMarquee(), text = subjectToken.name)
-        }
+      TokenImageOrSymbol(
+        modifier = Modifier.size(40.dp).clip(CircleShape),
+        image = subjectToken.image,
+        symbol = subjectToken.symbol,
+        name = subjectToken.name
+      )
 
-        Spacer(modifier = Modifier.width(5.dp))
+      Spacer(modifier = Modifier.width(10.dp))
 
-        Text(text = subjectToken.marketCap?.toMarketCapFormat().orEmpty())
+      Column(modifier = Modifier.weight(1f)) {
+        Text(
+          modifier = Modifier.basicMarquee(),
+          text = subjectToken.symbol.uppercase(),
+          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+          maxLines = 1,
+        )
+        Text(
+          modifier = Modifier.basicMarquee(),
+          text = subjectToken.name,
+          maxLines = 1,
+        )
       }
 
+      Spacer(modifier = Modifier.width(10.dp))
+
+      Text(
+        modifier = Modifier.weight(1f).basicMarquee(),
+        text = subjectToken.marketCap?.toMarketCapFormat().orEmpty(),
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+        maxLines = 1,
+      )
+
       potential?.let { (_, potentialPriceFormatted, potentialUpsideFormatted) ->
-        Spacer(modifier = Modifier.width(5.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-          Text(text = potentialPriceFormatted)
-          potentialUpsideFormatted?.let { Text(text = it) }
+          Text(
+            modifier = Modifier.basicMarquee(),
+            text = "$potentialPriceFormatted$",
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+          )
+          Box(
+            modifier =
+              Modifier.clip(RoundedCornerShape(5.dp))
+                .background(
+                  color =
+                    when {
+                      potentialUpsideFormatted?.startsWith("+") == true ||
+                        potentialUpsideFormatted?.endsWith("x") == true -> {
+                        Color.Green
+                      }
+                      potentialUpsideFormatted?.startsWith("-") == true -> {
+                        Color.Red
+                      }
+                      else -> {
+                        Color.Transparent
+                      }
+                    }
+                ),
+          ) {
+            Text(
+              modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
+              text = potentialUpsideFormatted ?: "N/A",
+              fontWeight = FontWeight.SemiBold,
+              maxLines = 1
+            )
+          }
         }
       }
     }

@@ -45,10 +45,7 @@ internal fun PriceChartHeader(
       loadingContent = {},
       failedContent = {},
     ) { marketData ->
-      val price =
-        remember(marketData) {
-          marketData.currentPrice?.usd?.decimalFormat()
-        } // TODO: currency from settings?
+      val price = remember(marketData) { marketData.currentPrice?.usd?.decimalFormat() }
       val priceChange =
         remember(marketData, chartPeriod) {
           with(marketData) {

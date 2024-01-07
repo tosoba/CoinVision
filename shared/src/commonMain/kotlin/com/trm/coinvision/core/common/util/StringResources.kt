@@ -18,7 +18,9 @@ internal data class StringResources(
   val back: String,
   val exceededRateLimit: String,
   val apiErrorOccurred: String,
-  val noInternetConnection: String
+  val noInternetConnection: String,
+  val `if`: String,
+  val reachedMarketCapOf: String,
 )
 
 internal fun stringResourcesEn() =
@@ -35,7 +37,9 @@ internal fun stringResourcesEn() =
     back = "Back",
     exceededRateLimit = "Exceeded request rate limit. Try again later.",
     apiErrorOccurred = "API error occurred.",
-    noInternetConnection = "No internet connection."
+    noInternetConnection = "No internet connection.",
+    `if` = "If",
+    reachedMarketCapOf = "reached the market cap of"
   )
 
 internal fun stringResourcesPl() =
@@ -52,7 +56,9 @@ internal fun stringResourcesPl() =
     back = "Wstecz",
     exceededRateLimit = "Przekroczono limit API. Spróbuj później.",
     apiErrorOccurred = "Wystąpił błąd API.",
-    noInternetConnection = "Brak połączenia z internetem."
+    noInternetConnection = "Brak połączenia z internetem.",
+    `if` = "Jeśli",
+    reachedMarketCapOf = "osiągnie kapitalizację rynkową"
   )
 
 internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }
