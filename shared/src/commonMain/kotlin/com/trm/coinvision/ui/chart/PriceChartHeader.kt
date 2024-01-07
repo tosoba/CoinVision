@@ -1,17 +1,26 @@
 package com.trm.coinvision.ui.chart
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.trm.coinvision.core.common.util.ext.decimalFormat
 import com.trm.coinvision.core.domain.model.Empty
@@ -21,6 +30,7 @@ import com.trm.coinvision.core.domain.model.TokenMarketDataDTO
 import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SegmentedButton
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PriceChartHeader(
   modifier: Modifier = Modifier,
@@ -60,8 +70,32 @@ internal fun PriceChartHeader(
         }
       if (price != null) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-          Text(price)
-          if (priceChange != null) Text("$priceChange%")
+          Text(
+            modifier = Modifier.basicMarquee(),
+            text = "$price$",
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+          )
+          if (priceChange != null)
+            Box(
+              modifier =
+                Modifier.clip(RoundedCornerShape(5.dp))
+                  .background(
+                    color =
+                      when {
+                        priceChange.startsWith("+") -> Color.Green
+                        priceChange.startsWith("-") -> Color.Red
+                        else -> Color.Transparent
+                      }
+                  ),
+            ) {
+              Text(
+                modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
+                text = "$priceChange%",
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+              )
+            }
         }
       }
     }
