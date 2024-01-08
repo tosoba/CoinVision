@@ -32,7 +32,7 @@ import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.chart.PriceChartHeader
 import com.trm.coinvision.ui.common.LoadableView
-import com.trm.coinvision.ui.common.SelectedTokenData
+import com.trm.coinvision.ui.common.TokenComparison
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
@@ -95,7 +95,7 @@ object CompareTokensTab : Tab {
               onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
               onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
             ) { mainToken, referenceToken ->
-              SelectedTokenData(
+              TokenComparison(
                 modifier = Modifier.fillMaxSize(),
                 mainToken = mainToken,
                 referenceToken = referenceToken
@@ -141,7 +141,7 @@ object CompareTokensTab : Tab {
             onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
             onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
           ) { mainToken, referenceToken ->
-            SelectedTokenData(
+            TokenComparison(
               modifier = Modifier.fillMaxSize(),
               mainToken = mainToken,
               referenceToken = referenceToken
