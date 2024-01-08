@@ -90,13 +90,15 @@ object CompareTokensTab : Tab {
 
             LoadableView(
               modifier = Modifier.fillMaxSize(),
-              loadable = selectedReferenceToken,
-              onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
-            ) {
+              loadable1 = mainTokenWithChart.map { (token) -> token },
+              loadable2 = selectedReferenceToken,
+              onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
+              onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
+            ) { mainToken, referenceToken ->
               SelectedTokenData(
                 modifier = Modifier.fillMaxSize(),
-                mainToken = TODO(), // use new LoadableView with 2 args
-                referenceToken = it
+                mainToken = mainToken,
+                referenceToken = referenceToken
               )
             }
           }
@@ -134,13 +136,15 @@ object CompareTokensTab : Tab {
 
           LoadableView(
             modifier = Modifier.fillMaxWidth().weight(.5f).padding(tabElementPadding),
-            loadable = selectedReferenceToken,
-            onRetryClick = compareTokensScreenModel::onRetryReferenceTokenClick
-          ) {
+            loadable1 = mainTokenWithChart.map { (token) -> token },
+            loadable2 = selectedReferenceToken,
+            onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
+            onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
+          ) { mainToken, referenceToken ->
             SelectedTokenData(
               modifier = Modifier.fillMaxSize(),
-              mainToken = TODO(), // use new LoadableView with 2 args
-              referenceToken = it
+              mainToken = mainToken,
+              referenceToken = referenceToken
             )
           }
         }
