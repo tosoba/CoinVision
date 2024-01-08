@@ -21,6 +21,9 @@ internal data class StringResources(
   val noInternetConnection: String,
   val `if`: String,
   val reachedMarketCapOf: String,
+  val hadMarketCapOf: String,
+  val wouldBeWorth: String,
+  val tokenComparisonDataIncomplete: String
 )
 
 internal fun stringResourcesEn() =
@@ -39,7 +42,10 @@ internal fun stringResourcesEn() =
     apiErrorOccurred = "API error occurred.",
     noInternetConnection = "No internet connection.",
     `if` = "If",
-    reachedMarketCapOf = "reached the market cap of"
+    reachedMarketCapOf = "reached the market cap of",
+    hadMarketCapOf = "had the market cap of",
+    wouldBeWorth = "would be worth",
+    tokenComparisonDataIncomplete = "Data retrieved for at least one of selected tokens is incomplete - choose a different token pair."
   )
 
 internal fun stringResourcesPl() =
@@ -58,7 +64,10 @@ internal fun stringResourcesPl() =
     apiErrorOccurred = "Wystąpił błąd API.",
     noInternetConnection = "Brak połączenia z internetem.",
     `if` = "Jeśli",
-    reachedMarketCapOf = "osiągnie kapitalizację rynkową"
+    reachedMarketCapOf = "osiągnie kapitalizację rynkową",
+    hadMarketCapOf = "miało kapitalizację rynkową",
+    wouldBeWorth = "byłoby warte",
+    tokenComparisonDataIncomplete = "Dane pobrane dla przynajmniej jednego z wybranych tokenów są niekompletne - wybierz inną parę tokenów."
   )
 
 internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }

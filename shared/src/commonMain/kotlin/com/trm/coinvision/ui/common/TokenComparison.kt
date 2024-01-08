@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.ext.decimalFormat
 import com.trm.coinvision.core.domain.model.TokenDTO
 
@@ -51,16 +52,22 @@ internal fun TokenComparison(
         referenceTokenSymbol != null
   ) { isTokensDataComplete ->
     if (isTokensDataComplete) {
+      val ifText = LocalStringResources.current.`if`
+      val hadMarketCapOfText = LocalStringResources.current.hadMarketCapOf
+      val wouldBeWorthText = LocalStringResources.current.wouldBeWorth
       val comparisonText =
         remember(mainToken, referenceToken) {
           buildAnnotatedString {
-            append("If ")
+            append(ifText)
+            append(" ")
             appendInlineContent(id = MAIN_TOKEN_IMAGE_ID)
             append(" ")
             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
             append(mainToken.symbol.orEmpty().uppercase())
             pop()
-            append(" had the market cap of ")
+            append(" ")
+            append(hadMarketCapOfText)
+            append(" ")
             appendInlineContent(id = REFERENCE_TOKEN_IMAGE_ID)
             append(" ")
             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
@@ -71,7 +78,9 @@ internal fun TokenComparison(
             append("1 ")
             append(mainToken.symbol.orEmpty().uppercase())
             pop()
-            append(" would be worth ")
+            append(" ")
+            append(wouldBeWorthText)
+            append(" ")
             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
             append(referenceTokenPotentialPrice)
             append("$")
@@ -129,8 +138,7 @@ internal fun TokenComparison(
       Box(modifier = Modifier.fillMaxSize()) {
         Text(
           modifier = Modifier.align(Alignment.Center),
-          text =
-            "Data retrieved for at least one of selected tokens is incomplete - choose a different token pair.", // TODO: StringRes
+          text = LocalStringResources.current.tokenComparisonDataIncomplete,
           textAlign = TextAlign.Center,
           fontSize = 24.sp,
           lineHeight = 32.sp,
