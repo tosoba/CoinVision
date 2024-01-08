@@ -55,13 +55,13 @@ internal fun TokenComparison(
         remember(mainToken, referenceToken) {
           buildAnnotatedString {
             append("If ")
-            appendInlineContent(id = "mainTokenImage")
+            appendInlineContent(id = MAIN_TOKEN_IMAGE_ID)
             append(" ")
             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
             append(mainToken.symbol.orEmpty().uppercase())
             pop()
             append(" had the market cap of ")
-            appendInlineContent(id = "referenceTokenImage")
+            appendInlineContent(id = REFERENCE_TOKEN_IMAGE_ID)
             append(" ")
             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
             append(referenceToken.symbol.orEmpty().uppercase())
@@ -82,7 +82,7 @@ internal fun TokenComparison(
       val inlineContentMap =
         remember(mainToken, referenceToken) {
           mapOf(
-            "mainTokenImage" to
+            MAIN_TOKEN_IMAGE_ID to
               InlineTextContent(
                 Placeholder(
                   width = 32.sp,
@@ -97,7 +97,7 @@ internal fun TokenComparison(
                   name = mainToken.name.orEmpty()
                 )
               },
-            "referenceTokenImage" to
+            REFERENCE_TOKEN_IMAGE_ID to
               InlineTextContent(
                 Placeholder(
                   width = 32.sp,
@@ -140,3 +140,6 @@ internal fun TokenComparison(
     }
   }
 }
+
+private const val MAIN_TOKEN_IMAGE_ID = "mainTokenImage"
+private const val REFERENCE_TOKEN_IMAGE_ID = "referenceTokenImage"
