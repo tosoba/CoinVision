@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.trm.coinvision.core.common.util.LocalStringResources
+import com.trm.coinvision.core.common.util.ext.requireAs
+import com.trm.coinvision.core.common.util.ext.safeAs
 import com.trm.coinvision.core.domain.model.Empty
 import com.trm.coinvision.core.domain.model.Failed
 import com.trm.coinvision.core.domain.model.Loadable
@@ -77,11 +79,17 @@ fun <T : Any, S : Any> LoadableView(
     when {
       loadables.any { it is Loading } -> loadingContent()
       loadables.any { it is Failed } -> {
-        failedContent((loadable1 as? Failed)?.throwable, (loadable2 as? Failed)?.throwable)
+        failedContent(
+          loadables.firstOrNull()?.safeAs<Failed>()?.throwable,
+          loadables.lastOrNull()?.safeAs<Failed>()?.throwable
+        )
       }
       loadables.any { it is Empty } -> emptyContent()
       loadables.all { it is Ready } -> {
-        readyContent((loadable1 as Ready).data, (loadable2 as Ready).data)
+        readyContent(
+          loadables.first().requireAs<Ready<T>>().data,
+          loadables.last().requireAs<Ready<S>>().data
+        )
       }
     }
   }

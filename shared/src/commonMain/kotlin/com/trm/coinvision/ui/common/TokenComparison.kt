@@ -51,64 +51,69 @@ internal fun TokenComparison(
         referenceTokenSymbol != null
   ) { isTokensDataComplete ->
     if (isTokensDataComplete) {
-      val comparisonText = buildAnnotatedString {
-        append("If ")
-        appendInlineContent(id = "mainTokenImage")
-        append(" ")
-        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-        append(mainToken.symbol.orEmpty().uppercase())
-        pop()
-        append(" had the market cap of ")
-        appendInlineContent(id = "referenceTokenImage")
-        append(" ")
-        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-        append(referenceToken.symbol.orEmpty().uppercase())
-        pop()
-        append(", ")
-        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-        append("1 ")
-        append(mainToken.symbol.orEmpty().uppercase())
-        pop()
-        append(" would be worth ")
-        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-        append(referenceTokenPotentialPrice)
-        append("$")
-        pop()
-        append(".")
-      }
+      val comparisonText =
+        remember(mainToken, referenceToken) {
+          buildAnnotatedString {
+            append("If ")
+            appendInlineContent(id = "mainTokenImage")
+            append(" ")
+            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+            append(mainToken.symbol.orEmpty().uppercase())
+            pop()
+            append(" had the market cap of ")
+            appendInlineContent(id = "referenceTokenImage")
+            append(" ")
+            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+            append(referenceToken.symbol.orEmpty().uppercase())
+            pop()
+            append(", ")
+            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+            append("1 ")
+            append(mainToken.symbol.orEmpty().uppercase())
+            pop()
+            append(" would be worth ")
+            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+            append(referenceTokenPotentialPrice)
+            append("$")
+            pop()
+            append(".")
+          }
+        }
       val inlineContentMap =
-        mapOf(
-          "mainTokenImage" to
-            InlineTextContent(
-              Placeholder(
-                width = 32.sp,
-                height = 32.sp,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
-              )
-            ) {
-              TokenImageOrSymbol(
-                modifier = Modifier.fillMaxSize().clip(CircleShape),
-                image = mainToken.image?.small,
-                symbol = mainTokenSymbol.orEmpty(),
-                name = mainToken.name.orEmpty()
-              )
-            },
-          "referenceTokenImage" to
-            InlineTextContent(
-              Placeholder(
-                width = 32.sp,
-                height = 32.sp,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
-              )
-            ) {
-              TokenImageOrSymbol(
-                modifier = Modifier.fillMaxSize().clip(CircleShape),
-                image = referenceToken.image?.small,
-                symbol = referenceTokenSymbol.orEmpty(),
-                name = referenceToken.name.orEmpty()
-              )
-            }
-        )
+        remember(mainToken, referenceToken) {
+          mapOf(
+            "mainTokenImage" to
+              InlineTextContent(
+                Placeholder(
+                  width = 32.sp,
+                  height = 32.sp,
+                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                )
+              ) {
+                TokenImageOrSymbol(
+                  modifier = Modifier.fillMaxSize().clip(CircleShape),
+                  image = mainToken.image?.small,
+                  symbol = mainTokenSymbol.orEmpty(),
+                  name = mainToken.name.orEmpty()
+                )
+              },
+            "referenceTokenImage" to
+              InlineTextContent(
+                Placeholder(
+                  width = 32.sp,
+                  height = 32.sp,
+                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                )
+              ) {
+                TokenImageOrSymbol(
+                  modifier = Modifier.fillMaxSize().clip(CircleShape),
+                  image = referenceToken.image?.small,
+                  symbol = referenceTokenSymbol.orEmpty(),
+                  name = referenceToken.name.orEmpty()
+                )
+              }
+          )
+        }
       Box(modifier = Modifier.fillMaxSize()) {
         Text(
           modifier = Modifier.align(Alignment.Center),
