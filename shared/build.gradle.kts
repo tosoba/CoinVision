@@ -26,6 +26,14 @@ kotlin {
     }
   }
 
+  targets.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().forEach {
+    it.binaries.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>().forEach { lib
+      ->
+      lib.isStatic = false
+      lib.linkerOpts.add("-lsqlite3")
+    }
+  }
+
   sourceSets {
     val commonMain by getting {
       dependencies {
@@ -147,4 +155,7 @@ android {
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 }
 
-sqldelight { databases { create("CoinVisionDb") { packageName.set("com.trm.coinvision.db") } } }
+sqldelight {
+  databases { create("CoinVisionDb") { packageName.set("com.trm.coinvision.db") } }
+  linkSqlite = true
+}
