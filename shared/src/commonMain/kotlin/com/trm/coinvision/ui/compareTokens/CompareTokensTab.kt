@@ -42,6 +42,7 @@ import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 object CompareTokensTab : Tab {
   @OptIn(ExperimentalVoyagerApi::class, ExperimentalResourceApi::class)
@@ -179,7 +180,7 @@ object CompareTokensTab : Tab {
     get() =
       TabOptions(
         index = 0u,
-        title = LocalStringResources.current.compare,
+        title = stringResource(Res.string.compare),
         icon = painterResource(Res.drawable.compare),
       )
 }

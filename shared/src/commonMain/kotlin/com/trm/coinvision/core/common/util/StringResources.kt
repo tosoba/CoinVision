@@ -6,7 +6,6 @@ import androidx.compose.ui.text.intl.Locale
 
 @Immutable
 internal data class StringResources(
-  val appTitle: String,
   val compare: String,
   val list: String,
   val errorOccurred: String,
@@ -23,12 +22,11 @@ internal data class StringResources(
   val reachedMarketCapOf: String,
   val hadMarketCapOf: String,
   val wouldBeWorth: String,
-  val tokenComparisonDataIncomplete: String
+  val tokenComparisonDataIncomplete: String,
 )
 
 internal fun stringResourcesEn() =
   StringResources(
-    appTitle = "CoinVision",
     compare = "Compare",
     list = "List",
     errorOccurred = "Error occurred",
@@ -45,12 +43,12 @@ internal fun stringResourcesEn() =
     reachedMarketCapOf = "reached the market cap of",
     hadMarketCapOf = "had the market cap of",
     wouldBeWorth = "would be worth",
-    tokenComparisonDataIncomplete = "Data retrieved for at least one of selected tokens is incomplete - choose a different token pair."
+    tokenComparisonDataIncomplete =
+      "Data retrieved for at least one of selected tokens is incomplete - choose a different token pair.",
   )
 
 internal fun stringResourcesPl() =
   StringResources(
-    appTitle = "CoinVision",
     compare = "Porównaj",
     list = "Lista",
     errorOccurred = "Wystąpił błąd",
@@ -67,7 +65,8 @@ internal fun stringResourcesPl() =
     reachedMarketCapOf = "osiągnie kapitalizację rynkową",
     hadMarketCapOf = "miało kapitalizację rynkową",
     wouldBeWorth = "byłoby warte",
-    tokenComparisonDataIncomplete = "Dane pobrane dla przynajmniej jednego z wybranych tokenów są niekompletne - wybierz inną parę tokenów."
+    tokenComparisonDataIncomplete =
+      "Dane pobrane dla przynajmniej jednego z wybranych tokenów są niekompletne - wybierz inną parę tokenów.",
   )
 
 internal val LocalStringResources = compositionLocalOf { stringResourcesEn() }
