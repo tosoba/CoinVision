@@ -46,6 +46,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.list
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
@@ -91,20 +93,20 @@ object TokensListTab : Tab {
         Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
           TokensSearchBar(
             modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-            viewModel = mainTokensSearchBarViewModel
+            viewModel = mainTokensSearchBarViewModel,
           )
 
           PriceChartHeader(
             modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
             marketData = mainToken.mapNullable(block = TokenDTO::marketData),
             chartPeriod = chartPeriod,
-            onChartPeriodClick = tokensListScreenModel::onChartPeriodClick
+            onChartPeriodClick = tokensListScreenModel::onChartPeriodClick,
           )
 
           LoadableView(
             modifier = Modifier.fillMaxSize().padding(tabElementPadding),
             loadable = chartPoints,
-            onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
+            onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
           ) {
             PriceChart(modifier = Modifier.fillMaxSize(), points = it)
           }
@@ -113,12 +115,12 @@ object TokensListTab : Tab {
         LoadableView(
           modifier = Modifier.weight(.5f).fillMaxHeight(),
           loadable = mainToken,
-          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
+          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
         ) {
           TokenPotentialComparisonLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            comparisonItems = tokenPotentialComparisonItems
+            comparisonItems = tokenPotentialComparisonItems,
           )
         }
       }
@@ -126,13 +128,13 @@ object TokensListTab : Tab {
       Column(modifier = Modifier.fillMaxSize()) {
         TokensSearchBar(
           modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-          viewModel = mainTokensSearchBarViewModel
+          viewModel = mainTokensSearchBarViewModel,
         )
 
         LoadableView(
           modifier = Modifier.fillMaxSize(),
           loadable = mainToken,
-          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick
+          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
         ) {
           TokenPotentialComparisonLazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -151,7 +153,7 @@ object TokensListTab : Tab {
       TabOptions(
         index = 1u,
         title = LocalStringResources.current.list,
-        icon = painterResource("list.xml")
+        icon = painterResource(Res.drawable.list),
       )
 }
 
@@ -170,7 +172,7 @@ private fun TokenPotentialComparisonLazyColumn(
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
             text = prepend.error.errorText(),
-            onRetryClick = comparisonItems::retry
+            onRetryClick = comparisonItems::retry,
           )
         }
       }
@@ -186,7 +188,7 @@ private fun TokenPotentialComparisonLazyColumn(
           CoinVisionRetryColumn(
             modifier = Modifier.fillParentMaxSize(),
             text = refresh.error.errorText(),
-            onRetryClick = comparisonItems::retry
+            onRetryClick = comparisonItems::retry,
           )
         }
       }
@@ -207,20 +209,20 @@ private fun TokenPotentialComparisonLazyColumn(
                   Modifier.fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.background)
                     .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                tokenSymbol = it
+                tokenSymbol = it,
               )
             }
           }
 
         items(
           count = comparisonItems.itemCount,
-          key = comparisonItems.itemKey { it.referenceToken.id }
+          key = comparisonItems.itemKey { it.referenceToken.id },
         ) { index ->
           comparisonItems[index]?.let {
             TokenPotentialComparisonItem(
               modifier = Modifier.fillMaxWidth().padding(5.dp),
               index = index,
-              item = it
+              item = it,
             )
           }
         }
@@ -233,7 +235,7 @@ private fun TokenPotentialComparisonLazyColumn(
           CoinVisionRetryRow(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
             text = append.error.errorText(),
-            onRetryClick = comparisonItems::retry
+            onRetryClick = comparisonItems::retry,
           )
         }
       }
@@ -260,7 +262,7 @@ private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenS
         append(LocalStringResources.current.reachedMarketCapOf)
         append('…')
       },
-    style = MaterialTheme.typography.headlineMedium
+    style = MaterialTheme.typography.headlineMedium,
   )
 }
 
@@ -269,19 +271,19 @@ private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenS
 private fun TokenPotentialComparisonItem(
   modifier: Modifier = Modifier,
   index: Int,
-  item: TokenPotentialComparison
+  item: TokenPotentialComparison,
 ) {
   val (subjectToken, potential) = item
   Card(modifier = modifier) {
     Row(
       modifier = Modifier.fillMaxWidth().padding(5.dp),
       verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.SpaceBetween
+      horizontalArrangement = Arrangement.SpaceBetween,
     ) {
       Text(
         text = "${index + 1}",
         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-        maxLines = 1
+        maxLines = 1,
       )
 
       Spacer(modifier = Modifier.width(10.dp))
@@ -290,7 +292,7 @@ private fun TokenPotentialComparisonItem(
         modifier = Modifier.size(40.dp).clip(CircleShape),
         image = subjectToken.image,
         symbol = subjectToken.symbol,
-        name = subjectToken.name
+        name = subjectToken.name,
       )
 
       Spacer(modifier = Modifier.width(10.dp))
@@ -302,11 +304,7 @@ private fun TokenPotentialComparisonItem(
           style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
           maxLines = 1,
         )
-        Text(
-          modifier = Modifier.basicMarquee(),
-          text = subjectToken.name,
-          maxLines = 1,
-        )
+        Text(modifier = Modifier.basicMarquee(), text = subjectToken.name, maxLines = 1)
       }
 
       Spacer(modifier = Modifier.width(10.dp))
@@ -345,13 +343,13 @@ private fun TokenPotentialComparisonItem(
                         Color.Transparent
                       }
                     }
-                ),
+                )
           ) {
             Text(
               modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
               text = potentialUpsideFormatted ?: "N/A",
               fontWeight = FontWeight.SemiBold,
-              maxLines = 1
+              maxLines = 1,
             )
           }
         }

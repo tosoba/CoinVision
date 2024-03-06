@@ -25,6 +25,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.compare
+import coinvision.shared.generated.resources.swap_horizontal
+import coinvision.shared.generated.resources.swap_vertical
 import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
@@ -62,7 +66,7 @@ object CompareTokensTab : Tab {
           Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
             TokensSearchBar(
               modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-              viewModel = mainTokensSearchBarViewModel
+              viewModel = mainTokensSearchBarViewModel,
             )
 
             PriceChartHeader(
@@ -70,13 +74,13 @@ object CompareTokensTab : Tab {
               daysPeriodScrollState = chartPeriodButtonScrollState,
               marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
               chartPeriod = chartPeriod,
-              onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick
+              onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick,
             )
 
             LoadableView(
               modifier = Modifier.fillMaxSize(),
               loadable = mainTokenWithChart.map { (_, chart) -> chart },
-              onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick
+              onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick,
             ) {
               PriceChart(modifier = Modifier.fillMaxSize().padding(tabElementPadding), points = it)
             }
@@ -85,7 +89,7 @@ object CompareTokensTab : Tab {
           Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
             TokensSearchBar(
               modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-              viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
+              viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel,
             )
 
             LoadableView(
@@ -93,12 +97,12 @@ object CompareTokensTab : Tab {
               loadable1 = mainTokenWithChart.map { (token) -> token },
               loadable2 = selectedReferenceToken,
               onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
-              onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
+              onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick,
             ) { mainToken, referenceToken ->
               TokenComparison(
                 modifier = Modifier.fillMaxSize(),
                 mainToken = mainToken,
-                referenceToken = referenceToken
+                referenceToken = referenceToken,
               )
             }
           }
@@ -107,7 +111,7 @@ object CompareTokensTab : Tab {
         Column(modifier = Modifier.fillMaxSize()) {
           TokensSearchBar(
             modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-            viewModel = mainTokensSearchBarViewModel
+            viewModel = mainTokensSearchBarViewModel,
           )
 
           PriceChartHeader(
@@ -118,20 +122,20 @@ object CompareTokensTab : Tab {
             daysPeriodScrollState = chartPeriodButtonScrollState,
             marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
             chartPeriod = chartPeriod,
-            onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick
+            onChartPeriodClick = compareTokensScreenModel::onChartPeriodClick,
           )
 
           LoadableView(
             modifier = Modifier.fillMaxWidth().weight(.5f).padding(tabElementPadding),
             loadable = mainTokenWithChart.map { (_, chart) -> chart },
-            onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick
+            onRetryClick = compareTokensScreenModel::onRetryMainTokenWithChartClick,
           ) {
             PriceChart(modifier = Modifier.fillMaxSize(), points = it)
           }
 
           TokensSearchBar(
             modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-            viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel
+            viewModel = compareTokensScreenModel.referenceTokensSearchBarViewModel,
           )
 
           LoadableView(
@@ -139,12 +143,12 @@ object CompareTokensTab : Tab {
             loadable1 = mainTokenWithChart.map { (token) -> token },
             loadable2 = selectedReferenceToken,
             onRetryClick1 = compareTokensScreenModel::onRetryMainTokenWithChartClick,
-            onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick
+            onRetryClick2 = compareTokensScreenModel::onRetryReferenceTokenClick,
           ) { mainToken, referenceToken ->
             TokenComparison(
               modifier = Modifier.fillMaxSize(),
               mainToken = mainToken,
-              referenceToken = referenceToken
+              referenceToken = referenceToken,
             )
           }
         }
@@ -152,15 +156,18 @@ object CompareTokensTab : Tab {
 
       FloatingActionButton(
         modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
-        onClick = compareTokensScreenModel::onSwapTokensClick
+        onClick = compareTokensScreenModel::onSwapTokensClick,
       ) {
         Image(
           painter =
             painterResource(
-              if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) "swap_horizontal.xml"
-              else "swap_vertical.xml"
+              if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+                Res.drawable.swap_horizontal
+              } else {
+                Res.drawable.swap_vertical
+              }
             ),
-          contentDescription = LocalStringResources.current.swapTokens
+          contentDescription = LocalStringResources.current.swapTokens,
         )
       }
     }
@@ -173,6 +180,6 @@ object CompareTokensTab : Tab {
       TabOptions(
         index = 0u,
         title = LocalStringResources.current.compare,
-        icon = painterResource("compare.xml")
+        icon = painterResource(Res.drawable.compare),
       )
 }
