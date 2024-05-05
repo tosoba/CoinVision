@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -45,7 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 object CompareTokensTab : Tab {
-  @OptIn(ExperimentalVoyagerApi::class, ExperimentalResourceApi::class)
+  @OptIn(ExperimentalResourceApi::class)
   @Composable
   override fun Content() {
     val mainTokensSearchBarViewModel =

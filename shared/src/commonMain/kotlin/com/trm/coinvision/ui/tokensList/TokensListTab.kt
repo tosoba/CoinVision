@@ -39,7 +39,6 @@ import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.compose.itemKey
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -70,7 +69,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 object TokensListTab : Tab {
-  @OptIn(ExperimentalVoyagerApi::class)
   @Composable
   override fun Content() {
     val mainTokensSearchBarViewModel =
