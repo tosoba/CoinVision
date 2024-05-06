@@ -54,11 +54,11 @@ import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.chart.PriceChartHeader
+import com.trm.coinvision.ui.common.AutoSizeText
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
 import com.trm.coinvision.ui.common.CoinVisionRetryRow
 import com.trm.coinvision.ui.common.LoadableView
-import com.trm.coinvision.ui.common.SingleLineAutoSizeText
 import com.trm.coinvision.ui.common.TokenImageOrSymbol
 import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
@@ -163,7 +163,11 @@ private fun TokenPotentialComparisonLazyColumn(
   comparisonItems: LazyPagingItems<TokenPotentialComparison> =
     flowOf(PagingData.empty<TokenPotentialComparison>()).collectAsLazyPagingItems(),
 ) {
-  LazyColumn(modifier = modifier, contentPadding = PaddingValues(10.dp), state = state) {
+  LazyColumn(
+    modifier = modifier,
+    contentPadding = PaddingValues(bottom = 10.dp, start = 10.dp, end = 10.dp),
+    state = state,
+  ) {
     when (val prepend = comparisonItems.loadState.prepend) {
       is LoadState.Error -> {
         item {
@@ -247,7 +251,7 @@ private fun TokenPotentialComparisonLazyColumn(
 
 @Composable
 private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
-  SingleLineAutoSizeText(
+  AutoSizeText(
     modifier = modifier,
     text =
       buildAnnotatedString {
@@ -260,7 +264,8 @@ private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenS
         append(LocalStringResources.current.reachedMarketCapOf)
         append('…')
       },
-    style = MaterialTheme.typography.headlineMedium,
+    maxLines = 1,
+    maxTextSize = MaterialTheme.typography.headlineMedium.fontSize,
   )
 }
 
