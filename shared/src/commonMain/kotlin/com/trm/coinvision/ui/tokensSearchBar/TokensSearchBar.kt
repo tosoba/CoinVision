@@ -18,8 +18,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +39,11 @@ import androidx.paging.PagingData
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.compose.itemKey
-import com.trm.coinvision.core.common.util.LocalStringResources
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.back
+import coinvision.shared.generated.resources.loading
+import coinvision.shared.generated.resources.search
+import coinvision.shared.generated.resources.search_for_tokens
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
@@ -51,6 +55,8 @@ import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.flowOf
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSearchBarViewModel) {
@@ -67,12 +73,16 @@ internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSea
     tokens = tokens,
     onQueryChange = viewModel::onQueryChange,
     onActiveChange = viewModel::onActiveChange,
-    onTokenSelected = viewModel::onTokenSelected
+    onTokenSelected = viewModel::onTokenSelected,
   )
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(
+  ExperimentalMaterial3Api::class,
+  ExperimentalFoundationApi::class,
+  ExperimentalResourceApi::class,
+)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   query: String = "",
@@ -84,7 +94,7 @@ internal fun TokensSearchBar(
     flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
   onQueryChange: (String) -> Unit = {},
   onActiveChange: (Boolean) -> Unit = {},
-  onTokenSelected: (TokenListItemDTO) -> Unit = {}
+  onTokenSelected: (TokenListItemDTO) -> Unit = {},
 ) {
   Column(modifier = modifier) {
     DockedSearchBar(
@@ -96,17 +106,17 @@ internal fun TokensSearchBar(
       active = active,
       onActiveChange = { onActiveChange(it) },
       placeholder = {
-        Text(
-          if (isLoading) LocalStringResources.current.loading
-          else LocalStringResources.current.searchForTokens
-        )
+        Text(stringResource(if (isLoading) Res.string.loading else Res.string.search_for_tokens))
       },
       leadingIcon = {
         IconButton({ onActiveChange(!active) }) {
           if (active) {
-            Icon(Icons.Rounded.ArrowBack, contentDescription = LocalStringResources.current.back)
+            Icon(
+              Icons.AutoMirrored.Rounded.ArrowBack,
+              contentDescription = stringResource(Res.string.back),
+            )
           } else {
-            Icon(Icons.Rounded.Search, contentDescription = LocalStringResources.current.search)
+            Icon(Icons.Rounded.Search, contentDescription = stringResource(Res.string.search))
           }
         }
       },
@@ -120,7 +130,7 @@ internal fun TokensSearchBar(
             modifier = Modifier.size(40.dp).clip(CircleShape),
             image = selectedToken.image,
             symbol = selectedToken.symbol,
-            name = selectedToken.name
+            name = selectedToken.name,
           )
         }
       },
@@ -132,7 +142,7 @@ internal fun TokensSearchBar(
               CoinVisionRetryRow(
                 modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
                 text = prepend.error.errorText(),
-                onRetryClick = tokens::retry
+                onRetryClick = tokens::retry,
               )
             }
           }
@@ -148,7 +158,7 @@ internal fun TokensSearchBar(
               CoinVisionRetryColumn(
                 modifier = Modifier.fillParentMaxSize().animateItemPlacement(),
                 text = refresh.error.errorText(),
-                onRetryClick = tokens::retry
+                onRetryClick = tokens::retry,
               )
             }
           }
@@ -163,10 +173,7 @@ internal fun TokensSearchBar(
             }
           }
           is LoadState.NotLoading -> {
-            items(
-              count = tokens.itemCount,
-              key = tokens.itemKey(TokenListItemDTO::id),
-            ) { index ->
+            items(count = tokens.itemCount, key = tokens.itemKey(TokenListItemDTO::id)) { index ->
               tokens[index]?.let { token ->
                 ListItem(
                   modifier = Modifier.clickable { onTokenSelected(token) }.animateItemPlacement(),
@@ -176,7 +183,7 @@ internal fun TokensSearchBar(
                   supportingContent = {
                     Text(
                       text = token.currentPrice.toString(),
-                      style = MaterialTheme.typography.titleMedium
+                      style = MaterialTheme.typography.titleMedium,
                     )
                   },
                   leadingContent = {
@@ -184,14 +191,14 @@ internal fun TokensSearchBar(
                       modifier = Modifier.size(40.dp).clip(CircleShape),
                       image = token.image,
                       symbol = token.symbol,
-                      name = token.name
+                      name = token.name,
                     )
                   },
                   trailingContent = {
                     AnimatedVisibility(visible = selectedToken.id == token.id) {
                       Icon(Icons.Default.Check, contentDescription = null)
                     }
-                  }
+                  },
                 )
               }
             }
@@ -204,7 +211,7 @@ internal fun TokensSearchBar(
               CoinVisionRetryRow(
                 modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
                 text = append.error.errorText(),
-                onRetryClick = tokens::retry
+                onRetryClick = tokens::retry,
               )
             }
           }
@@ -218,11 +225,7 @@ internal fun TokensSearchBar(
       }
     }
 
-    AnimatedVisibility(
-      visible = isLoading,
-      enter = fadeIn(),
-      exit = fadeOut(),
-    ) {
+    AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
       LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     }
   }

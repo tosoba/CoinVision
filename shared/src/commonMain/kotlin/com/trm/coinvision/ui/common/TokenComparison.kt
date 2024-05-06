@@ -20,10 +20,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import com.trm.coinvision.core.common.util.LocalStringResources
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.had_market_cap_of
+import coinvision.shared.generated.resources.if_label
+import coinvision.shared.generated.resources.token_comparison_data_incomplete
+import coinvision.shared.generated.resources.would_be_worth
 import com.trm.coinvision.core.common.util.ext.decimalFormat
 import com.trm.coinvision.core.domain.model.TokenDTO
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TokenComparison(
   modifier: Modifier = Modifier,
@@ -49,45 +56,39 @@ internal fun TokenComparison(
     targetState =
       referenceTokenPotentialPrice != null &&
         mainTokenSymbol != null &&
-        referenceTokenSymbol != null
+        referenceTokenSymbol != null,
   ) { isTokensDataComplete ->
     if (isTokensDataComplete) {
-      val ifText = LocalStringResources.current.`if`
-      val hadMarketCapOfText = LocalStringResources.current.hadMarketCapOf
-      val wouldBeWorthText = LocalStringResources.current.wouldBeWorth
-      val comparisonText =
-        remember(mainToken, referenceToken) {
-          buildAnnotatedString {
-            append(ifText)
-            append(" ")
-            appendInlineContent(id = MAIN_TOKEN_IMAGE_ID)
-            append(" ")
-            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-            append(mainToken.symbol.orEmpty().uppercase())
-            pop()
-            append(" ")
-            append(hadMarketCapOfText)
-            append(" ")
-            appendInlineContent(id = REFERENCE_TOKEN_IMAGE_ID)
-            append(" ")
-            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-            append(referenceToken.symbol.orEmpty().uppercase())
-            pop()
-            append(", ")
-            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-            append("1 ")
-            append(mainToken.symbol.orEmpty().uppercase())
-            pop()
-            append(" ")
-            append(wouldBeWorthText)
-            append(" ")
-            pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-            append(referenceTokenPotentialPrice)
-            append("$")
-            pop()
-            append(".")
-          }
-        }
+      val comparisonText = buildAnnotatedString {
+        append(stringResource(Res.string.if_label))
+        append(" ")
+        appendInlineContent(id = MAIN_TOKEN_IMAGE_ID)
+        append(" ")
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        append(mainToken.symbol.orEmpty().uppercase())
+        pop()
+        append(" ")
+        append(stringResource(Res.string.had_market_cap_of))
+        append(" ")
+        appendInlineContent(id = REFERENCE_TOKEN_IMAGE_ID)
+        append(" ")
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        append(referenceToken.symbol.orEmpty().uppercase())
+        pop()
+        append(", ")
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        append("1 ")
+        append(mainToken.symbol.orEmpty().uppercase())
+        pop()
+        append(" ")
+        append(stringResource(Res.string.would_be_worth))
+        append(" ")
+        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        append(referenceTokenPotentialPrice)
+        append("$")
+        pop()
+        append(".")
+      }
       val inlineContentMap =
         remember(mainToken, referenceToken) {
           mapOf(
@@ -96,14 +97,14 @@ internal fun TokenComparison(
                 Placeholder(
                   width = 32.sp,
                   height = 32.sp,
-                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
                 )
               ) {
                 TokenImageOrSymbol(
                   modifier = Modifier.fillMaxSize().clip(CircleShape),
                   image = mainToken.image?.small,
                   symbol = mainTokenSymbol.orEmpty(),
-                  name = mainToken.name.orEmpty()
+                  name = mainToken.name.orEmpty(),
                 )
               },
             REFERENCE_TOKEN_IMAGE_ID to
@@ -111,16 +112,16 @@ internal fun TokenComparison(
                 Placeholder(
                   width = 32.sp,
                   height = 32.sp,
-                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+                  placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
                 )
               ) {
                 TokenImageOrSymbol(
                   modifier = Modifier.fillMaxSize().clip(CircleShape),
                   image = referenceToken.image?.small,
                   symbol = referenceTokenSymbol.orEmpty(),
-                  name = referenceToken.name.orEmpty()
+                  name = referenceToken.name.orEmpty(),
                 )
-              }
+              },
           )
         }
       Box(modifier = Modifier.fillMaxSize()) {
@@ -131,18 +132,18 @@ internal fun TokenComparison(
           textAlign = TextAlign.Center,
           lineHeight = 32.sp,
           fontSize = 24.sp,
-          overflow = TextOverflow.Ellipsis
+          overflow = TextOverflow.Ellipsis,
         )
       }
     } else {
       Box(modifier = Modifier.fillMaxSize()) {
         Text(
           modifier = Modifier.align(Alignment.Center),
-          text = LocalStringResources.current.tokenComparisonDataIncomplete,
+          text = stringResource(Res.string.token_comparison_data_incomplete),
           textAlign = TextAlign.Center,
           fontSize = 24.sp,
           lineHeight = 32.sp,
-          overflow = TextOverflow.Ellipsis
+          overflow = TextOverflow.Ellipsis,
         )
       }
     }

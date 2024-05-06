@@ -46,8 +46,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.if_label
 import coinvision.shared.generated.resources.list
-import com.trm.coinvision.core.common.util.LocalStringResources
+import coinvision.shared.generated.resources.reached_market_cap_of
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
 import com.trm.coinvision.core.domain.model.TokenDTO
@@ -67,6 +68,7 @@ import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 object TokensListTab : Tab {
   @Composable
@@ -150,7 +152,7 @@ object TokensListTab : Tab {
     get() =
       TabOptions(
         index = 1u,
-        title = LocalStringResources.current.list,
+        title = stringResource(Res.string.list),
         icon = painterResource(Res.drawable.list),
       )
 }
@@ -249,19 +251,20 @@ private fun TokenPotentialComparisonLazyColumn(
   }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
   AutoSizeText(
     modifier = modifier,
     text =
       buildAnnotatedString {
-        append(LocalStringResources.current.`if`)
+        append(stringResource(Res.string.if_label))
         append(' ')
         pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
         append(tokenSymbol.uppercase())
         pop()
         append(' ')
-        append(LocalStringResources.current.reachedMarketCapOf)
+        append(stringResource(Res.string.reached_market_cap_of))
         append('…')
       },
     maxLines = 1,

@@ -1,3 +1,19 @@
 <resources>
     <string name="compare">Porównaj</string>
+    <string name="list">Lista</string>
+    <string name="error_occurred">Wystąpił błąd</string>
+    <string name="retry">Ponów próbę</string>
+    <string name="search_for_tokens">Szukaj tokenów…</string>
+    <string name="loading">Ładowanie…</string>
+    <string name="swap_tokens">Zamień tokeny</string>
+    <string name="search">Szukaj</string>
+    <string name="back">Wstecz</string>
+    <string name="exceeded_rate_limit">Przekroczono limit API. Spróbuj później.</string>
+    <string name="api_error_occurred">Wystąpił błąd API.</string>
+    <string name="no_internet_connection">Brak połączenia z internetem.</string>
+    <string name="if_label">Gdyby</string>
+    <string name="reached_market_cap_of">osiągnęło kapitalizację rynkową</string>
+    <string name="had_market_cap_of">miało kapitalizację rynkową</string>
+    <string name="would_be_worth">byłoby warte</string>
+    <string name="token_comparison_data_incomplete">Dane pobrane dla przynajmniej jednego z wybranych tokenów są niekompletne - wybierz inną parę tokenów.</string>
 </resources>

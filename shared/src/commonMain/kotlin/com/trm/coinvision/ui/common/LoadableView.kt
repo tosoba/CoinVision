@@ -7,7 +7,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.trm.coinvision.core.common.util.LocalStringResources
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.error_occurred
 import com.trm.coinvision.core.common.util.ext.requireAs
 import com.trm.coinvision.core.common.util.ext.safeAs
 import com.trm.coinvision.core.domain.model.Empty
@@ -15,7 +16,10 @@ import com.trm.coinvision.core.domain.model.Failed
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.Loading
 import com.trm.coinvision.core.domain.model.Ready
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun <T : Any> LoadableView(
   modifier: Modifier = Modifier,
@@ -29,12 +33,12 @@ fun <T : Any> LoadableView(
   failedContent: @Composable (Throwable?) -> Unit = {
     CoinVisionRetryColumn(
       modifier = Modifier.fillMaxSize(),
-      text = it?.errorText() ?: LocalStringResources.current.errorOccurred,
-      onRetryClick = onRetryClick
+      text = it?.errorText() ?: stringResource(Res.string.error_occurred),
+      onRetryClick = onRetryClick,
     )
   },
   emptyContent: @Composable () -> Unit = {},
-  readyContent: @Composable (T) -> Unit = {}
+  readyContent: @Composable (T) -> Unit = {},
 ) {
   Crossfade(targetState = loadable, modifier = modifier) {
     when (loadable) {
@@ -46,6 +50,7 @@ fun <T : Any> LoadableView(
   }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun <T : Any, S : Any> LoadableView(
   modifier: Modifier = Modifier,
@@ -65,15 +70,15 @@ fun <T : Any, S : Any> LoadableView(
       modifier = Modifier.fillMaxSize(),
       text =
         errorText1?.takeIf { errorText1 == errorText2 }
-          ?: LocalStringResources.current.errorOccurred,
+          ?: stringResource(Res.string.error_occurred),
       onRetryClick = {
         if (loadable1 is Failed) onRetryClick1()
         if (loadable2 is Failed) onRetryClick2()
-      }
+      },
     )
   },
   emptyContent: @Composable () -> Unit = {},
-  readyContent: @Composable (T, S) -> Unit = { _, _ -> }
+  readyContent: @Composable (T, S) -> Unit = { _, _ -> },
 ) {
   Crossfade(targetState = listOf(loadable1, loadable2), modifier = modifier) { loadables ->
     when {
@@ -81,14 +86,14 @@ fun <T : Any, S : Any> LoadableView(
       loadables.any { it is Failed } -> {
         failedContent(
           loadables.firstOrNull()?.safeAs<Failed>()?.throwable,
-          loadables.lastOrNull()?.safeAs<Failed>()?.throwable
+          loadables.lastOrNull()?.safeAs<Failed>()?.throwable,
         )
       }
       loadables.any { it is Empty } -> emptyContent()
       loadables.all { it is Ready } -> {
         readyContent(
           loadables.first().requireAs<Ready<T>>().data,
-          loadables.last().requireAs<Ready<S>>().data
+          loadables.last().requireAs<Ready<S>>().data,
         )
       }
     }

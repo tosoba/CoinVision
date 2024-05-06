@@ -27,8 +27,8 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import coinvision.shared.generated.resources.Res
 import coinvision.shared.generated.resources.compare
 import coinvision.shared.generated.resources.swap_horizontal
+import coinvision.shared.generated.resources.swap_tokens
 import coinvision.shared.generated.resources.swap_vertical
-import com.trm.coinvision.core.common.util.LocalStringResources
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.ui.MainNavigatorScreenModel
@@ -167,7 +167,7 @@ object CompareTokensTab : Tab {
                 Res.drawable.swap_vertical
               }
             ),
-          contentDescription = LocalStringResources.current.swapTokens,
+          contentDescription = stringResource(Res.string.swap_tokens),
         )
       }
     }

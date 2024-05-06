@@ -15,25 +15,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.trm.coinvision.core.common.util.LocalStringResources
+import coinvision.shared.generated.resources.Res
+import coinvision.shared.generated.resources.api_error_occurred
+import coinvision.shared.generated.resources.error_occurred
+import coinvision.shared.generated.resources.exceeded_rate_limit
+import coinvision.shared.generated.resources.no_internet_connection
+import coinvision.shared.generated.resources.retry
 import com.trm.coinvision.core.domain.exception.HttpException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.utils.io.errors.IOException
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun CoinVisionRetryRow(
   modifier: Modifier = Modifier,
-  text: String = LocalStringResources.current.errorOccurred,
-  onRetryClick: () -> Unit = {}
+  text: String = stringResource(Res.string.error_occurred),
+  onRetryClick: () -> Unit = {},
 ) {
   Row(
     modifier = modifier,
     verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center
+    horizontalArrangement = Arrangement.Center,
   ) {
     Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
     Spacer(modifier = Modifier.width(5.dp))
-    Button(onRetryClick) { Text(text = LocalStringResources.current.retry) }
+    Button(onRetryClick) { Text(text = stringResource(Res.string.retry)) }
   }
 }
 
@@ -44,34 +52,37 @@ internal fun CoinVisionProgressIndicator(modifier: Modifier = Modifier) {
   }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun CoinVisionRetryColumn(
   modifier: Modifier = Modifier,
-  text: String = LocalStringResources.current.errorOccurred,
-  onRetryClick: () -> Unit = {}
+  text: String = stringResource(Res.string.error_occurred),
+  onRetryClick: () -> Unit = {},
 ) {
   Column(
     modifier = modifier,
     verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
+    horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
     Spacer(modifier = Modifier.height(5.dp))
-    Button(onRetryClick) { Text(text = LocalStringResources.current.retry) }
+    Button(onRetryClick) { Text(text = stringResource(Res.string.retry)) }
   }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Throwable.errorText(): String =
-  when (this) {
-    is ResponseException -> {
-      if (response.status.value == 429) LocalStringResources.current.exceededRateLimit
-      else LocalStringResources.current.apiErrorOccurred
+  stringResource(
+    when (this) {
+      is ResponseException -> {
+        if (response.status.value == 429) Res.string.exceeded_rate_limit
+        else Res.string.api_error_occurred
+      }
+      is HttpException -> {
+        if (status.value == 429) Res.string.exceeded_rate_limit else Res.string.api_error_occurred
+      }
+      is IOException -> Res.string.no_internet_connection
+      else -> Res.string.error_occurred
     }
-    is HttpException -> {
-      if (status.value == 429) LocalStringResources.current.exceededRateLimit
-      else LocalStringResources.current.apiErrorOccurred
-    }
-    is IOException -> LocalStringResources.current.noInternetConnection
-    else -> LocalStringResources.current.errorOccurred
-  }
+  )
