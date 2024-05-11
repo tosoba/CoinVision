@@ -63,8 +63,8 @@ internal fun PriceChartHeader(
               MarketChartDaysPeriod.DAY -> priceChangePercentage24h
               MarketChartDaysPeriod.WEEK -> priceChangePercentage7d
               MarketChartDaysPeriod.MONTH -> priceChangePercentage30d
-              MarketChartDaysPeriod.DAYS_200 -> priceChangePercentage200d
-              MarketChartDaysPeriod.MAX -> null
+              MarketChartDaysPeriod.MONTHS_3 -> priceChangePercentage200d
+              MarketChartDaysPeriod.YEAR -> null
             }?.decimalFormat(signed = true)
           }
         }
