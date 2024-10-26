@@ -146,11 +146,11 @@ android {
   // Issue: https://github.com/icerockdev/moko-resources/issues/510
   // Remove after fix this
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
 
-  kotlin { jvmToolchain(11) }
+  kotlin { jvmToolchain(17) }
 
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 }
