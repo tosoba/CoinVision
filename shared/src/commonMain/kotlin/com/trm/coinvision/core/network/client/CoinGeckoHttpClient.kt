@@ -1,5 +1,6 @@
 package com.trm.coinvision.core.network.client
 
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.HttpRequestRetry
@@ -7,6 +8,7 @@ import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -33,7 +35,17 @@ internal fun coinGeckoHttpClientDefaultConfig(
     )
   }
 
-  logLevel?.let { install(Logging) { level = it } }
+  logLevel?.let {
+    install(Logging) {
+      logger =
+        object : Logger {
+          override fun log(message: String) {
+            Napier.d(message = message, throwable = null, tag = "ktor")
+          }
+        }
+      level = it
+    }
+  }
 
   cacheStorage?.let { install(HttpCache) { publicStorage(it) } }
 
