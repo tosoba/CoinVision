@@ -10,6 +10,7 @@ class PriceChartUIViewFactory: ComposeSharedFactory {
 
 class PriceChartUIView : UIView, PriceChartUIViewDelegate {
     private var chart: LightweightCharts!
+    private var series: AreaSeries!
     
     init(points: [PriceChartPoint], frame: CGRect = .zero) {
         super.init(frame: frame)
@@ -24,15 +25,19 @@ class PriceChartUIView : UIView, PriceChartUIViewDelegate {
         let options = ChartOptions()
         chart = LightweightCharts(options: options)
         chart.translatesAutoresizingMaskIntoConstraints = false
-        let series = chart.addBaselineSeries(
-            options: BaselineSeriesOptions(
-                topFillColor1: "#fff",
-                topFillColor2: "#0f0"
-            ))
-        // series.setData(data: <#T##[BaselineData]#>)
+        addSubview(chart)
+        NSLayoutConstraint.activate([
+            chart.topAnchor.constraint(equalTo: topAnchor),
+            chart.bottomAnchor.constraint(equalTo: bottomAnchor),
+            chart.leadingAnchor.constraint(equalTo: leadingAnchor),
+            chart.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+        
+        series = chart.addAreaSeries(options: AreaSeriesOptions())
+        updatePoints(points: points)
     }
     
     func updatePoints(points: [PriceChartPoint]) {
-        
+        series.setData(data: points.map { AreaData(time: .utc(timestamp: Double($0.timestamp)), value: Double($0.value)) })
     }
 }

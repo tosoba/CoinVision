@@ -108,7 +108,7 @@
 		33C56DD72DD8F61B0063C183 /* wrapper_functions.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D062DD8F61B0063C183 /* wrapper_functions.js */; };
 		33C56DD82DD8F61B0063C183 /* lightweight-charts.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D052DD8F61B0063C183 /* lightweight-charts.js */; };
 		33C56DD92DD8F61B0063C183 /* content-setup.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D042DD8F61B0063C183 /* content-setup.js */; };
-		33C56DDB2DD8F7DF0063C183 /* PriceChartUIViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56DDA2DD8F7D30063C183 /* PriceChartUIViewFactory.swift */; };
+		33C56DDB2DD8F7DF0063C183 /* PriceChartUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56DDA2DD8F7D30063C183 /* PriceChartUIView.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		772F0DB885BE564364B1F3CE /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11A99F42C560D9E887D5EF40 /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
@@ -230,7 +230,7 @@
 		33C56D732DD8F61B0063C183 /* PriceScaleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceScaleApi.swift; sourceTree = "<group>"; };
 		33C56D742DD8F61B0063C183 /* SeriesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesApi.swift; sourceTree = "<group>"; };
 		33C56D752DD8F61B0063C183 /* TimeScaleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleApi.swift; sourceTree = "<group>"; };
-		33C56DDA2DD8F7D30063C183 /* PriceChartUIViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceChartUIViewFactory.swift; sourceTree = "<group>"; };
+		33C56DDA2DD8F7D30063C183 /* PriceChartUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceChartUIView.swift; sourceTree = "<group>"; };
 		47E9B267B8FA4854B8D1681F /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -528,7 +528,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				33C56DDA2DD8F7D30063C183 /* PriceChartUIViewFactory.swift */,
+				33C56DDA2DD8F7D30063C183 /* PriceChartUIView.swift */,
 				33C56D772DD8F61B0063C183 /* LightweightCharts */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
@@ -724,7 +724,7 @@
 				33C56D8B2DD8F61B0063C183 /* CandlestickData.swift in Sources */,
 				33C56D8C2DD8F61B0063C183 /* BaseValueType.swift in Sources */,
 				33C56D8D2DD8F61B0063C183 /* TrackingModeOptions.swift in Sources */,
-				33C56DDB2DD8F7DF0063C183 /* PriceChartUIViewFactory.swift in Sources */,
+				33C56DDB2DD8F7DF0063C183 /* PriceChartUIView.swift in Sources */,
 				33C56D8E2DD8F61B0063C183 /* BarSeriesOptions.swift in Sources */,
 				33C56D8F2DD8F61B0063C183 /* ColorType.swift in Sources */,
 				33C56D902DD8F61B0063C183 /* FromToRange.swift in Sources */,

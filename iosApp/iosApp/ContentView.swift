@@ -11,7 +11,7 @@ struct ContentView: View {
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController()
+        MainViewControllerKt.MainViewController(generatedViewFactory: PriceChartUIViewFactory())
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
