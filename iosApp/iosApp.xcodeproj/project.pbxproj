@@ -10,6 +10,104 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		33C56D782DD8F61B0063C183 /* PriceFormatterApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D712DD8F61B0063C183 /* PriceFormatterApi.swift */; };
+		33C56D792DD8F61B0063C183 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D202DD8F61B0063C183 /* Subscription.swift */; };
+		33C56D7A2DD8F61B0063C183 /* UIColor+ColorComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D0D2DD8F61B0063C183 /* UIColor+ColorComponents.swift */; };
+		33C56D7B2DD8F61B0063C183 /* SeriesMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D5B2DD8F61B0063C183 /* SeriesMarker.swift */; };
+		33C56D7C2DD8F61B0063C183 /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D1A2DD8F61B0063C183 /* PriceFormatter.swift */; };
+		33C56D7D2DD8F61B0063C183 /* OhlcData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D312DD8F61B0063C183 /* OhlcData.swift */; };
+		33C56D7E2DD8F61B0063C183 /* CandlestickSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D542DD8F61B0063C183 /* CandlestickSeriesOptions.swift */; };
+		33C56D7F2DD8F61B0063C183 /* JavaScriptObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D282DD8F61B0063C183 /* JavaScriptObject.swift */; };
+		33C56D802DD8F61B0063C183 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D682DD8F61B0063C183 /* Point.swift */; };
+		33C56D812DD8F61B0063C183 /* Rectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D412DD8F61B0063C183 /* Rectangle.swift */; };
+		33C56D822DD8F61B0063C183 /* SeriesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D742DD8F61B0063C183 /* SeriesApi.swift */; };
+		33C56D832DD8F61B0063C183 /* SeriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D322DD8F61B0063C183 /* SeriesData.swift */; };
+		33C56D842DD8F61B0063C183 /* TimeScaleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D752DD8F61B0063C183 /* TimeScaleApi.swift */; };
+		33C56D852DD8F61B0063C183 /* AxisPressedMouseMoveOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D5F2DD8F61B0063C183 /* AxisPressedMouseMoveOptions.swift */; };
+		33C56D862DD8F61B0063C183 /* SeriesType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D6A2DD8F61B0063C183 /* SeriesType.swift */; };
+		33C56D872DD8F61B0063C183 /* HistogramSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D552DD8F61B0063C183 /* HistogramSeriesOptions.swift */; };
+		33C56D882DD8F61B0063C183 /* BaselineSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D112DD8F61B0063C183 /* BaselineSeries.swift */; };
+		33C56D892DD8F61B0063C183 /* BarPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D602DD8F61B0063C183 /* BarPrice.swift */; };
+		33C56D8A2DD8F61B0063C183 /* SingleValueSeriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D342DD8F61B0063C183 /* SingleValueSeriesData.swift */; };
+		33C56D8B2DD8F61B0063C183 /* CandlestickData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D2E2DD8F61B0063C183 /* CandlestickData.swift */; };
+		33C56D8C2DD8F61B0063C183 /* BaseValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D382DD8F61B0063C183 /* BaseValueType.swift */; };
+		33C56D8D2DD8F61B0063C183 /* TrackingModeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4E2DD8F61B0063C183 /* TrackingModeOptions.swift */; };
+		33C56D8E2DD8F61B0063C183 /* BarSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D522DD8F61B0063C183 /* BarSeriesOptions.swift */; };
+		33C56D8F2DD8F61B0063C183 /* ColorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D642DD8F61B0063C183 /* ColorType.swift */; };
+		33C56D902DD8F61B0063C183 /* FromToRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D662DD8F61B0063C183 /* FromToRange.swift */; };
+		33C56D912DD8F61B0063C183 /* WatermarkOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4F2DD8F61B0063C183 /* WatermarkOptions.swift */; };
+		33C56D922DD8F61B0063C183 /* HistogramSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D132DD8F61B0063C183 /* HistogramSeries.swift */; };
+		33C56D932DD8F61B0063C183 /* Int+ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D0A2DD8F61B0063C183 /* Int+ColorComponent.swift */; };
+		33C56D942DD8F61B0063C183 /* HistogramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D2F2DD8F61B0063C183 /* HistogramData.swift */; };
+		33C56D952DD8F61B0063C183 /* ChartApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D702DD8F61B0063C183 /* ChartApi.swift */; };
+		33C56D962DD8F61B0063C183 /* SeriesOptionsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D582DD8F61B0063C183 /* SeriesOptionsCommon.swift */; };
+		33C56D972DD8F61B0063C183 /* JavaScriptMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D222DD8F61B0063C183 /* JavaScriptMethod.swift */; };
+		33C56D982DD8F61B0063C183 /* AxisDoubleClickOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D5E2DD8F61B0063C183 /* AxisDoubleClickOptions.swift */; };
+		33C56D992DD8F61B0063C183 /* ChartOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D442DD8F61B0063C183 /* ChartOptions.swift */; };
+		33C56D9A2DD8F61B0063C183 /* LocalizationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4D2DD8F61B0063C183 /* LocalizationOptions.swift */; };
+		33C56D9B2DD8F61B0063C183 /* MouseEventParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D672DD8F61B0063C183 /* MouseEventParams.swift */; };
+		33C56D9C2DD8F61B0063C183 /* BaselineSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D532DD8F61B0063C183 /* BaselineSeriesOptions.swift */; };
+		33C56D9D2DD8F61B0063C183 /* PriceScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D1C2DD8F61B0063C183 /* PriceScale.swift */; };
+		33C56D9E2DD8F61B0063C183 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D292DD8F61B0063C183 /* WebView.swift */; };
+		33C56D9F2DD8F61B0063C183 /* Encodable+JSONString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D092DD8F61B0063C183 /* Encodable+JSONString.swift */; };
+		33C56DA02DD8F61B0063C183 /* LineSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D562DD8F61B0063C183 /* LineSeriesOptions.swift */; };
+		33C56DA12DD8F61B0063C183 /* LineWidth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3C2DD8F61B0063C183 /* LineWidth.swift */; };
+		33C56DA22DD8F61B0063C183 /* JavaScriptMessageProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D272DD8F61B0063C183 /* JavaScriptMessageProducer.swift */; };
+		33C56DA32DD8F61B0063C183 /* BaselineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D2D2DD8F61B0063C183 /* BaselineData.swift */; };
+		33C56DA42DD8F61B0063C183 /* BarsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D612DD8F61B0063C183 /* BarsInfo.swift */; };
+		33C56DA52DD8F61B0063C183 /* PriceLineApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D722DD8F61B0063C183 /* PriceLineApi.swift */; };
+		33C56DA62DD8F61B0063C183 /* CrosshairLineOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D452DD8F61B0063C183 /* CrosshairLineOptions.swift */; };
+		33C56DA72DD8F61B0063C183 /* NSRegularExpression+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D0B2DD8F61B0063C183 /* NSRegularExpression+Color.swift */; };
+		33C56DA82DD8F61B0063C183 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D6D2DD8F61B0063C183 /* Time.swift */; };
+		33C56DA92DD8F61B0063C183 /* LayoutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4C2DD8F61B0063C183 /* LayoutOptions.swift */; };
+		33C56DAA2DD8F61B0063C183 /* TickMarkFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D6C2DD8F61B0063C183 /* TickMarkFormatter.swift */; };
+		33C56DAB2DD8F61B0063C183 /* BarSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D102DD8F61B0063C183 /* BarSeries.swift */; };
+		33C56DAC2DD8F61B0063C183 /* TimeScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D1D2DD8F61B0063C183 /* TimeScale.swift */; };
+		33C56DAD2DD8F61B0063C183 /* CrosshairOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D462DD8F61B0063C183 /* CrosshairOptions.swift */; };
+		33C56DAE2DD8F61B0063C183 /* SeriesObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D162DD8F61B0063C183 /* SeriesObject.swift */; };
+		33C56DAF2DD8F61B0063C183 /* KineticScrollOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4B2DD8F61B0063C183 /* KineticScrollOptions.swift */; };
+		33C56DB02DD8F61B0063C183 /* GridLineOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D472DD8F61B0063C183 /* GridLineOptions.swift */; };
+		33C56DB12DD8F61B0063C183 /* SeriesApi+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D152DD8F61B0063C183 /* SeriesApi+Extension.swift */; };
+		33C56DB22DD8F61B0063C183 /* LightweightCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D192DD8F61B0063C183 /* LightweightCharts.swift */; };
+		33C56DB32DD8F61B0063C183 /* Bundle+Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D082DD8F61B0063C183 /* Bundle+Resources.swift */; };
+		33C56DB42DD8F61B0063C183 /* HandleScaleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D492DD8F61B0063C183 /* HandleScaleOptions.swift */; };
+		33C56DB52DD8F61B0063C183 /* SeriesDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D332DD8F61B0063C183 /* SeriesDataType.swift */; };
+		33C56DB62DD8F61B0063C183 /* PriceLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D1B2DD8F61B0063C183 /* PriceLine.swift */; };
+		33C56DB72DD8F61B0063C183 /* AreaSeriesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D512DD8F61B0063C183 /* AreaSeriesOptions.swift */; };
+		33C56DB82DD8F61B0063C183 /* BarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D2C2DD8F61B0063C183 /* BarData.swift */; };
+		33C56DB92DD8F61B0063C183 /* LastPriceAnimationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D392DD8F61B0063C183 /* LastPriceAnimationMode.swift */; };
+		33C56DBA2DD8F61B0063C183 /* AreaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D2B2DD8F61B0063C183 /* AreaData.swift */; };
+		33C56DBB2DD8F61B0063C183 /* LineType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3B2DD8F61B0063C183 /* LineType.swift */; };
+		33C56DBC2DD8F61B0063C183 /* HandleScrollOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D4A2DD8F61B0063C183 /* HandleScrollOptions.swift */; };
+		33C56DBD2DD8F61B0063C183 /* CandlestickSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D122DD8F61B0063C183 /* CandlestickSeries.swift */; };
+		33C56DBE2DD8F61B0063C183 /* GridOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D482DD8F61B0063C183 /* GridOptions.swift */; };
+		33C56DBF2DD8F61B0063C183 /* MessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D1F2DD8F61B0063C183 /* MessageHandler.swift */; };
+		33C56DC02DD8F61B0063C183 /* PromptHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D242DD8F61B0063C183 /* PromptHandler.swift */; };
+		33C56DC12DD8F61B0063C183 /* ChartColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D632DD8F61B0063C183 /* ChartColor.swift */; };
+		33C56DC22DD8F61B0063C183 /* AreaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D0F2DD8F61B0063C183 /* AreaSeries.swift */; };
+		33C56DC32DD8F61B0063C183 /* PriceLineOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3E2DD8F61B0063C183 /* PriceLineOptions.swift */; };
+		33C56DC42DD8F61B0063C183 /* PriceScaleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D402DD8F61B0063C183 /* PriceScaleOptions.swift */; };
+		33C56DC52DD8F61B0063C183 /* LineSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D142DD8F61B0063C183 /* LineSeries.swift */; };
+		33C56DC62DD8F61B0063C183 /* WhitespaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D352DD8F61B0063C183 /* WhitespaceData.swift */; };
+		33C56DC72DD8F61B0063C183 /* JavaScriptSyncMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D232DD8F61B0063C183 /* JavaScriptSyncMethod.swift */; };
+		33C56DC82DD8F61B0063C183 /* BusinessDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D622DD8F61B0063C183 /* BusinessDay.swift */; };
+		33C56DC92DD8F61B0063C183 /* TogglableOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D6E2DD8F61B0063C183 /* TogglableOptions.swift */; };
+		33C56DCA2DD8F61B0063C183 /* TimeScaleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D422DD8F61B0063C183 /* TimeScaleOptions.swift */; };
+		33C56DCB2DD8F61B0063C183 /* PriceScaleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D732DD8F61B0063C183 /* PriceScaleApi.swift */; };
+		33C56DCC2DD8F61B0063C183 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D652DD8F61B0063C183 /* Coordinate.swift */; };
+		33C56DCD2DD8F61B0063C183 /* MismatchDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3D2DD8F61B0063C183 /* MismatchDirection.swift */; };
+		33C56DCE2DD8F61B0063C183 /* PriceFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D692DD8F61B0063C183 /* PriceFormat.swift */; };
+		33C56DCF2DD8F61B0063C183 /* PriceLineSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3F2DD8F61B0063C183 /* PriceLineSource.swift */; };
+		33C56DD02DD8F61B0063C183 /* SurfaceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D6B2DD8F61B0063C183 /* SurfaceColor.swift */; };
+		33C56DD12DD8F61B0063C183 /* AutoscaleInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D5D2DD8F61B0063C183 /* AutoscaleInfoProvider.swift */; };
+		33C56DD22DD8F61B0063C183 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D182DD8F61B0063C183 /* Chart.swift */; };
+		33C56DD32DD8F61B0063C183 /* String+UniqueString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D0C2DD8F61B0063C183 /* String+UniqueString.swift */; };
+		33C56DD42DD8F61B0063C183 /* LineStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D3A2DD8F61B0063C183 /* LineStyle.swift */; };
+		33C56DD52DD8F61B0063C183 /* LineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D302DD8F61B0063C183 /* LineData.swift */; };
+		33C56DD62DD8F61B0063C183 /* JavaScriptEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C56D262DD8F61B0063C183 /* JavaScriptEvaluator.swift */; };
+		33C56DD72DD8F61B0063C183 /* wrapper_functions.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D062DD8F61B0063C183 /* wrapper_functions.js */; };
+		33C56DD82DD8F61B0063C183 /* lightweight-charts.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D052DD8F61B0063C183 /* lightweight-charts.js */; };
+		33C56DD92DD8F61B0063C183 /* content-setup.js in Resources */ = {isa = PBXBuildFile; fileRef = 33C56D042DD8F61B0063C183 /* content-setup.js */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		772F0DB885BE564364B1F3CE /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11A99F42C560D9E887D5EF40 /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
@@ -33,6 +131,104 @@
 		11A99F42C560D9E887D5EF40 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E6C94763D5075B9F27259B5 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		33C56D042DD8F61B0063C183 /* content-setup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "content-setup.js"; sourceTree = "<group>"; };
+		33C56D052DD8F61B0063C183 /* lightweight-charts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lightweight-charts.js"; sourceTree = "<group>"; };
+		33C56D062DD8F61B0063C183 /* wrapper_functions.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wrapper_functions.js; sourceTree = "<group>"; };
+		33C56D082DD8F61B0063C183 /* Bundle+Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Resources.swift"; sourceTree = "<group>"; };
+		33C56D092DD8F61B0063C183 /* Encodable+JSONString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+JSONString.swift"; sourceTree = "<group>"; };
+		33C56D0A2DD8F61B0063C183 /* Int+ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+ColorComponent.swift"; sourceTree = "<group>"; };
+		33C56D0B2DD8F61B0063C183 /* NSRegularExpression+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRegularExpression+Color.swift"; sourceTree = "<group>"; };
+		33C56D0C2DD8F61B0063C183 /* String+UniqueString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UniqueString.swift"; sourceTree = "<group>"; };
+		33C56D0D2DD8F61B0063C183 /* UIColor+ColorComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ColorComponents.swift"; sourceTree = "<group>"; };
+		33C56D0F2DD8F61B0063C183 /* AreaSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaSeries.swift; sourceTree = "<group>"; };
+		33C56D102DD8F61B0063C183 /* BarSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarSeries.swift; sourceTree = "<group>"; };
+		33C56D112DD8F61B0063C183 /* BaselineSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineSeries.swift; sourceTree = "<group>"; };
+		33C56D122DD8F61B0063C183 /* CandlestickSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlestickSeries.swift; sourceTree = "<group>"; };
+		33C56D132DD8F61B0063C183 /* HistogramSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramSeries.swift; sourceTree = "<group>"; };
+		33C56D142DD8F61B0063C183 /* LineSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSeries.swift; sourceTree = "<group>"; };
+		33C56D152DD8F61B0063C183 /* SeriesApi+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeriesApi+Extension.swift"; sourceTree = "<group>"; };
+		33C56D162DD8F61B0063C183 /* SeriesObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesObject.swift; sourceTree = "<group>"; };
+		33C56D182DD8F61B0063C183 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		33C56D192DD8F61B0063C183 /* LightweightCharts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightweightCharts.swift; sourceTree = "<group>"; };
+		33C56D1A2DD8F61B0063C183 /* PriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
+		33C56D1B2DD8F61B0063C183 /* PriceLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLine.swift; sourceTree = "<group>"; };
+		33C56D1C2DD8F61B0063C183 /* PriceScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceScale.swift; sourceTree = "<group>"; };
+		33C56D1D2DD8F61B0063C183 /* TimeScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScale.swift; sourceTree = "<group>"; };
+		33C56D1F2DD8F61B0063C183 /* MessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageHandler.swift; sourceTree = "<group>"; };
+		33C56D202DD8F61B0063C183 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
+		33C56D222DD8F61B0063C183 /* JavaScriptMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptMethod.swift; sourceTree = "<group>"; };
+		33C56D232DD8F61B0063C183 /* JavaScriptSyncMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptSyncMethod.swift; sourceTree = "<group>"; };
+		33C56D242DD8F61B0063C183 /* PromptHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptHandler.swift; sourceTree = "<group>"; };
+		33C56D262DD8F61B0063C183 /* JavaScriptEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptEvaluator.swift; sourceTree = "<group>"; };
+		33C56D272DD8F61B0063C183 /* JavaScriptMessageProducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptMessageProducer.swift; sourceTree = "<group>"; };
+		33C56D282DD8F61B0063C183 /* JavaScriptObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptObject.swift; sourceTree = "<group>"; };
+		33C56D292DD8F61B0063C183 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		33C56D2B2DD8F61B0063C183 /* AreaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaData.swift; sourceTree = "<group>"; };
+		33C56D2C2DD8F61B0063C183 /* BarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarData.swift; sourceTree = "<group>"; };
+		33C56D2D2DD8F61B0063C183 /* BaselineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineData.swift; sourceTree = "<group>"; };
+		33C56D2E2DD8F61B0063C183 /* CandlestickData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlestickData.swift; sourceTree = "<group>"; };
+		33C56D2F2DD8F61B0063C183 /* HistogramData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramData.swift; sourceTree = "<group>"; };
+		33C56D302DD8F61B0063C183 /* LineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineData.swift; sourceTree = "<group>"; };
+		33C56D312DD8F61B0063C183 /* OhlcData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhlcData.swift; sourceTree = "<group>"; };
+		33C56D322DD8F61B0063C183 /* SeriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesData.swift; sourceTree = "<group>"; };
+		33C56D332DD8F61B0063C183 /* SeriesDataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesDataType.swift; sourceTree = "<group>"; };
+		33C56D342DD8F61B0063C183 /* SingleValueSeriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleValueSeriesData.swift; sourceTree = "<group>"; };
+		33C56D352DD8F61B0063C183 /* WhitespaceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhitespaceData.swift; sourceTree = "<group>"; };
+		33C56D382DD8F61B0063C183 /* BaseValueType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseValueType.swift; sourceTree = "<group>"; };
+		33C56D392DD8F61B0063C183 /* LastPriceAnimationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastPriceAnimationMode.swift; sourceTree = "<group>"; };
+		33C56D3A2DD8F61B0063C183 /* LineStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineStyle.swift; sourceTree = "<group>"; };
+		33C56D3B2DD8F61B0063C183 /* LineType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineType.swift; sourceTree = "<group>"; };
+		33C56D3C2DD8F61B0063C183 /* LineWidth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineWidth.swift; sourceTree = "<group>"; };
+		33C56D3D2DD8F61B0063C183 /* MismatchDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MismatchDirection.swift; sourceTree = "<group>"; };
+		33C56D3E2DD8F61B0063C183 /* PriceLineOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLineOptions.swift; sourceTree = "<group>"; };
+		33C56D3F2DD8F61B0063C183 /* PriceLineSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLineSource.swift; sourceTree = "<group>"; };
+		33C56D402DD8F61B0063C183 /* PriceScaleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceScaleOptions.swift; sourceTree = "<group>"; };
+		33C56D412DD8F61B0063C183 /* Rectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rectangle.swift; sourceTree = "<group>"; };
+		33C56D422DD8F61B0063C183 /* TimeScaleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleOptions.swift; sourceTree = "<group>"; };
+		33C56D442DD8F61B0063C183 /* ChartOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartOptions.swift; sourceTree = "<group>"; };
+		33C56D452DD8F61B0063C183 /* CrosshairLineOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosshairLineOptions.swift; sourceTree = "<group>"; };
+		33C56D462DD8F61B0063C183 /* CrosshairOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosshairOptions.swift; sourceTree = "<group>"; };
+		33C56D472DD8F61B0063C183 /* GridLineOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLineOptions.swift; sourceTree = "<group>"; };
+		33C56D482DD8F61B0063C183 /* GridOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridOptions.swift; sourceTree = "<group>"; };
+		33C56D492DD8F61B0063C183 /* HandleScaleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleScaleOptions.swift; sourceTree = "<group>"; };
+		33C56D4A2DD8F61B0063C183 /* HandleScrollOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleScrollOptions.swift; sourceTree = "<group>"; };
+		33C56D4B2DD8F61B0063C183 /* KineticScrollOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KineticScrollOptions.swift; sourceTree = "<group>"; };
+		33C56D4C2DD8F61B0063C183 /* LayoutOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutOptions.swift; sourceTree = "<group>"; };
+		33C56D4D2DD8F61B0063C183 /* LocalizationOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationOptions.swift; sourceTree = "<group>"; };
+		33C56D4E2DD8F61B0063C183 /* TrackingModeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingModeOptions.swift; sourceTree = "<group>"; };
+		33C56D4F2DD8F61B0063C183 /* WatermarkOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatermarkOptions.swift; sourceTree = "<group>"; };
+		33C56D512DD8F61B0063C183 /* AreaSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D522DD8F61B0063C183 /* BarSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D532DD8F61B0063C183 /* BaselineSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D542DD8F61B0063C183 /* CandlestickSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlestickSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D552DD8F61B0063C183 /* HistogramSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D562DD8F61B0063C183 /* LineSeriesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSeriesOptions.swift; sourceTree = "<group>"; };
+		33C56D582DD8F61B0063C183 /* SeriesOptionsCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesOptionsCommon.swift; sourceTree = "<group>"; };
+		33C56D5B2DD8F61B0063C183 /* SeriesMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesMarker.swift; sourceTree = "<group>"; };
+		33C56D5D2DD8F61B0063C183 /* AutoscaleInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoscaleInfoProvider.swift; sourceTree = "<group>"; };
+		33C56D5E2DD8F61B0063C183 /* AxisDoubleClickOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisDoubleClickOptions.swift; sourceTree = "<group>"; };
+		33C56D5F2DD8F61B0063C183 /* AxisPressedMouseMoveOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisPressedMouseMoveOptions.swift; sourceTree = "<group>"; };
+		33C56D602DD8F61B0063C183 /* BarPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarPrice.swift; sourceTree = "<group>"; };
+		33C56D612DD8F61B0063C183 /* BarsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarsInfo.swift; sourceTree = "<group>"; };
+		33C56D622DD8F61B0063C183 /* BusinessDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessDay.swift; sourceTree = "<group>"; };
+		33C56D632DD8F61B0063C183 /* ChartColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartColor.swift; sourceTree = "<group>"; };
+		33C56D642DD8F61B0063C183 /* ColorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorType.swift; sourceTree = "<group>"; };
+		33C56D652DD8F61B0063C183 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		33C56D662DD8F61B0063C183 /* FromToRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromToRange.swift; sourceTree = "<group>"; };
+		33C56D672DD8F61B0063C183 /* MouseEventParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseEventParams.swift; sourceTree = "<group>"; };
+		33C56D682DD8F61B0063C183 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		33C56D692DD8F61B0063C183 /* PriceFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormat.swift; sourceTree = "<group>"; };
+		33C56D6A2DD8F61B0063C183 /* SeriesType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesType.swift; sourceTree = "<group>"; };
+		33C56D6B2DD8F61B0063C183 /* SurfaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceColor.swift; sourceTree = "<group>"; };
+		33C56D6C2DD8F61B0063C183 /* TickMarkFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickMarkFormatter.swift; sourceTree = "<group>"; };
+		33C56D6D2DD8F61B0063C183 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		33C56D6E2DD8F61B0063C183 /* TogglableOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogglableOptions.swift; sourceTree = "<group>"; };
+		33C56D702DD8F61B0063C183 /* ChartApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartApi.swift; sourceTree = "<group>"; };
+		33C56D712DD8F61B0063C183 /* PriceFormatterApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatterApi.swift; sourceTree = "<group>"; };
+		33C56D722DD8F61B0063C183 /* PriceLineApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceLineApi.swift; sourceTree = "<group>"; };
+		33C56D732DD8F61B0063C183 /* PriceScaleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceScaleApi.swift; sourceTree = "<group>"; };
+		33C56D742DD8F61B0063C183 /* SeriesApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesApi.swift; sourceTree = "<group>"; };
+		33C56D752DD8F61B0063C183 /* TimeScaleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleApi.swift; sourceTree = "<group>"; };
 		47E9B267B8FA4854B8D1681F /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -68,6 +264,247 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		33C56D072DD8F61B0063C183 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D042DD8F61B0063C183 /* content-setup.js */,
+				33C56D052DD8F61B0063C183 /* lightweight-charts.js */,
+				33C56D062DD8F61B0063C183 /* wrapper_functions.js */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		33C56D0E2DD8F61B0063C183 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D082DD8F61B0063C183 /* Bundle+Resources.swift */,
+				33C56D092DD8F61B0063C183 /* Encodable+JSONString.swift */,
+				33C56D0A2DD8F61B0063C183 /* Int+ColorComponent.swift */,
+				33C56D0B2DD8F61B0063C183 /* NSRegularExpression+Color.swift */,
+				33C56D0C2DD8F61B0063C183 /* String+UniqueString.swift */,
+				33C56D0D2DD8F61B0063C183 /* UIColor+ColorComponents.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		33C56D172DD8F61B0063C183 /* Series */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D0F2DD8F61B0063C183 /* AreaSeries.swift */,
+				33C56D102DD8F61B0063C183 /* BarSeries.swift */,
+				33C56D112DD8F61B0063C183 /* BaselineSeries.swift */,
+				33C56D122DD8F61B0063C183 /* CandlestickSeries.swift */,
+				33C56D132DD8F61B0063C183 /* HistogramSeries.swift */,
+				33C56D142DD8F61B0063C183 /* LineSeries.swift */,
+				33C56D152DD8F61B0063C183 /* SeriesApi+Extension.swift */,
+				33C56D162DD8F61B0063C183 /* SeriesObject.swift */,
+			);
+			path = Series;
+			sourceTree = "<group>";
+		};
+		33C56D1E2DD8F61B0063C183 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D172DD8F61B0063C183 /* Series */,
+				33C56D182DD8F61B0063C183 /* Chart.swift */,
+				33C56D192DD8F61B0063C183 /* LightweightCharts.swift */,
+				33C56D1A2DD8F61B0063C183 /* PriceFormatter.swift */,
+				33C56D1B2DD8F61B0063C183 /* PriceLine.swift */,
+				33C56D1C2DD8F61B0063C183 /* PriceScale.swift */,
+				33C56D1D2DD8F61B0063C183 /* TimeScale.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		33C56D212DD8F61B0063C183 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D1F2DD8F61B0063C183 /* MessageHandler.swift */,
+				33C56D202DD8F61B0063C183 /* Subscription.swift */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		33C56D252DD8F61B0063C183 /* SyncScriptEvaluating */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D222DD8F61B0063C183 /* JavaScriptMethod.swift */,
+				33C56D232DD8F61B0063C183 /* JavaScriptSyncMethod.swift */,
+				33C56D242DD8F61B0063C183 /* PromptHandler.swift */,
+			);
+			path = SyncScriptEvaluating;
+			sourceTree = "<group>";
+		};
+		33C56D2A2DD8F61B0063C183 /* Implementations */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D1E2DD8F61B0063C183 /* API */,
+				33C56D212DD8F61B0063C183 /* Subscription */,
+				33C56D252DD8F61B0063C183 /* SyncScriptEvaluating */,
+				33C56D262DD8F61B0063C183 /* JavaScriptEvaluator.swift */,
+				33C56D272DD8F61B0063C183 /* JavaScriptMessageProducer.swift */,
+				33C56D282DD8F61B0063C183 /* JavaScriptObject.swift */,
+				33C56D292DD8F61B0063C183 /* WebView.swift */,
+			);
+			path = Implementations;
+			sourceTree = "<group>";
+		};
+		33C56D362DD8F61B0063C183 /* SeriesData */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D2B2DD8F61B0063C183 /* AreaData.swift */,
+				33C56D2C2DD8F61B0063C183 /* BarData.swift */,
+				33C56D2D2DD8F61B0063C183 /* BaselineData.swift */,
+				33C56D2E2DD8F61B0063C183 /* CandlestickData.swift */,
+				33C56D2F2DD8F61B0063C183 /* HistogramData.swift */,
+				33C56D302DD8F61B0063C183 /* LineData.swift */,
+				33C56D312DD8F61B0063C183 /* OhlcData.swift */,
+				33C56D322DD8F61B0063C183 /* SeriesData.swift */,
+				33C56D332DD8F61B0063C183 /* SeriesDataType.swift */,
+				33C56D342DD8F61B0063C183 /* SingleValueSeriesData.swift */,
+				33C56D352DD8F61B0063C183 /* WhitespaceData.swift */,
+			);
+			path = SeriesData;
+			sourceTree = "<group>";
+		};
+		33C56D372DD8F61B0063C183 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D362DD8F61B0063C183 /* SeriesData */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		33C56D432DD8F61B0063C183 /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D382DD8F61B0063C183 /* BaseValueType.swift */,
+				33C56D392DD8F61B0063C183 /* LastPriceAnimationMode.swift */,
+				33C56D3A2DD8F61B0063C183 /* LineStyle.swift */,
+				33C56D3B2DD8F61B0063C183 /* LineType.swift */,
+				33C56D3C2DD8F61B0063C183 /* LineWidth.swift */,
+				33C56D3D2DD8F61B0063C183 /* MismatchDirection.swift */,
+				33C56D3E2DD8F61B0063C183 /* PriceLineOptions.swift */,
+				33C56D3F2DD8F61B0063C183 /* PriceLineSource.swift */,
+				33C56D402DD8F61B0063C183 /* PriceScaleOptions.swift */,
+				33C56D412DD8F61B0063C183 /* Rectangle.swift */,
+				33C56D422DD8F61B0063C183 /* TimeScaleOptions.swift */,
+			);
+			path = Basics;
+			sourceTree = "<group>";
+		};
+		33C56D502DD8F61B0063C183 /* ChartOptions */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D442DD8F61B0063C183 /* ChartOptions.swift */,
+				33C56D452DD8F61B0063C183 /* CrosshairLineOptions.swift */,
+				33C56D462DD8F61B0063C183 /* CrosshairOptions.swift */,
+				33C56D472DD8F61B0063C183 /* GridLineOptions.swift */,
+				33C56D482DD8F61B0063C183 /* GridOptions.swift */,
+				33C56D492DD8F61B0063C183 /* HandleScaleOptions.swift */,
+				33C56D4A2DD8F61B0063C183 /* HandleScrollOptions.swift */,
+				33C56D4B2DD8F61B0063C183 /* KineticScrollOptions.swift */,
+				33C56D4C2DD8F61B0063C183 /* LayoutOptions.swift */,
+				33C56D4D2DD8F61B0063C183 /* LocalizationOptions.swift */,
+				33C56D4E2DD8F61B0063C183 /* TrackingModeOptions.swift */,
+				33C56D4F2DD8F61B0063C183 /* WatermarkOptions.swift */,
+			);
+			path = ChartOptions;
+			sourceTree = "<group>";
+		};
+		33C56D572DD8F61B0063C183 /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D512DD8F61B0063C183 /* AreaSeriesOptions.swift */,
+				33C56D522DD8F61B0063C183 /* BarSeriesOptions.swift */,
+				33C56D532DD8F61B0063C183 /* BaselineSeriesOptions.swift */,
+				33C56D542DD8F61B0063C183 /* CandlestickSeriesOptions.swift */,
+				33C56D552DD8F61B0063C183 /* HistogramSeriesOptions.swift */,
+				33C56D562DD8F61B0063C183 /* LineSeriesOptions.swift */,
+			);
+			path = Options;
+			sourceTree = "<group>";
+		};
+		33C56D592DD8F61B0063C183 /* SeriesOptions */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D572DD8F61B0063C183 /* Options */,
+				33C56D582DD8F61B0063C183 /* SeriesOptionsCommon.swift */,
+			);
+			path = SeriesOptions;
+			sourceTree = "<group>";
+		};
+		33C56D5A2DD8F61B0063C183 /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D432DD8F61B0063C183 /* Basics */,
+				33C56D502DD8F61B0063C183 /* ChartOptions */,
+				33C56D592DD8F61B0063C183 /* SeriesOptions */,
+			);
+			path = Options;
+			sourceTree = "<group>";
+		};
+		33C56D5C2DD8F61B0063C183 /* SeriesMarker */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D5B2DD8F61B0063C183 /* SeriesMarker.swift */,
+			);
+			path = SeriesMarker;
+			sourceTree = "<group>";
+		};
+		33C56D6F2DD8F61B0063C183 /* LightweightChartsModels */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D372DD8F61B0063C183 /* Data */,
+				33C56D5A2DD8F61B0063C183 /* Options */,
+				33C56D5C2DD8F61B0063C183 /* SeriesMarker */,
+				33C56D5D2DD8F61B0063C183 /* AutoscaleInfoProvider.swift */,
+				33C56D5E2DD8F61B0063C183 /* AxisDoubleClickOptions.swift */,
+				33C56D5F2DD8F61B0063C183 /* AxisPressedMouseMoveOptions.swift */,
+				33C56D602DD8F61B0063C183 /* BarPrice.swift */,
+				33C56D612DD8F61B0063C183 /* BarsInfo.swift */,
+				33C56D622DD8F61B0063C183 /* BusinessDay.swift */,
+				33C56D632DD8F61B0063C183 /* ChartColor.swift */,
+				33C56D642DD8F61B0063C183 /* ColorType.swift */,
+				33C56D652DD8F61B0063C183 /* Coordinate.swift */,
+				33C56D662DD8F61B0063C183 /* FromToRange.swift */,
+				33C56D672DD8F61B0063C183 /* MouseEventParams.swift */,
+				33C56D682DD8F61B0063C183 /* Point.swift */,
+				33C56D692DD8F61B0063C183 /* PriceFormat.swift */,
+				33C56D6A2DD8F61B0063C183 /* SeriesType.swift */,
+				33C56D6B2DD8F61B0063C183 /* SurfaceColor.swift */,
+				33C56D6C2DD8F61B0063C183 /* TickMarkFormatter.swift */,
+				33C56D6D2DD8F61B0063C183 /* Time.swift */,
+				33C56D6E2DD8F61B0063C183 /* TogglableOptions.swift */,
+			);
+			path = LightweightChartsModels;
+			sourceTree = "<group>";
+		};
+		33C56D762DD8F61B0063C183 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D702DD8F61B0063C183 /* ChartApi.swift */,
+				33C56D712DD8F61B0063C183 /* PriceFormatterApi.swift */,
+				33C56D722DD8F61B0063C183 /* PriceLineApi.swift */,
+				33C56D732DD8F61B0063C183 /* PriceScaleApi.swift */,
+				33C56D742DD8F61B0063C183 /* SeriesApi.swift */,
+				33C56D752DD8F61B0063C183 /* TimeScaleApi.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		33C56D772DD8F61B0063C183 /* LightweightCharts */ = {
+			isa = PBXGroup;
+			children = (
+				33C56D072DD8F61B0063C183 /* Assets */,
+				33C56D0E2DD8F61B0063C183 /* Extensions */,
+				33C56D2A2DD8F61B0063C183 /* Implementations */,
+				33C56D6F2DD8F61B0063C183 /* LightweightChartsModels */,
+				33C56D762DD8F61B0063C183 /* Protocols */,
+			);
+			path = LightweightCharts;
+			sourceTree = "<group>";
+		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +526,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				33C56D772DD8F61B0063C183 /* LightweightCharts */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -171,6 +609,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
+				33C56DD72DD8F61B0063C183 /* wrapper_functions.js in Resources */,
+				33C56DD82DD8F61B0063C183 /* lightweight-charts.js in Resources */,
+				33C56DD92DD8F61B0063C183 /* content-setup.js in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,6 +699,101 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33C56D782DD8F61B0063C183 /* PriceFormatterApi.swift in Sources */,
+				33C56D792DD8F61B0063C183 /* Subscription.swift in Sources */,
+				33C56D7A2DD8F61B0063C183 /* UIColor+ColorComponents.swift in Sources */,
+				33C56D7B2DD8F61B0063C183 /* SeriesMarker.swift in Sources */,
+				33C56D7C2DD8F61B0063C183 /* PriceFormatter.swift in Sources */,
+				33C56D7D2DD8F61B0063C183 /* OhlcData.swift in Sources */,
+				33C56D7E2DD8F61B0063C183 /* CandlestickSeriesOptions.swift in Sources */,
+				33C56D7F2DD8F61B0063C183 /* JavaScriptObject.swift in Sources */,
+				33C56D802DD8F61B0063C183 /* Point.swift in Sources */,
+				33C56D812DD8F61B0063C183 /* Rectangle.swift in Sources */,
+				33C56D822DD8F61B0063C183 /* SeriesApi.swift in Sources */,
+				33C56D832DD8F61B0063C183 /* SeriesData.swift in Sources */,
+				33C56D842DD8F61B0063C183 /* TimeScaleApi.swift in Sources */,
+				33C56D852DD8F61B0063C183 /* AxisPressedMouseMoveOptions.swift in Sources */,
+				33C56D862DD8F61B0063C183 /* SeriesType.swift in Sources */,
+				33C56D872DD8F61B0063C183 /* HistogramSeriesOptions.swift in Sources */,
+				33C56D882DD8F61B0063C183 /* BaselineSeries.swift in Sources */,
+				33C56D892DD8F61B0063C183 /* BarPrice.swift in Sources */,
+				33C56D8A2DD8F61B0063C183 /* SingleValueSeriesData.swift in Sources */,
+				33C56D8B2DD8F61B0063C183 /* CandlestickData.swift in Sources */,
+				33C56D8C2DD8F61B0063C183 /* BaseValueType.swift in Sources */,
+				33C56D8D2DD8F61B0063C183 /* TrackingModeOptions.swift in Sources */,
+				33C56D8E2DD8F61B0063C183 /* BarSeriesOptions.swift in Sources */,
+				33C56D8F2DD8F61B0063C183 /* ColorType.swift in Sources */,
+				33C56D902DD8F61B0063C183 /* FromToRange.swift in Sources */,
+				33C56D912DD8F61B0063C183 /* WatermarkOptions.swift in Sources */,
+				33C56D922DD8F61B0063C183 /* HistogramSeries.swift in Sources */,
+				33C56D932DD8F61B0063C183 /* Int+ColorComponent.swift in Sources */,
+				33C56D942DD8F61B0063C183 /* HistogramData.swift in Sources */,
+				33C56D952DD8F61B0063C183 /* ChartApi.swift in Sources */,
+				33C56D962DD8F61B0063C183 /* SeriesOptionsCommon.swift in Sources */,
+				33C56D972DD8F61B0063C183 /* JavaScriptMethod.swift in Sources */,
+				33C56D982DD8F61B0063C183 /* AxisDoubleClickOptions.swift in Sources */,
+				33C56D992DD8F61B0063C183 /* ChartOptions.swift in Sources */,
+				33C56D9A2DD8F61B0063C183 /* LocalizationOptions.swift in Sources */,
+				33C56D9B2DD8F61B0063C183 /* MouseEventParams.swift in Sources */,
+				33C56D9C2DD8F61B0063C183 /* BaselineSeriesOptions.swift in Sources */,
+				33C56D9D2DD8F61B0063C183 /* PriceScale.swift in Sources */,
+				33C56D9E2DD8F61B0063C183 /* WebView.swift in Sources */,
+				33C56D9F2DD8F61B0063C183 /* Encodable+JSONString.swift in Sources */,
+				33C56DA02DD8F61B0063C183 /* LineSeriesOptions.swift in Sources */,
+				33C56DA12DD8F61B0063C183 /* LineWidth.swift in Sources */,
+				33C56DA22DD8F61B0063C183 /* JavaScriptMessageProducer.swift in Sources */,
+				33C56DA32DD8F61B0063C183 /* BaselineData.swift in Sources */,
+				33C56DA42DD8F61B0063C183 /* BarsInfo.swift in Sources */,
+				33C56DA52DD8F61B0063C183 /* PriceLineApi.swift in Sources */,
+				33C56DA62DD8F61B0063C183 /* CrosshairLineOptions.swift in Sources */,
+				33C56DA72DD8F61B0063C183 /* NSRegularExpression+Color.swift in Sources */,
+				33C56DA82DD8F61B0063C183 /* Time.swift in Sources */,
+				33C56DA92DD8F61B0063C183 /* LayoutOptions.swift in Sources */,
+				33C56DAA2DD8F61B0063C183 /* TickMarkFormatter.swift in Sources */,
+				33C56DAB2DD8F61B0063C183 /* BarSeries.swift in Sources */,
+				33C56DAC2DD8F61B0063C183 /* TimeScale.swift in Sources */,
+				33C56DAD2DD8F61B0063C183 /* CrosshairOptions.swift in Sources */,
+				33C56DAE2DD8F61B0063C183 /* SeriesObject.swift in Sources */,
+				33C56DAF2DD8F61B0063C183 /* KineticScrollOptions.swift in Sources */,
+				33C56DB02DD8F61B0063C183 /* GridLineOptions.swift in Sources */,
+				33C56DB12DD8F61B0063C183 /* SeriesApi+Extension.swift in Sources */,
+				33C56DB22DD8F61B0063C183 /* LightweightCharts.swift in Sources */,
+				33C56DB32DD8F61B0063C183 /* Bundle+Resources.swift in Sources */,
+				33C56DB42DD8F61B0063C183 /* HandleScaleOptions.swift in Sources */,
+				33C56DB52DD8F61B0063C183 /* SeriesDataType.swift in Sources */,
+				33C56DB62DD8F61B0063C183 /* PriceLine.swift in Sources */,
+				33C56DB72DD8F61B0063C183 /* AreaSeriesOptions.swift in Sources */,
+				33C56DB82DD8F61B0063C183 /* BarData.swift in Sources */,
+				33C56DB92DD8F61B0063C183 /* LastPriceAnimationMode.swift in Sources */,
+				33C56DBA2DD8F61B0063C183 /* AreaData.swift in Sources */,
+				33C56DBB2DD8F61B0063C183 /* LineType.swift in Sources */,
+				33C56DBC2DD8F61B0063C183 /* HandleScrollOptions.swift in Sources */,
+				33C56DBD2DD8F61B0063C183 /* CandlestickSeries.swift in Sources */,
+				33C56DBE2DD8F61B0063C183 /* GridOptions.swift in Sources */,
+				33C56DBF2DD8F61B0063C183 /* MessageHandler.swift in Sources */,
+				33C56DC02DD8F61B0063C183 /* PromptHandler.swift in Sources */,
+				33C56DC12DD8F61B0063C183 /* ChartColor.swift in Sources */,
+				33C56DC22DD8F61B0063C183 /* AreaSeries.swift in Sources */,
+				33C56DC32DD8F61B0063C183 /* PriceLineOptions.swift in Sources */,
+				33C56DC42DD8F61B0063C183 /* PriceScaleOptions.swift in Sources */,
+				33C56DC52DD8F61B0063C183 /* LineSeries.swift in Sources */,
+				33C56DC62DD8F61B0063C183 /* WhitespaceData.swift in Sources */,
+				33C56DC72DD8F61B0063C183 /* JavaScriptSyncMethod.swift in Sources */,
+				33C56DC82DD8F61B0063C183 /* BusinessDay.swift in Sources */,
+				33C56DC92DD8F61B0063C183 /* TogglableOptions.swift in Sources */,
+				33C56DCA2DD8F61B0063C183 /* TimeScaleOptions.swift in Sources */,
+				33C56DCB2DD8F61B0063C183 /* PriceScaleApi.swift in Sources */,
+				33C56DCC2DD8F61B0063C183 /* Coordinate.swift in Sources */,
+				33C56DCD2DD8F61B0063C183 /* MismatchDirection.swift in Sources */,
+				33C56DCE2DD8F61B0063C183 /* PriceFormat.swift in Sources */,
+				33C56DCF2DD8F61B0063C183 /* PriceLineSource.swift in Sources */,
+				33C56DD02DD8F61B0063C183 /* SurfaceColor.swift in Sources */,
+				33C56DD12DD8F61B0063C183 /* AutoscaleInfoProvider.swift in Sources */,
+				33C56DD22DD8F61B0063C183 /* Chart.swift in Sources */,
+				33C56DD32DD8F61B0063C183 /* String+UniqueString.swift in Sources */,
+				33C56DD42DD8F61B0063C183 /* LineStyle.swift in Sources */,
+				33C56DD52DD8F61B0063C183 /* LineData.swift in Sources */,
+				33C56DD62DD8F61B0063C183 /* JavaScriptEvaluator.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
