@@ -9,9 +9,9 @@ import com.tradingview.lightweightcharts.view.ChartsView
 internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
   AndroidView(
     modifier = modifier,
-    factory = { ChartsView(it) },
+    factory = ::ChartsView,
     update = {
       it.api.addAreaSeries { api -> api.setData(points.map(PriceChartPoint::toAreaData)) }
-    }
+    },
   )
 }

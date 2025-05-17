@@ -11,6 +11,7 @@ kamel = "0.8.3"
 koin = "3.5.0"
 kotlin = "1.9.23"
 kotlinx-serialization-json = "1.6.3"
+ksp = "1.9.23-1.0.19"
 ktor = "2.3.5"
 logback-classic = "1.2.12" # upgrading this to 1.4.x version causes a runtime crash...
 material3-windowSizeClass = "0.3.1"
@@ -20,6 +21,7 @@ paging = "3.3.0-alpha02-0.4.0"
 shimmer = "1.2.0"
 sqlDelight = "2.0.1"
 stately = "2.0.6"
+swift-bridge-compose = "0.1.0"
 tradingview-charts = "4.0.0"
 voyager = "1.0.0"
 
@@ -54,6 +56,8 @@ sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-ex
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
+swift-bridge-compose = { group = "co.touchlab.compose", name = "compose-swift-bridge", version.ref = "swift-bridge-compose" }
+swift-bridge-compose-skie = { group = "co.touchlab.compose", name = "compose-swift-bridge-skie", version.ref = "swift-bridge-compose" }
 tradingview-charts = { group = "com.tradingview", name = "lightweightcharts", version.ref = "tradingview-charts" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
@@ -66,4 +70,5 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
