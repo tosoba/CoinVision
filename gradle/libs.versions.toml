@@ -21,7 +21,7 @@ paging = "3.3.0-alpha02-0.4.0"
 shimmer = "1.2.0"
 sqlDelight = "2.0.1"
 stately = "2.0.6"
-swift-bridge-compose = "0.1.0"
+swift-bridge-compose = "0.1.1"
 tradingview-charts = "4.0.0"
 voyager = "1.0.0"
 

@@ -141,7 +141,7 @@ kotlin {
 }
 
 dependencies {
-  val composeSwiftBridgeKsp = "co.touchlab.compose:compose-swift-bridge-ksp:0.1.0"
+  val composeSwiftBridgeKsp = "co.touchlab.compose:compose-swift-bridge-ksp:0.1.1"
   "kspCommonMainMetadata"(composeSwiftBridgeKsp)
   "kspIosSimulatorArm64"(composeSwiftBridgeKsp)
   "kspIosArm64"(composeSwiftBridgeKsp)
