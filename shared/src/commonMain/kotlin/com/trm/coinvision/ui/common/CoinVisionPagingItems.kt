@@ -23,7 +23,7 @@ import coinvision.shared.generated.resources.no_internet_connection
 import coinvision.shared.generated.resources.retry
 import com.trm.coinvision.core.domain.exception.HttpException
 import io.ktor.client.plugins.ResponseException
-import io.ktor.utils.io.errors.IOException
+import kotlinx.io.IOException
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

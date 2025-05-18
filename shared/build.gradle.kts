@@ -11,7 +11,6 @@ plugins {
   alias(libs.plugins.sqlDelight)
   alias(libs.plugins.kotlin.serialization)
   id("com.google.devtools.ksp")
-  id("co.touchlab.skie") version "0.10.2-preview.2.1.20"
 }
 
 kotlin {
@@ -79,8 +78,6 @@ kotlin {
 
         implementation(libs.sqldelight.coroutines.extensions)
 
-        implementation(libs.swift.bridge.compose)
-
         implementation(libs.voyager.koin)
         implementation(libs.voyager.navigator)
         implementation(libs.voyager.tab.navigator)
@@ -138,46 +135,6 @@ kotlin {
       iosX64Test.dependsOn(this)
       iosArm64Test.dependsOn(this)
       iosSimulatorArm64Test.dependsOn(this)
-    }
-  }
-}
-
-dependencies {
-  val composeSwiftBridgeKsp = "co.touchlab.compose:compose-swift-bridge-ksp:0.1.1"
-  "kspCommonMainMetadata"(composeSwiftBridgeKsp)
-  "kspIosSimulatorArm64"(composeSwiftBridgeKsp)
-  "kspIosArm64"(composeSwiftBridgeKsp)
-  "kspIosX64"(composeSwiftBridgeKsp)
-  "kspAndroid"(composeSwiftBridgeKsp)
-  skieSubPlugin(libs.swift.bridge.compose.skie)
-}
-
-ksp { arg("compose-swift-bridge.defaultFactoryName", project.name.capitalized()) }
-
-tasks.withType<com.google.devtools.ksp.gradle.KspTaskNative>().configureEach {
-  options.add(SubpluginOption("apoption", "compose-swift-bridge.targetName=$target"))
-}
-
-// support for generating ksp code in commonCode
-// see https://github.com/google/ksp/issues/567
-tasks.withType<KotlinCompilationTask<*>>().configureEach {
-  if (name != "kspCommonMainKotlinMetadata") {
-    dependsOn("kspCommonMainKotlinMetadata")
-  }
-}
-
-tasks {
-  configureEach {
-    if (name.contains("kspKotlinIos")) {
-      dependsOn("kspCommonMainKotlinMetadata")
-    }
-  }
-}
-
-tasks {
-  configureEach {
-    if (name.contains("kspDebugKotlinAndroid")) {
-      dependsOn("kspCommonMainKotlinMetadata")
     }
   }
 }

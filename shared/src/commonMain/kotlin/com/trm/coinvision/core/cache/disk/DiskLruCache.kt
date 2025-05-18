@@ -4,7 +4,7 @@ import com.trm.coinvision.core.cache.util.FaultHidingSink
 import com.trm.coinvision.core.cache.util.createFile
 import com.trm.coinvision.core.cache.util.deleteContents
 import io.ktor.utils.io.core.Closeable
-import io.ktor.utils.io.errors.IOException
+import kotlinx.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
