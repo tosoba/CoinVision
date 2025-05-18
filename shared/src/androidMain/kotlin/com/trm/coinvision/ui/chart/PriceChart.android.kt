@@ -22,9 +22,4 @@ internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>
 private fun PriceChartPoint.toAreaData(): AreaData =
   AreaData(time = Time.Utc.fromDate(Date(timestamp)), value = value)
 
-@Composable
-internal actual fun PriceChartUIView(modifier: Modifier, points: List<PriceChartPoint>) {
-  throw NotImplementedError("Use PriceChart instead.")
-}
-
 actual interface ComposeSharedFactory
