@@ -15,3 +15,8 @@ internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>
     },
   )
 }
+
+@Composable
+internal actual fun PriceChartUIView(modifier: Modifier, points: List<PriceChartPoint>) {
+  throw NotImplementedError("Use PriceChart instead.")
+}

@@ -10,4 +10,4 @@ internal expect fun PriceChart(modifier: Modifier = Modifier, points: List<Price
 
 @ExpectSwiftView(type = ViewType.UIView)
 @Composable
-expect fun PriceChartUIView(modifier: Modifier = Modifier, points: List<PriceChartPoint>)
+internal expect fun PriceChartUIView(modifier: Modifier = Modifier, points: List<PriceChartPoint>)
