@@ -11,8 +11,6 @@ internal expect fun PriceChart(modifier: Modifier = Modifier, points: List<Price
 @Composable
 internal expect fun PriceChartUIView(modifier: Modifier = Modifier, points: List<PriceChartPoint>)
 
-typealias SharedFactory = ComposeSharedFactory
-
 expect interface ComposeSharedFactory
 
 val LocalSharedFactory: ProvidableCompositionLocal<ComposeSharedFactory> =
