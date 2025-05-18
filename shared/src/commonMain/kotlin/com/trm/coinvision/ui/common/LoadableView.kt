@@ -16,10 +16,8 @@ import com.trm.coinvision.core.domain.model.Failed
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.Loading
 import com.trm.coinvision.core.domain.model.Ready
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun <T : Any> LoadableView(
   modifier: Modifier = Modifier,
@@ -50,7 +48,6 @@ fun <T : Any> LoadableView(
   }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun <T : Any, S : Any> LoadableView(
   modifier: Modifier = Modifier,

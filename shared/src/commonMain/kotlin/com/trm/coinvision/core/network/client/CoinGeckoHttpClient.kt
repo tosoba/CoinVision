@@ -11,13 +11,11 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
 internal fun coinGeckoHttpClient(config: HttpClientConfig<*>.() -> Unit): HttpClient =
   HttpClient(config)
 
-@OptIn(ExperimentalSerializationApi::class)
 internal fun coinGeckoHttpClientDefaultConfig(
   logLevel: LogLevel? = null,
   cacheStorage: CacheStorage? = null,

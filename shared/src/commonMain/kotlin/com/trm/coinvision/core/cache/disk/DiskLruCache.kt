@@ -64,14 +64,14 @@ import okio.buffer
  * @constructor Create a cache which will reside in [directory]. This cache is lazily initialized on
  *   first access and will be created if it does not exist.
  */
-@OptIn(InternalCoroutinesApi::class, ExperimentalStdlibApi::class)
+@OptIn(InternalCoroutinesApi::class)
 internal class DiskLruCache(
-    fileSystem: FileSystem,
-    private val directory: Path,
-    cleanupDispatcher: CoroutineDispatcher,
-    private val maxSize: Long,
-    private val appVersion: Int = 1,
-    private val valueCount: Int = 1,
+  fileSystem: FileSystem,
+  private val directory: Path,
+  cleanupDispatcher: CoroutineDispatcher,
+  private val maxSize: Long,
+  private val appVersion: Int = 1,
+  private val valueCount: Int = 1,
 ) : AutoCloseable, SynchronizedObject() {
 
   /*
@@ -143,46 +143,46 @@ internal class DiskLruCache(
     }
 
   private fun initialize() =
-      synchronized(this) {
-          if (initialized) return
+    synchronized(this) {
+      if (initialized) return
 
-          // If a temporary file exists, delete it.
-          fileSystem.delete(journalFileTmp)
+      // If a temporary file exists, delete it.
+      fileSystem.delete(journalFileTmp)
 
-          // If a backup file exists, use it instead.
-          if (fileSystem.exists(journalFileBackup)) {
-              // If journal file also exists just delete backup file.
-              if (fileSystem.exists(journalFile)) {
-                  fileSystem.delete(journalFileBackup)
-              } else {
-                  fileSystem.atomicMove(journalFileBackup, journalFile)
-              }
-          }
-
-          // Prefer to pick up where we left off.
-          if (fileSystem.exists(journalFile)) {
-              try {
-                  readJournal()
-                  processJournal()
-                  initialized = true
-                  return
-              } catch (_: IOException) {
-                  // The journal is corrupt.
-              }
-
-              // The cache is corrupted; attempt to delete the contents of the directory.
-              // This can throw and we'll let that propagate out as it likely means there
-              // is a severe filesystem problem.
-              try {
-                  delete()
-              } finally {
-                  closed = false
-              }
-          }
-
-          writeJournal()
-          initialized = true
+      // If a backup file exists, use it instead.
+      if (fileSystem.exists(journalFileBackup)) {
+        // If journal file also exists just delete backup file.
+        if (fileSystem.exists(journalFile)) {
+          fileSystem.delete(journalFileBackup)
+        } else {
+          fileSystem.atomicMove(journalFileBackup, journalFile)
+        }
       }
+
+      // Prefer to pick up where we left off.
+      if (fileSystem.exists(journalFile)) {
+        try {
+          readJournal()
+          processJournal()
+          initialized = true
+          return
+        } catch (_: IOException) {
+          // The journal is corrupt.
+        }
+
+        // The cache is corrupted; attempt to delete the contents of the directory.
+        // This can throw and we'll let that propagate out as it likely means there
+        // is a severe filesystem problem.
+        try {
+          delete()
+        } finally {
+          closed = false
+        }
+      }
+
+      writeJournal()
+      initialized = true
+    }
 
   /** Reads the journal and initializes [lruEntries]. */
   private fun readJournal() {
@@ -201,7 +201,7 @@ internal class DiskLruCache(
           blank.isNotEmpty()
       ) {
         throw IOException(
-            "unexpected journal header: [$magic, $version, $appVersionString, $valueCountString, $blank]"
+          "unexpected journal header: [$magic, $version, $appVersionString, $valueCountString, $blank]"
         )
       }
 
@@ -294,121 +294,121 @@ internal class DiskLruCache(
 
   /** Writes [lruEntries] to a new journal file. This replaces the current journal if it exists. */
   private fun writeJournal() =
-      synchronized(this) {
-          journalWriter?.close()
+    synchronized(this) {
+      journalWriter?.close()
 
-          fileSystem.write(journalFileTmp) {
-              writeUtf8(MAGIC).writeByte('\n'.code)
-              writeUtf8(VERSION).writeByte('\n'.code)
-              writeDecimalLong(appVersion.toLong()).writeByte('\n'.code)
-              writeDecimalLong(valueCount.toLong()).writeByte('\n'.code)
-              writeByte('\n'.code)
+      fileSystem.write(journalFileTmp) {
+        writeUtf8(MAGIC).writeByte('\n'.code)
+        writeUtf8(VERSION).writeByte('\n'.code)
+        writeDecimalLong(appVersion.toLong()).writeByte('\n'.code)
+        writeDecimalLong(valueCount.toLong()).writeByte('\n'.code)
+        writeByte('\n'.code)
 
-              for (entry in lruEntries.values) {
-                  if (entry.currentEditor != null) {
-                      writeUtf8(DIRTY)
-                      writeByte(' '.code)
-                      writeUtf8(entry.key)
-                      writeByte('\n'.code)
-                  } else {
-                      writeUtf8(CLEAN)
-                      writeByte(' '.code)
-                      writeUtf8(entry.key)
-                      entry.writeLengths(this)
-                      writeByte('\n'.code)
-                  }
-              }
-          }
-
-          if (fileSystem.exists(journalFile)) {
-              fileSystem.atomicMove(journalFile, journalFileBackup)
-              fileSystem.atomicMove(journalFileTmp, journalFile)
-              fileSystem.delete(journalFileBackup)
+        for (entry in lruEntries.values) {
+          if (entry.currentEditor != null) {
+            writeUtf8(DIRTY)
+            writeByte(' '.code)
+            writeUtf8(entry.key)
+            writeByte('\n'.code)
           } else {
-              fileSystem.atomicMove(journalFileTmp, journalFile)
+            writeUtf8(CLEAN)
+            writeByte(' '.code)
+            writeUtf8(entry.key)
+            entry.writeLengths(this)
+            writeByte('\n'.code)
           }
-
-          journalWriter = newJournalWriter()
-          operationsSinceRewrite = 0
-          hasJournalErrors = false
-          mostRecentRebuildFailed = false
+        }
       }
+
+      if (fileSystem.exists(journalFile)) {
+        fileSystem.atomicMove(journalFile, journalFileBackup)
+        fileSystem.atomicMove(journalFileTmp, journalFile)
+        fileSystem.delete(journalFileBackup)
+      } else {
+        fileSystem.atomicMove(journalFileTmp, journalFile)
+      }
+
+      journalWriter = newJournalWriter()
+      operationsSinceRewrite = 0
+      hasJournalErrors = false
+      mostRecentRebuildFailed = false
+    }
 
   /**
    * Returns a snapshot of the entry named [key], or null if it doesn't exist or is not currently
    * readable. If a value is returned, it is moved to the head of the LRU queue.
    */
   fun get(key: String): Snapshot? =
-      synchronized(this) {
-          checkNotClosed()
-          validateKey(key)
-          initialize()
+    synchronized(this) {
+      checkNotClosed()
+      validateKey(key)
+      initialize()
 
-          val snapshot = lruEntries[key]?.snapshot() ?: return null
+      val snapshot = lruEntries[key]?.snapshot() ?: return null
 
-          operationsSinceRewrite++
-          journalWriter!!.apply {
-              writeUtf8(READ)
-              writeByte(' '.code)
-              writeUtf8(key)
-              writeByte('\n'.code)
-          }
-
-          if (journalRewriteRequired()) {
-              launchCleanup()
-          }
-
-          return snapshot
+      operationsSinceRewrite++
+      journalWriter!!.apply {
+        writeUtf8(READ)
+        writeByte(' '.code)
+        writeUtf8(key)
+        writeByte('\n'.code)
       }
+
+      if (journalRewriteRequired()) {
+        launchCleanup()
+      }
+
+      return snapshot
+    }
 
   /** Returns an editor for the entry named [key], or null if another edit is in progress. */
   fun edit(key: String): Editor? =
-      synchronized(this) {
-          checkNotClosed()
-          validateKey(key)
-          initialize()
+    synchronized(this) {
+      checkNotClosed()
+      validateKey(key)
+      initialize()
 
-          var entry = lruEntries[key]
+      var entry = lruEntries[key]
 
-          if (entry?.currentEditor != null) {
-              return null // Another edit is in progress.
-          }
-
-          if (entry != null && entry.lockingSnapshotCount != 0) {
-              return null // We can't write this file because a reader is still reading it.
-          }
-
-          if (mostRecentTrimFailed || mostRecentRebuildFailed) {
-              // The OS has become our enemy! If the trim job failed, it means we are storing more
-              // data than requested by the user. Do not allow edits so we do not go over that limit
-              // any further. If the journal rebuild failed, the journal writer will not be active,
-              // meaning we will not be able to record the edit, causing file leaks. In both cases,
-              // we want to retry the clean up so we can get out of this state!
-              launchCleanup()
-              return null
-          }
-
-          // Flush the journal before creating files to prevent file leaks.
-          journalWriter!!.apply {
-              writeUtf8(DIRTY)
-              writeByte(' '.code)
-              writeUtf8(key)
-              writeByte('\n'.code)
-              flush()
-          }
-
-          if (hasJournalErrors) {
-              return null // Don't edit; the journal can't be written.
-          }
-
-          if (entry == null) {
-              entry = Entry(key)
-              lruEntries[key] = entry
-          }
-          val editor = Editor(entry)
-          entry.currentEditor = editor
-          return editor
+      if (entry?.currentEditor != null) {
+        return null // Another edit is in progress.
       }
+
+      if (entry != null && entry.lockingSnapshotCount != 0) {
+        return null // We can't write this file because a reader is still reading it.
+      }
+
+      if (mostRecentTrimFailed || mostRecentRebuildFailed) {
+        // The OS has become our enemy! If the trim job failed, it means we are storing more
+        // data than requested by the user. Do not allow edits so we do not go over that limit
+        // any further. If the journal rebuild failed, the journal writer will not be active,
+        // meaning we will not be able to record the edit, causing file leaks. In both cases,
+        // we want to retry the clean up so we can get out of this state!
+        launchCleanup()
+        return null
+      }
+
+      // Flush the journal before creating files to prevent file leaks.
+      journalWriter!!.apply {
+        writeUtf8(DIRTY)
+        writeByte(' '.code)
+        writeUtf8(key)
+        writeByte('\n'.code)
+        flush()
+      }
+
+      if (hasJournalErrors) {
+        return null // Don't edit; the journal can't be written.
+      }
+
+      if (entry == null) {
+        entry = Entry(key)
+        lruEntries[key] = entry
+      }
+      val editor = Editor(entry)
+      entry.currentEditor = editor
+      return editor
+    }
 
   /**
    * Returns the number of bytes currently being used to store the values in this cache. This may be
@@ -420,70 +420,70 @@ internal class DiskLruCache(
   }
 
   private fun completeEdit(editor: Editor, success: Boolean) =
-      synchronized(this) {
-          val entry = editor.entry
-          check(entry.currentEditor == editor)
+    synchronized(this) {
+      val entry = editor.entry
+      check(entry.currentEditor == editor)
 
-          if (success && !entry.zombie) {
-              // Ensure all files that have been written to have an associated dirty file.
-              for (i in 0 until valueCount) {
-                  if (editor.written[i] && !fileSystem.exists(entry.dirtyFiles[i])) {
-                      editor.abort()
-                      return
-                  }
-              }
+      if (success && !entry.zombie) {
+        // Ensure all files that have been written to have an associated dirty file.
+        for (i in 0 until valueCount) {
+          if (editor.written[i] && !fileSystem.exists(entry.dirtyFiles[i])) {
+            editor.abort()
+            return
+          }
+        }
 
-              // Replace the clean files with the dirty ones.
-              for (i in 0 until valueCount) {
-                  val dirty = entry.dirtyFiles[i]
-                  val clean = entry.cleanFiles[i]
-                  if (fileSystem.exists(dirty)) {
-                      fileSystem.atomicMove(dirty, clean)
-                  } else {
-                      // Ensure every entry is complete.
-                      fileSystem.createFile(entry.cleanFiles[i])
-                  }
-                  val oldLength = entry.lengths[i]
-                  val newLength = fileSystem.metadata(clean).size ?: 0
-                  entry.lengths[i] = newLength
-                  size = size - oldLength + newLength
-              }
+        // Replace the clean files with the dirty ones.
+        for (i in 0 until valueCount) {
+          val dirty = entry.dirtyFiles[i]
+          val clean = entry.cleanFiles[i]
+          if (fileSystem.exists(dirty)) {
+            fileSystem.atomicMove(dirty, clean)
           } else {
-              // Discard any dirty files.
-              for (i in 0 until valueCount) {
-                  fileSystem.delete(entry.dirtyFiles[i])
-              }
+            // Ensure every entry is complete.
+            fileSystem.createFile(entry.cleanFiles[i])
           }
-
-          entry.currentEditor = null
-          if (entry.zombie) {
-              removeEntry(entry)
-              return
-          }
-
-          operationsSinceRewrite++
-          journalWriter!!.apply {
-              if (success || entry.readable) {
-                  entry.readable = true
-                  writeUtf8(CLEAN)
-                  writeByte(' '.code)
-                  writeUtf8(entry.key)
-                  entry.writeLengths(this)
-                  writeByte('\n'.code)
-              } else {
-                  lruEntries.remove(entry.key)
-                  writeUtf8(REMOVE)
-                  writeByte(' '.code)
-                  writeUtf8(entry.key)
-                  writeByte('\n'.code)
-              }
-              flush()
-          }
-
-          if (size > maxSize || journalRewriteRequired()) {
-              launchCleanup()
-          }
+          val oldLength = entry.lengths[i]
+          val newLength = fileSystem.metadata(clean).size ?: 0
+          entry.lengths[i] = newLength
+          size = size - oldLength + newLength
+        }
+      } else {
+        // Discard any dirty files.
+        for (i in 0 until valueCount) {
+          fileSystem.delete(entry.dirtyFiles[i])
+        }
       }
+
+      entry.currentEditor = null
+      if (entry.zombie) {
+        removeEntry(entry)
+        return
+      }
+
+      operationsSinceRewrite++
+      journalWriter!!.apply {
+        if (success || entry.readable) {
+          entry.readable = true
+          writeUtf8(CLEAN)
+          writeByte(' '.code)
+          writeUtf8(entry.key)
+          entry.writeLengths(this)
+          writeByte('\n'.code)
+        } else {
+          lruEntries.remove(entry.key)
+          writeUtf8(REMOVE)
+          writeByte(' '.code)
+          writeUtf8(entry.key)
+          writeByte('\n'.code)
+        }
+        flush()
+      }
+
+      if (size > maxSize || journalRewriteRequired()) {
+        launchCleanup()
+      }
+    }
 
   /** We rewrite [lruEntries] to the on-disk journal after a sufficient number of operations. */
   private fun journalRewriteRequired() = operationsSinceRewrite >= 2000
@@ -506,45 +506,45 @@ internal class DiskLruCache(
   }
 
   private fun removeEntry(entry: Entry): Boolean =
-      synchronized(this) {
-          // If we can't delete files that are still open, mark this entry as a zombie so its files
-          // will be deleted when those files are closed.
-          if (entry.lockingSnapshotCount > 0) {
-              // Mark this entry as 'DIRTY' so that if the process crashes this entry won't be used.
-              journalWriter?.apply {
-                  writeUtf8(DIRTY)
-                  writeByte(' '.code)
-                  writeUtf8(entry.key)
-                  writeByte('\n'.code)
-                  flush()
-              }
-          }
-          if (entry.lockingSnapshotCount > 0 || entry.currentEditor != null) {
-              entry.zombie = true
-              return true
-          }
-
-          for (i in 0 until valueCount) {
-              fileSystem.delete(entry.cleanFiles[i])
-              size -= entry.lengths[i]
-              entry.lengths[i] = 0
-          }
-
-          operationsSinceRewrite++
-          journalWriter?.apply {
-              writeUtf8(REMOVE)
-              writeByte(' '.code)
-              writeUtf8(entry.key)
-              writeByte('\n'.code)
-          }
-          lruEntries.remove(entry.key)
-
-          if (journalRewriteRequired()) {
-              launchCleanup()
-          }
-
-          return true
+    synchronized(this) {
+      // If we can't delete files that are still open, mark this entry as a zombie so its files
+      // will be deleted when those files are closed.
+      if (entry.lockingSnapshotCount > 0) {
+        // Mark this entry as 'DIRTY' so that if the process crashes this entry won't be used.
+        journalWriter?.apply {
+          writeUtf8(DIRTY)
+          writeByte(' '.code)
+          writeUtf8(entry.key)
+          writeByte('\n'.code)
+          flush()
+        }
       }
+      if (entry.lockingSnapshotCount > 0 || entry.currentEditor != null) {
+        entry.zombie = true
+        return true
+      }
+
+      for (i in 0 until valueCount) {
+        fileSystem.delete(entry.cleanFiles[i])
+        size -= entry.lengths[i]
+        entry.lengths[i] = 0
+      }
+
+      operationsSinceRewrite++
+      journalWriter?.apply {
+        writeUtf8(REMOVE)
+        writeByte(' '.code)
+        writeUtf8(entry.key)
+        writeByte('\n'.code)
+      }
+      lruEntries.remove(entry.key)
+
+      if (journalRewriteRequired()) {
+        launchCleanup()
+      }
+
+      return true
+    }
 
   private fun checkNotClosed() {
     check(!closed) { "cache is closed" }
@@ -552,24 +552,24 @@ internal class DiskLruCache(
 
   /** Closes this cache. Stored values will remain on the filesystem. */
   override fun close() =
-      synchronized(this) {
-          if (!initialized || closed) {
-              closed = true
-              return@synchronized
-          }
-
-          // Copying for concurrent iteration.
-          for (entry in lruEntries.values.toTypedArray()) {
-              // Prevent the edit from completing normally.
-              entry.currentEditor?.detach()
-          }
-
-          trimToSize()
-          cleanupScope.cancel()
-          journalWriter!!.close()
-          journalWriter = null
-          closed = true
+    synchronized(this) {
+      if (!initialized || closed) {
+        closed = true
+        return@synchronized
       }
+
+      // Copying for concurrent iteration.
+      for (entry in lruEntries.values.toTypedArray()) {
+        // Prevent the edit from completing normally.
+        entry.currentEditor?.detach()
+      }
+
+      trimToSize()
+      cleanupScope.cancel()
+      journalWriter!!.close()
+      journalWriter = null
+      closed = true
+    }
 
   private fun trimToSize() {
     while (size > maxSize) {
@@ -613,24 +613,24 @@ internal class DiskLruCache(
 
   /** Launch an asynchronous operation to trim files from the disk cache and update the journal. */
   private fun launchCleanup() =
-      synchronized(this) {
-          cleanupScope.launch {
-              if (!initialized || closed) return@launch
-              try {
-                  trimToSize()
-              } catch (_: IOException) {
-                  mostRecentTrimFailed = true
-              }
-              try {
-                  if (journalRewriteRequired()) {
-                      writeJournal()
-                  }
-              } catch (_: IOException) {
-                  mostRecentRebuildFailed = true
-                  journalWriter = blackholeSink().buffer()
-              }
+    synchronized(this) {
+      cleanupScope.launch {
+        if (!initialized || closed) return@launch
+        try {
+          trimToSize()
+        } catch (_: IOException) {
+          mostRecentTrimFailed = true
+        }
+        try {
+          if (journalRewriteRequired()) {
+            writeJournal()
           }
+        } catch (_: IOException) {
+          mostRecentRebuildFailed = true
+          journalWriter = blackholeSink().buffer()
+        }
       }
+    }
 
   private fun validateKey(key: String) {
     require(LEGAL_KEY_PATTERN matches key) { "keys must match regex [a-z0-9_-]{1,120}: \"$key\"" }
@@ -649,24 +649,24 @@ internal class DiskLruCache(
     fun file() = file(0)
 
     override fun close() =
-        synchronized(this@DiskLruCache) {
-            if (!closed) {
-                closed = true
+      synchronized(this@DiskLruCache) {
+        if (!closed) {
+          closed = true
 
-                cleanupScope.launch {
-                    entry.lockingSnapshotCount--
-                    if (entry.lockingSnapshotCount == 0 && entry.zombie) {
-                        cleanupScope.launch { removeEntry(entry) }
-                    }
-                }
+          cleanupScope.launch {
+            entry.lockingSnapshotCount--
+            if (entry.lockingSnapshotCount == 0 && entry.zombie) {
+              cleanupScope.launch { removeEntry(entry) }
             }
+          }
         }
+      }
 
     fun closeAndEdit(): Editor? =
-        synchronized(this@DiskLruCache) {
-            close()
-            return edit(entry.key)
-        }
+      synchronized(this@DiskLruCache) {
+        close()
+        return edit(entry.key)
+      }
   }
 
   /** Edits the values for an entry. */
@@ -682,11 +682,11 @@ internal class DiskLruCache(
      * index if committed.
      */
     private fun file(index: Int): Path =
-        synchronized(this) {
-            check(!closed) { "editor is closed" }
-            written[index] = true
-            return entry.dirtyFiles[index].also(fileSystem::createFile)
-        }
+      synchronized(this) {
+        check(!closed) { "editor is closed" }
+        written[index] = true
+        return entry.dirtyFiles[index].also(fileSystem::createFile)
+      }
 
     fun file() = file(0)
 
@@ -708,10 +708,10 @@ internal class DiskLruCache(
 
     /** Commit the edit and open a new [Snapshot] atomically. */
     fun commitAndGet(): Snapshot? =
-        synchronized(this) {
-            commit()
-            return get(entry.key)
-        }
+      synchronized(this) {
+        commit()
+        return get(entry.key)
+      }
 
     /**
      * Aborts this edit. This releases the edit lock so another edit may be started on the same key.
@@ -720,13 +720,13 @@ internal class DiskLruCache(
 
     /** Complete this edit either successfully or unsuccessfully. */
     private fun complete(success: Boolean): Unit =
-        synchronized(this) {
-            check(!closed) { "editor is closed" }
-            if (entry.currentEditor == this) {
-                completeEdit(this, success)
-            }
-            closed = true
+      synchronized(this) {
+        check(!closed) { "editor is closed" }
+        if (entry.currentEditor == this) {
+          completeEdit(this, success)
         }
+        closed = true
+      }
   }
 
   inner class Entry(val key: String) {

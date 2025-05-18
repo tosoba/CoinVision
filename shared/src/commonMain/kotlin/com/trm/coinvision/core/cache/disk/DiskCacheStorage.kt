@@ -102,7 +102,7 @@ internal class DiskCacheStorage(
       expires = expirationTime,
       headers = headers.build(),
       varyKeys = varyKeys,
-      body = body
+      body = body,
     )
   }
 

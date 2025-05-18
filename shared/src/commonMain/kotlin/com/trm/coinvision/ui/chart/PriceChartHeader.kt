@@ -1,6 +1,5 @@
 package com.trm.coinvision.ui.chart
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -30,14 +29,13 @@ import com.trm.coinvision.core.domain.model.TokenMarketDataDTO
 import com.trm.coinvision.ui.common.LoadableView
 import com.trm.coinvision.ui.common.SegmentedButton
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PriceChartHeader(
   modifier: Modifier = Modifier,
   daysPeriodScrollState: ScrollState = rememberScrollState(),
   marketData: Loadable<TokenMarketDataDTO> = Empty,
   chartPeriod: MarketChartDaysPeriod = MarketChartDaysPeriod.DAY,
-  onChartPeriodClick: (MarketChartDaysPeriod) -> Unit = {}
+  onChartPeriodClick: (MarketChartDaysPeriod) -> Unit = {},
 ) {
   Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
     SegmentedButton(
@@ -45,16 +43,12 @@ internal fun PriceChartHeader(
       items = MarketChartDaysPeriod.entries.toList(),
       selectedItem = chartPeriod,
       label = MarketChartDaysPeriod::label,
-      onItemClick = onChartPeriodClick
+      onItemClick = onChartPeriodClick,
     )
 
     Spacer(modifier = Modifier.width(5.dp))
 
-    LoadableView(
-      loadable = marketData,
-      loadingContent = {},
-      failedContent = {},
-    ) { marketData ->
+    LoadableView(loadable = marketData, loadingContent = {}, failedContent = {}) { marketData ->
       val price = remember(marketData) { marketData.currentPrice?.usd?.decimalFormat() }
       val priceChange =
         remember(marketData, chartPeriod) {
@@ -87,7 +81,7 @@ internal fun PriceChartHeader(
                         priceChange.startsWith("-") -> Color.Red
                         else -> Color.Transparent
                       }
-                  ),
+                  )
             ) {
               Text(
                 modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),

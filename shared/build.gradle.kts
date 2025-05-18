@@ -7,10 +7,11 @@ plugins {
   kotlin("native.cocoapods")
   alias(libs.plugins.androidLibrary)
   alias(libs.plugins.jetbrainsCompose)
+  alias(libs.plugins.compose.compiler)
   alias(libs.plugins.sqlDelight)
   alias(libs.plugins.kotlin.serialization)
   id("com.google.devtools.ksp")
-  id("co.touchlab.skie") version "0.10.0"
+  id("co.touchlab.skie") version "0.10.2-preview.2.1.20"
 }
 
 kotlin {
@@ -45,6 +46,7 @@ kotlin {
       dependencies {
         implementation(compose.foundation)
         implementation(compose.material3)
+        implementation(compose.materialIconsExtended)
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
         implementation(compose.runtime)
@@ -150,9 +152,7 @@ dependencies {
   skieSubPlugin(libs.swift.bridge.compose.skie)
 }
 
-ksp {
-  arg("compose-swift-bridge.defaultFactoryName", project.name.capitalized())
-}
+ksp { arg("compose-swift-bridge.defaultFactoryName", project.name.capitalized()) }
 
 tasks.withType<com.google.devtools.ksp.gradle.KspTaskNative>().configureEach {
   options.add(SubpluginOption("apoption", "compose-swift-bridge.targetName=$target"))
@@ -166,13 +166,27 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
   }
 }
 
-kotlin.sourceSets.commonMain {
-  kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+tasks {
+  configureEach {
+    if (name.contains("kspKotlinIos")) {
+      dependsOn("kspCommonMainKotlinMetadata")
+    }
+  }
 }
+
+tasks {
+  configureEach {
+    if (name.contains("kspDebugKotlinAndroid")) {
+      dependsOn("kspCommonMainKotlinMetadata")
+    }
+  }
+}
+
+kotlin.sourceSets.commonMain { kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin") }
 
 android {
   namespace = "com.trm.coinvision"
-  compileSdk = 34
+  compileSdk = 35
   defaultConfig { minSdk = 21 }
 
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

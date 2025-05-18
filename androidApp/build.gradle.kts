@@ -1,7 +1,8 @@
 plugins {
   kotlin("multiplatform")
   id("com.android.application")
-  id("org.jetbrains.compose")
+  alias(libs.plugins.jetbrainsCompose)
+  alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -20,7 +21,7 @@ kotlin {
 
 android {
   namespace = "com.trm.coinvision.android"
-  compileSdk = 34
+  compileSdk = 35
 
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
@@ -32,7 +33,7 @@ android {
     versionName = "1.0"
   }
 
-  packagingOptions { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
+  packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
 
   buildTypes { getByName("release") { isMinifyEnabled = false } }
 

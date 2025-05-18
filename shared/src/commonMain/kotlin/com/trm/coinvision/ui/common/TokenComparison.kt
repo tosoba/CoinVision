@@ -27,10 +27,8 @@ import coinvision.shared.generated.resources.token_comparison_data_incomplete
 import coinvision.shared.generated.resources.would_be_worth
 import com.trm.coinvision.core.common.util.ext.decimalFormat
 import com.trm.coinvision.core.domain.model.TokenDTO
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TokenComparison(
   modifier: Modifier = Modifier,

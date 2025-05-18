@@ -24,10 +24,8 @@ import coinvision.shared.generated.resources.retry
 import com.trm.coinvision.core.domain.exception.HttpException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.utils.io.errors.IOException
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun CoinVisionRetryRow(
   modifier: Modifier = Modifier,
@@ -52,7 +50,6 @@ internal fun CoinVisionProgressIndicator(modifier: Modifier = Modifier) {
   }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun CoinVisionRetryColumn(
   modifier: Modifier = Modifier,
@@ -70,7 +67,6 @@ internal fun CoinVisionRetryColumn(
   }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Throwable.errorText(): String =
   stringResource(

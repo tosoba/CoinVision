@@ -39,12 +39,10 @@ import com.trm.coinvision.ui.common.TokenComparison
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 object CompareTokensTab : Tab {
-  @OptIn(ExperimentalResourceApi::class)
   @Composable
   override fun Content() {
     val mainTokensSearchBarViewModel =
@@ -173,7 +171,6 @@ object CompareTokensTab : Tab {
     }
   }
 
-  @OptIn(ExperimentalResourceApi::class)
   override val options: TabOptions
     @Composable
     get() =

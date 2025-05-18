@@ -1,6 +1,5 @@
 package com.trm.coinvision.ui.tokensList
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -66,7 +65,6 @@ import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -146,7 +144,6 @@ object TokensListTab : Tab {
     }
   }
 
-  @OptIn(ExperimentalResourceApi::class)
   override val options: TabOptions
     @Composable
     get() =
@@ -157,7 +154,6 @@ object TokensListTab : Tab {
       )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TokenPotentialComparisonLazyColumn(
   modifier: Modifier = Modifier,
@@ -206,14 +202,14 @@ private fun TokenPotentialComparisonLazyColumn(
           ?.potential
           ?.token
           ?.symbol
-          ?.let {
+          ?.let { symbol ->
             stickyHeader {
               TokenPotentialComparisonHeader(
                 modifier =
                   Modifier.fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.background)
                     .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                tokenSymbol = it,
+                tokenSymbol = symbol,
               )
             }
           }
@@ -251,7 +247,6 @@ private fun TokenPotentialComparisonLazyColumn(
   }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
   AutoSizeText(
@@ -272,7 +267,6 @@ private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenS
   )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TokenPotentialComparisonItem(
   modifier: Modifier = Modifier,

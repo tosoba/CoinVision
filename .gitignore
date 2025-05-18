@@ -12,3 +12,4 @@ xcuserdata
 /iosApp/Podfile.lock
 /iosApp/iosApp.xcodeproj/*
 /iosApp/iosApp.xcworkspace/*
+.kotlin

@@ -3,7 +3,6 @@ package com.trm.coinvision.ui.tokensSearchBar
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -55,7 +54,6 @@ import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.flowOf
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -78,11 +76,7 @@ internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSea
 }
 
 @Composable
-@OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class,
-  ExperimentalResourceApi::class,
-)
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun TokensSearchBar(
   modifier: Modifier = Modifier,
   query: String = "",
@@ -140,7 +134,7 @@ internal fun TokensSearchBar(
           is LoadState.Error -> {
             item {
               CoinVisionRetryRow(
-                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
+                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItem(),
                 text = prepend.error.errorText(),
                 onRetryClick = tokens::retry,
               )
@@ -156,7 +150,7 @@ internal fun TokensSearchBar(
           is LoadState.Error -> {
             item {
               CoinVisionRetryColumn(
-                modifier = Modifier.fillParentMaxSize().animateItemPlacement(),
+                modifier = Modifier.fillParentMaxSize().animateItem(),
                 text = refresh.error.errorText(),
                 onRetryClick = tokens::retry,
               )
@@ -165,7 +159,7 @@ internal fun TokensSearchBar(
           LoadState.Loading -> {
             items(100) {
               ListItem(
-                modifier = Modifier.animateItemPlacement(),
+                modifier = Modifier.animateItem(),
                 headlineContent = { Box(modifier = Modifier.shimmerListItemContent()) },
                 supportingContent = { Box(modifier = Modifier.shimmerListItemContent()) },
                 leadingContent = { TokenSymbol(modifier = Modifier.shimmer().tokenSymbolShape()) },
@@ -176,7 +170,7 @@ internal fun TokensSearchBar(
             items(count = tokens.itemCount, key = tokens.itemKey(TokenListItemDTO::id)) { index ->
               tokens[index]?.let { token ->
                 ListItem(
-                  modifier = Modifier.clickable { onTokenSelected(token) }.animateItemPlacement(),
+                  modifier = Modifier.clickable { onTokenSelected(token) }.animateItem(),
                   headlineContent = {
                     Text(text = token.name, style = MaterialTheme.typography.titleMedium)
                   },
@@ -209,16 +203,14 @@ internal fun TokensSearchBar(
           is LoadState.Error -> {
             item {
               CoinVisionRetryRow(
-                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItemPlacement(),
+                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItem(),
                 text = append.error.errorText(),
                 onRetryClick = tokens::retry,
               )
             }
           }
           LoadState.Loading -> {
-            item {
-              CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItemPlacement())
-            }
+            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItem()) }
           }
           else -> {}
         }
