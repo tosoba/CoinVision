@@ -14,18 +14,18 @@ fun TokenImageOrSymbol(
     symbol: String,
     name: String
 ) {
-  image?.let {
-      KamelImage(
-          modifier = modifier,
-          resource = asyncPainterResource(data = Url(it)),
-          contentDescription = name,
-          onFailure = { TokenSymbol(symbol = symbol) },
-          onLoading = {
-              TokenSymbol(
-                  symbol = symbol,
-                  modifier = Modifier.tokenSymbolShape().shimmer()
-              )
-          }
-      )
-  } ?: run { TokenSymbol(symbol = symbol) }
+    image?.let {
+        KamelImage(
+            modifier = modifier,
+            resource = { asyncPainterResource(data = Url(it)) },
+            contentDescription = name,
+            onFailure = { TokenSymbol(symbol = symbol) },
+            onLoading = {
+                TokenSymbol(
+                    symbol = symbol,
+                    modifier = Modifier.tokenSymbolShape().shimmer()
+                )
+            }
+        )
+    } ?: run { TokenSymbol(symbol = symbol) }
 }
