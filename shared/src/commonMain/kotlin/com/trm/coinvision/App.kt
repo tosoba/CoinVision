@@ -10,17 +10,19 @@ import com.trm.coinvision.core.common.util.LocalHeightSizeClass
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.MainScreen
 import com.trm.coinvision.ui.common.coinVisionShimmerTheme
+import com.trm.coinvision.ui.common.kamelConfig
 import com.valentinilk.shimmer.LocalShimmerTheme
+import io.kamel.image.config.LocalKamelConfig
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun App() {
   val windowSizeClass = calculateWindowSizeClass()
-
   CompositionLocalProvider(
     LocalWidthSizeClass provides windowSizeClass.widthSizeClass,
     LocalHeightSizeClass provides windowSizeClass.heightSizeClass,
-    LocalShimmerTheme provides coinVisionShimmerTheme
+    LocalShimmerTheme provides coinVisionShimmerTheme,
+    LocalKamelConfig provides kamelConfig,
   ) {
     MaterialTheme { Navigator(MainScreen) }
   }

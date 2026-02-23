@@ -30,6 +30,8 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat"
 bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
+kamel-decoder-image-bitmap = { group = "media.kamel", name = "kamel-decoder-image-bitmap", version.ref = "kamel" }
+kamel-decoder-image-vector = { group = "media.kamel", name = "kamel-decoder-image-vector", version.ref = "kamel" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }

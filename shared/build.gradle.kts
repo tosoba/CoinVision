@@ -1,7 +1,3 @@
-import org.gradle.internal.extensions.stdlib.capitalized
-import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-
 plugins {
   alias(libs.plugins.kotlinMultiplatform)
   kotlin("native.cocoapods")
@@ -46,13 +42,14 @@ kotlin {
         implementation(compose.foundation)
         implementation(compose.material3)
         implementation(compose.materialIconsExtended)
-        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
         implementation(compose.runtime)
 
         implementation(libs.bignum)
 
         implementation(libs.kamel)
+        implementation(libs.kamel.decoder.image.bitmap)
+        implementation(libs.kamel.decoder.image.vector)
 
         api(libs.koin.core)
 
