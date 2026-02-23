@@ -1,9 +1,7 @@
 package com.trm.coinvision.core.data.source
 
+import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import app.cash.paging.PagingSource
-import app.cash.paging.PagingSourceLoadResultError
-import app.cash.paging.PagingSourceLoadResultPage
 import com.trm.coinvision.core.domain.model.FiatCurrency
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.network.client.CoinGeckoApiClient
@@ -29,7 +27,7 @@ internal class TokenListNetworkPagingSource(
           null
         }
       if (query != null && ids.isNullOrEmpty()) {
-        return PagingSourceLoadResultPage(emptyList(), null, null)
+        return LoadResult.Page(emptyList(), null, null)
       }
 
       val tokens =
@@ -38,18 +36,18 @@ internal class TokenListNetworkPagingSource(
             vsFiatCurrency = FiatCurrency.USD,
             ids = ids,
             page = page,
-            perPage = params.loadSize
+            perPage = params.loadSize,
           )
           .toTokenListItems()
-      PagingSourceLoadResultPage(
+      LoadResult.Page(
         data = tokens,
         prevKey = (page - 1).takeIf { it >= FIRST_PAGE },
-        nextKey = (page + 1).takeIf { tokens.size == params.loadSize }
+        nextKey = (page + 1).takeIf { tokens.size == params.loadSize },
       )
     } catch (ex: CancellationException) {
       throw ex
     } catch (ex: Exception) {
-      PagingSourceLoadResultError(ex)
+      LoadResult.Error(ex)
     }
   }
 }

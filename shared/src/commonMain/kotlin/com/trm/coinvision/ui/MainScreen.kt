@@ -72,7 +72,7 @@ private fun RowScope.TabNavigationBarItem(tab: Tab) {
     selected = tabNavigator.current.key == tab.key,
     onClick = { tabNavigator.current = tab },
     icon = { TabNavigationItemIcon(tab) },
-    label = { Text(tab.options.title) }
+    label = { Text(tab.options.title) },
   )
 }
 
@@ -83,7 +83,7 @@ private fun TabNavigationRailItem(tab: Tab) {
     selected = tabNavigator.current.key == tab.key,
     onClick = { tabNavigator.current = tab },
     icon = { TabNavigationItemIcon(tab) },
-    label = { Text(tab.options.title) }
+    label = { Text(tab.options.title) },
   )
 }
 
