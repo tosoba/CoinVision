@@ -67,6 +67,14 @@ internal class DiskCacheStorage(
     return find(url, emptyMap())?.let(::setOf) ?: emptySet()
   }
 
+  override suspend fun remove(url: Url, varyKeys: Map<String, String>) {
+    diskLruCache.remove(url.hash())
+  }
+
+  override suspend fun removeAll(url: Url) {
+    diskLruCache.remove(url.hash())
+  }
+
   private fun readCache(source: BufferedSource): CachedResponseData {
     val url = source.readUtf8Line()!!
     val status = HttpStatusCode(source.readInt(), source.readUtf8Line()!!)

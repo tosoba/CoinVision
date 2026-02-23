@@ -140,7 +140,7 @@ kotlin.sourceSets.commonMain { kotlin.srcDir("build/generated/ksp/metadata/commo
 
 android {
   namespace = "com.trm.coinvision"
-  compileSdk = 35
+  compileSdk = 36
   defaultConfig { minSdk = 21 }
 
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

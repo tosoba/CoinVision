@@ -13,13 +13,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 internal class CoinVisionDatabase(
   databaseDriverFactory: DriverFactory,
-  private val dispatcher: CoroutineDispatcher
+  private val dispatcher: CoroutineDispatcher,
 ) {
   private val database: CoinVisionDb =
     CoinVisionDb(
@@ -37,7 +37,7 @@ internal class CoinVisionDatabase(
         name = token.name,
         image = token.image,
         id_ = token.id,
-        updatedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        updatedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
       )
     }
   }
@@ -50,7 +50,7 @@ internal class CoinVisionDatabase(
         name = token.name,
         image = token.image,
         id_ = token.id,
-        updatedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        updatedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
       )
     }
   }
