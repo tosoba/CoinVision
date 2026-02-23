@@ -1,6 +1,5 @@
 package com.trm.coinvision.ui.compareTokens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -156,7 +156,7 @@ object CompareTokensTab : Tab {
         modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
         onClick = compareTokensScreenModel::onSwapTokensClick,
       ) {
-        Image(
+        Icon(
           painter =
             painterResource(
               if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {

@@ -1,6 +1,9 @@
 package com.trm.coinvision
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
@@ -24,6 +27,10 @@ fun App() {
     LocalShimmerTheme provides coinVisionShimmerTheme,
     LocalKamelConfig provides kamelConfig,
   ) {
-    MaterialTheme { Navigator(MainScreen) }
+    MaterialTheme(
+      colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+    ) {
+      Navigator(MainScreen)
+    }
   }
 }
