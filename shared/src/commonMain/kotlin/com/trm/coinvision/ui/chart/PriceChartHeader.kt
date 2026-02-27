@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -67,7 +68,7 @@ internal fun PriceChartHeader(
           Text(
             modifier = Modifier.basicMarquee(),
             text = "$price$",
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
           )
           if (priceChange != null)
@@ -86,7 +87,13 @@ internal fun PriceChartHeader(
               Text(
                 modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
                 text = "$priceChange%",
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
+                color =
+                  when {
+                    priceChange.startsWith("+") -> Color.Black
+                    priceChange.startsWith("-") -> Color.White
+                    else -> MaterialTheme.colorScheme.onBackground
+                  },
                 maxLines = 1,
               )
             }

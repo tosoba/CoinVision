@@ -301,7 +301,7 @@ private fun TokenPotentialComparisonItem(
         Text(
           modifier = Modifier.basicMarquee(),
           text = subjectToken.symbol.uppercase(),
-          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+          style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
           maxLines = 1,
         )
         Text(modifier = Modifier.basicMarquee(), text = subjectToken.name, maxLines = 1)
@@ -323,7 +323,7 @@ private fun TokenPotentialComparisonItem(
           Text(
             modifier = Modifier.basicMarquee(),
             text = "$potentialPriceFormatted$",
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
           )
           Box(
@@ -348,7 +348,20 @@ private fun TokenPotentialComparisonItem(
             Text(
               modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
               text = potentialUpsideFormatted ?: "N/A",
-              fontWeight = FontWeight.SemiBold,
+              fontWeight = FontWeight.Medium,
+              color =
+                when {
+                  potentialUpsideFormatted?.startsWith("+") == true ||
+                    potentialUpsideFormatted?.endsWith("x") == true -> {
+                    Color.Black
+                  }
+                  potentialUpsideFormatted?.startsWith("-") == true -> {
+                    Color.White
+                  }
+                  else -> {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                  }
+                },
               maxLines = 1,
             )
           }
