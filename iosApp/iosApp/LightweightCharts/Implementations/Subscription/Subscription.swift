@@ -6,7 +6,7 @@ enum Subscription: String {
     case visibleTimeRangeChange = "VisibleTimeRangeChangeSubscriber"
     case visibleLogicalRangeChange = "VisibleLogicalRangeChangeSubscriber"
     case timeScaleSizeChange = "TimeScaleSizeChangeSubscriber"
-    
+
     var jsRepresentation: String {
         switch self {
         case .click:
@@ -21,5 +21,4 @@ enum Subscription: String {
             return "SizeChange"
         }
     }
-    
 }

@@ -1,7 +1,6 @@
 import Foundation
 
 public struct HistogramSeriesOptions: SeriesOptionsCommon {
-    
     public var lastValueVisible: Bool?
     public var title: String?
     public var priceScaleId: String?
@@ -17,10 +16,10 @@ public struct HistogramSeriesOptions: SeriesOptionsCommon {
     public var baseLineWidth: LineWidth?
     public var baseLineStyle: LineStyle?
     public var autoscaleInfoProvider: AutoscaleInfoProvider?
-    
+
     public var color: ChartColor?
     public var base: Double?
-    
+
     public init(lastValueVisible: Bool? = nil,
                 title: String? = nil,
                 priceScaleId: String? = nil,
@@ -37,7 +36,8 @@ public struct HistogramSeriesOptions: SeriesOptionsCommon {
                 baseLineStyle: LineStyle? = nil,
                 autoscaleInfoProvider: AutoscaleInfoProvider? = nil,
                 color: ChartColor? = nil,
-                base: Double? = nil) {
+                base: Double? = nil)
+    {
         self.lastValueVisible = lastValueVisible
         self.title = title
         self.priceScaleId = priceScaleId
@@ -56,5 +56,4 @@ public struct HistogramSeriesOptions: SeriesOptionsCommon {
         self.color = color
         self.base = base
     }
-    
 }

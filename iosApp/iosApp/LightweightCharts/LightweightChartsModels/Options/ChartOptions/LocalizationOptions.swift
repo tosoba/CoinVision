@@ -1,7 +1,6 @@
 import Foundation
 
 public struct LocalizationOptions {
-    
     // swiftlint:disable line_length
     /**
      * Current locale, which will be used for formatting dates.
@@ -9,7 +8,7 @@ public struct LocalizationOptions {
      */
     public var locale: String?
     // swiftlint:enable line_length
-    
+
     /**
      * User-defined function for price formatting.
      * Could be used for some specific cases, that could not be covered with PriceFormat
@@ -22,7 +21,7 @@ public struct LocalizationOptions {
             priceFormatterJSFunction = newValue != nil ? JSFunction(function: newValue!) : nil
         }
     }
-    
+
     /**
      * User-defined function for time formatting.
      */
@@ -34,7 +33,7 @@ public struct LocalizationOptions {
             timeFormatterJSFunction = newValue != nil ? JSFunction(function: newValue!) : nil
         }
     }
-    
+
     /**
      * Date formatting string.
      * Might contains `yyyy`, `yy`, `MMMM`, `MMM`, `MM` and `dd` literals
@@ -42,28 +41,27 @@ public struct LocalizationOptions {
      * Ignored if timeFormatter has been specified.
      */
     public var dateFormat: String?
-    
+
     var priceFormatterJSFunction: JSFunction<BarPrice, String>?
     var timeFormatterJSFunction: JSFunction<EventTime, String>?
-    
+
     public init(locale: String? = nil,
                 dateFormat: String? = nil,
                 priceFormatter: JavaScriptMethod<BarPrice, String>? = nil,
-                timeFormatter: JavaScriptMethod<EventTime, String>? = nil) {
+                timeFormatter: JavaScriptMethod<EventTime, String>? = nil)
+    {
         self.locale = locale
         self.dateFormat = dateFormat
         self.priceFormatter = priceFormatter
         self.timeFormatter = timeFormatter
     }
-    
 }
 
 // MARK: - Codable
+
 extension LocalizationOptions: Codable {
-    
     enum CodingKeys: String, CodingKey {
         case locale
         case dateFormat
     }
-    
 }

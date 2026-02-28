@@ -2,6 +2,7 @@
 import Foundation
 
 // MARK: -
+
 public enum EventTime {
     case utc(timestamp: Double)
     case businessDay(BusinessDay)
@@ -9,6 +10,7 @@ public enum EventTime {
 }
 
 // MARK: -
+
 public enum EventPrices {
     case barData(BarData)
     case lineData(LineData)
@@ -16,70 +18,70 @@ public enum EventPrices {
 }
 
 // MARK: -
+
 public struct TouchMouseEventData: Codable {
-    
     /**
      * The X coordinate of the mouse pointer in local (DOM content) coordinates.
      */
-    public let  clientX: Double?
-    
+    public let clientX: Double?
+
     /**
      * The Y coordinate of the mouse pointer in local (DOM content) coordinates.
      */
-    public let  clientY: Double?
-    
+    public let clientY: Double?
+
     /**
      * The X coordinate of the mouse pointer relative to the whole document.
      */
-    public let  pageX: Double?
-    
+    public let pageX: Double?
+
     /**
      * The Y coordinate of the mouse pointer relative to the whole document.
      */
-    public let  pageY: Double?
-    
+    public let pageY: Double?
+
     /**
      * The X coordinate of the mouse pointer in global (screen) coordinates.
      */
-    public let  screenX: Double?
-    
+    public let screenX: Double?
+
     /**
      * The Y coordinate of the mouse pointer in global (screen) coordinates.
      */
-    public let  screenY: Double?
-    
+    public let screenY: Double?
+
     /**
      * The X coordinate of the mouse pointer relative to the chart / price axis / time axis canvas element.
      */
-    public let  localX: Double?
-    
+    public let localX: Double?
+
     /**
      * The Y coordinate of the mouse pointer relative to the chart / price axis / time axis canvas element.
      */
-    public let  localY: Double?
-    
+    public let localY: Double?
+
     /**
      * Returns a boolean value that is true if the Ctrl key was active when the key event was generated.
      */
-    public let  ctrlKey: Bool?
-    
+    public let ctrlKey: Bool?
+
     /**
      * Returns a boolean value that is true if the Alt (Option or ⌥ on macOS) key was active when the
      * key event was generated.
      */
-    public let  altKey: Bool?
-    
+    public let altKey: Bool?
+
     /**
      * Returns a boolean value that is true if the Shift key was active when the key event was generated.
      */
-    public let  shiftKey: Bool?
-    
+    public let shiftKey: Bool?
+
     /**
      * Returns a boolean value that is true if the Meta key (on Mac keyboards, the ⌘ Command key; on
      * Windows keyboards, the Windows key (⊞)) was active when the key event was generated.
      */
-    public let  metaKey: Bool?
-    
+    public let metaKey: Bool?
+
     public init(clientX: Double?,
                 clientY: Double?,
                 pageX: Double?,
@@ -91,7 +93,8 @@ public struct TouchMouseEventData: Codable {
                 ctrlKey: Bool?,
                 altKey: Bool?,
                 shiftKey: Bool?,
-                metaKey: Bool?) {
+                metaKey: Bool?)
+    {
         self.clientX = clientX
         self.clientY = clientY
         self.pageX = pageX
@@ -105,44 +108,41 @@ public struct TouchMouseEventData: Codable {
         self.shiftKey = shiftKey
         self.metaKey = metaKey
     }
-    
 }
 
-
 // MARK: -
+
 public struct MouseEventParams: Codable {
-    
     public let time: EventTime?
     public let logical: Int?
     public let point: Point?
     public let hoveredObjectId: Int?
     public let sourceEvent: TouchMouseEventData?
-    
+
     public let hoveredSeries: String?
-    
+
     private let seriesData: [String: EventPrices?]
-    
+
     public init(time: EventTime?, logical: Int?, point: Point?, hoveredObjectId: Int?, sourceEvent: TouchMouseEventData?, hoveredSeries: String?) {
         self.time = time
         self.logical = logical
         self.point = point
         self.hoveredObjectId = hoveredObjectId
         self.sourceEvent = sourceEvent
-        self.seriesData = [:]
+        seriesData = [:]
         self.hoveredSeries = hoveredSeries
     }
-    
+
     public func price(forSeries series: SeriesObject) -> EventPrices? {
         seriesData[series.jsName] ?? nil
     }
-    
 }
 
 // MARK: - EventTime Cadable
+
 extension EventTime: Codable {
-    
     // MARK: Decodable
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let utcTimestamp = try? container.decode(Double.self) {
@@ -156,9 +156,9 @@ extension EventTime: Codable {
                                                    debugDescription: "Error decoding \(type(of: self))")
         }
     }
-    
+
     // MARK: Encodable
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -170,14 +170,13 @@ extension EventTime: Codable {
             try container.encode(businessDayString)
         }
     }
-    
 }
 
 // MARK: - EventPrices Cadable
+
 extension EventPrices: Codable {
-    
     // MARK: Decodable
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let lineData = try? container.decode(LineData.self), lineData.value != nil {
@@ -188,9 +187,9 @@ extension EventPrices: Codable {
             self = .none
         }
     }
-    
+
     // MARK: Encodable
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -202,5 +201,4 @@ extension EventPrices: Codable {
             break
         }
     }
-    
 }

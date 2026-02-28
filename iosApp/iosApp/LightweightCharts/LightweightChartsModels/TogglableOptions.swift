@@ -6,8 +6,8 @@ public enum TogglableOptions<Options> {
 }
 
 // MARK: - Codable
+
 extension TogglableOptions: Codable where Options: Codable {
-    
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let enabled = try? container.decode(Bool.self) {
@@ -21,7 +21,7 @@ extension TogglableOptions: Codable where Options: Codable {
             )
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -31,5 +31,4 @@ extension TogglableOptions: Codable where Options: Codable {
             try container.encode(enabled)
         }
     }
-    
 }

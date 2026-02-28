@@ -4,7 +4,6 @@ import Foundation
  Structure describing a drawing style of the candlestick chart
  */
 public struct CandlestickSeriesOptions: SeriesOptionsCommon {
-    
     public var lastValueVisible: Bool?
     public var title: String?
     public var priceScaleId: String?
@@ -20,59 +19,59 @@ public struct CandlestickSeriesOptions: SeriesOptionsCommon {
     public var baseLineWidth: LineWidth?
     public var baseLineStyle: LineStyle?
     public var autoscaleInfoProvider: AutoscaleInfoProvider?
-    
+
     /**
      Color of rising candlesticks
      */
     public var upColor: ChartColor?
-    
+
     /**
      Color of falling candlesticks
      */
     public var downColor: ChartColor?
-    
+
     /**
      Flag to draw/hide candlestick wicks
      */
     public var wickVisible: Bool?
-    
+
     /**
      Flag to draw/hide candlestick borders around bodies
      */
     public var borderVisible: Bool?
-    
+
     /**
      * Color of borders around candles' bodies. Ignored if borderVisible == false
      * If specified, it overrides both borderUpColor and borderDownColor options
      */
     public var borderColor: ChartColor?
-    
+
     /**
      Color of the border of rising candlesticks. Ignored if borderVisible == false or borderColor is specified
      */
     public var borderUpColor: ChartColor?
-    
+
     /**
      Color of the border of rising candlesticks. Ignored if borderVisible == false or borderColor is specified
      */
     public var borderDownColor: ChartColor?
-    
+
     /**
      * Color of candlestick wicks. Ignored if wickVisible == false
      * If specified, it overrides both wickUpColor and wickDownColor options
      */
     public var wickColor: ChartColor?
-    
+
     /**
      Color of rising candlestick wicks. Ignored if wickVisible == false or wickColor is specified
      */
     public var wickUpColor: ChartColor?
-    
+
     /**
      Color of falling candlestick wicks. Ignored if wickVisible == false or wickColor is specified
      */
     public var wickDownColor: ChartColor?
-    
+
     public init(lastValueVisible: Bool? = nil,
                 title: String? = nil,
                 priceScaleId: String? = nil,
@@ -97,7 +96,8 @@ public struct CandlestickSeriesOptions: SeriesOptionsCommon {
                 borderDownColor: ChartColor? = nil,
                 wickColor: ChartColor? = nil,
                 wickUpColor: ChartColor? = nil,
-                wickDownColor: ChartColor? = nil) {
+                wickDownColor: ChartColor? = nil)
+    {
         self.lastValueVisible = lastValueVisible
         self.title = title
         self.priceScaleId = priceScaleId
@@ -124,5 +124,4 @@ public struct CandlestickSeriesOptions: SeriesOptionsCommon {
         self.wickUpColor = wickUpColor
         self.wickDownColor = wickDownColor
     }
-    
 }

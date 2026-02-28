@@ -7,32 +7,30 @@ public enum HandleScrollOptions {
 }
 
 // MARK: -
-extension HandleScrollOptions {
-    
-    public struct Options: Codable {
-        
+
+public extension HandleScrollOptions {
+    struct Options: Codable {
         public var mouseWheel: Bool?
         public var pressedMouseMove: Bool?
         public var horzTouchDrag: Bool?
         public var vertTouchDrag: Bool?
-        
+
         public init(mouseWheel: Bool? = nil,
                     pressedMouseMove: Bool? = nil,
                     horzTouchDrag: Bool? = nil,
-                    vertTouchDrag: Bool? = nil) {
+                    vertTouchDrag: Bool? = nil)
+        {
             self.mouseWheel = mouseWheel
             self.pressedMouseMove = pressedMouseMove
             self.horzTouchDrag = horzTouchDrag
             self.vertTouchDrag = vertTouchDrag
         }
-        
     }
-    
 }
 
 // MARK: - Codable
+
 extension HandleScrollOptions: Codable {
-    
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let enabled = try? container.decode(Bool.self) {
@@ -44,7 +42,7 @@ extension HandleScrollOptions: Codable {
                                                    debugDescription: "Error decoding \(type(of: self))")
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -54,5 +52,4 @@ extension HandleScrollOptions: Codable {
             try container.encode(enabled)
         }
     }
-    
 }

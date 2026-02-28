@@ -1,6 +1,6 @@
-import UIKit
-import SwiftUI
 import shared
+import SwiftUI
+import UIKit
 
 struct ContentView: View {
     var body: some View {
@@ -10,10 +10,9 @@ struct ContentView: View {
 }
 
 struct ComposeView: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
+    func makeUIViewController(context _: Context) -> UIViewController {
         MainViewControllerKt.MainViewController(generatedViewFactory: PriceChartUIViewFactory())
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-    }
+    func updateUIViewController(_: UIViewController, context _: Context) {}
 }

@@ -7,8 +7,8 @@ public enum Time {
 }
 
 // MARK: - Codable
+
 extension Time: Codable {
-    
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let utcTimestamp = try? container.decode(Double.self) {
@@ -22,7 +22,7 @@ extension Time: Codable {
                                                    debugDescription: "Error decoding \(type(of: self))")
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -34,5 +34,4 @@ extension Time: Codable {
             try container.encode(string)
         }
     }
-    
 }

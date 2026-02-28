@@ -1,7 +1,6 @@
 import Foundation
 
 public struct BarSeriesOptions: SeriesOptionsCommon {
-    
     public var lastValueVisible: Bool?
     public var title: String?
     public var priceScaleId: String?
@@ -17,12 +16,12 @@ public struct BarSeriesOptions: SeriesOptionsCommon {
     public var baseLineWidth: LineWidth?
     public var baseLineStyle: LineStyle?
     public var autoscaleInfoProvider: AutoscaleInfoProvider?
-    
+
     public var upColor: ChartColor?
     public var downColor: ChartColor?
     public var openVisible: Bool?
     public var thinBars: Bool?
-    
+
     public init(lastValueVisible: Bool? = nil,
                 title: String? = nil,
                 priceScaleId: String? = nil,
@@ -41,7 +40,8 @@ public struct BarSeriesOptions: SeriesOptionsCommon {
                 upColor: ChartColor? = nil,
                 downColor: ChartColor? = nil,
                 openVisible: Bool? = nil,
-                thinBars: Bool? = nil) {
+                thinBars: Bool? = nil)
+    {
         self.lastValueVisible = lastValueVisible
         self.title = title
         self.priceScaleId = priceScaleId
@@ -62,5 +62,4 @@ public struct BarSeriesOptions: SeriesOptionsCommon {
         self.openVisible = openVisible
         self.thinBars = thinBars
     }
-    
 }

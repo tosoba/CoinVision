@@ -19,88 +19,87 @@ public struct BaselineSeriesOptions: SeriesOptionsCommon {
     public var baseLineWidth: LineWidth?
     public var baseLineStyle: LineStyle?
     public var autoscaleInfoProvider: AutoscaleInfoProvider?
-    
+
     /**
      * Base value of the series.
      */
     public var baseValue: BaseValueType?
-    
+
     /**
      * The first color of the top area.
      */
     public var topFillColor1: ChartColor?
-    
+
     /**
      * The second color of the top area.
      */
     public var topFillColor2: ChartColor?
-    
+
     /**
      * The line color of the top area.
      */
     public var topLineColor: ChartColor?
-    
+
     /**
      * The first color of the bottom area.
      */
     public var bottomFillColor1: ChartColor?
-    
+
     /**
      * The second color of the bottom area.
      */
     public var bottomFillColor2: ChartColor?
-    
+
     /**
      * The line color of the bottom area.
      */
     public var bottomLineColor: ChartColor?
-    
+
     /**
      * Line width.
      */
     public var lineWidth: LineWidth?
-    
+
     /**
      * Line style.
      */
     public var lineStyle: LineStyle?
-    
+
     /**
      * Line type.
      */
     public var lineType: LineType?
-    
+
     /**
      * Show the crosshair marker.
      */
     public var crosshairMarkerVisible: Bool?
-    
+
     /**
      * Crosshair marker radius in pixels.
      */
     public var crosshairMarkerRadius: Double?
-    
+
     /**
      * Crosshair marker border color. An empty string falls back to the the color of the series under the crosshair.
      */
     public var crosshairMarkerBorderColor: String?
-    
+
     /**
      * The crosshair marker background color. An empty string falls back to the the color of the series under the crosshair.
      */
     public var crosshairMarkerBackgroundColor: String?
-    
+
     /**
      * Crosshair marker border width in pixels.
      */
     public var crosshairMarkerBorderWidth: Double?
-    
+
     /**
      * Last price animation mode.
      */
     public var lastPriceAnimation: LastPriceAnimationMode?
-    
-    
+
     public init(lastValueVisible: Bool? = nil,
                 title: String? = nil,
                 priceScaleId: String? = nil,
@@ -131,7 +130,8 @@ public struct BaselineSeriesOptions: SeriesOptionsCommon {
                 crosshairMarkerBorderColor: String? = nil,
                 crosshairMarkerBackgroundColor: String? = nil,
                 crosshairMarkerBorderWidth: Double? = nil,
-                lastPriceAnimation: LastPriceAnimationMode? = nil) {
+                lastPriceAnimation: LastPriceAnimationMode? = nil)
+    {
         self.lastValueVisible = lastValueVisible
         self.title = title
         self.priceScaleId = priceScaleId

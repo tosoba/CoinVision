@@ -2,7 +2,6 @@ import Foundation
 import WebKit
 
 protocol MessageHandlerDelegate: AnyObject {
-    
     func messageHandler(_ messageHandler: MessageHandler,
                         didReceiveClickWithParameters parameters: MouseEventParams)
     func messageHandler(_ messageHandler: MessageHandler,
@@ -16,10 +15,10 @@ protocol MessageHandlerDelegate: AnyObject {
 }
 
 // MARK: -
+
 class MessageHandler: NSObject {
-    
     weak var delegate: MessageHandlerDelegate?
-    
+
     private func decode<T: Decodable>(_ jsonString: String) throws -> T {
         do {
             let data = jsonString.data(using: .utf8)!
@@ -28,17 +27,18 @@ class MessageHandler: NSObject {
             throw error
         }
     }
-    
 }
 
 // MARK: - WKScriptMessageHandler
+
 extension MessageHandler: WKScriptMessageHandler {
-    
-    func userContentController(_ userContentController: WKUserContentController,
-                               didReceive message: WKScriptMessage) {
+    func userContentController(_: WKUserContentController,
+                               didReceive message: WKScriptMessage)
+    {
         let nameComponents = message.name.components(separatedBy: "_")
         if let namePrefix = nameComponents.first,
-            let subscription = Subscription(rawValue: namePrefix) {
+           let subscription = Subscription(rawValue: namePrefix)
+        {
             guard let messageBodyJSONString = message.body as? String else { return }
             switch subscription {
             case .click:
@@ -61,5 +61,4 @@ extension MessageHandler: WKScriptMessageHandler {
             }
         }
     }
-    
 }

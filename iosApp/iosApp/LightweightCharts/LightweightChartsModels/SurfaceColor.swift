@@ -3,7 +3,7 @@ import Foundation
 public enum SurfaceColor {
     case solid(color: ChartColor)
     case verticalGradient(topColor: ChartColor, bottomColor: ChartColor)
-    
+
     public var type: ColorType {
         switch self {
         case .solid:
@@ -15,6 +15,7 @@ public enum SurfaceColor {
 }
 
 // MARK: - CodingKeys
+
 extension SurfaceColor {
     enum CodingKeys: String, CodingKey {
         case type
@@ -25,12 +26,13 @@ extension SurfaceColor {
 }
 
 // MARK: - Codable
+
 extension SurfaceColor: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         let colorType = try container.decode(ColorType.self, forKey: .type)
-        
+
         switch colorType {
         case .solid:
             let color = try container.decode(ChartColor.self, forKey: .color)
@@ -41,12 +43,12 @@ extension SurfaceColor: Codable {
             self = .verticalGradient(topColor: topColor, bottomColor: bottomColor)
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(self.type.rawValue, forKey: .type)
-        
+
+        try container.encode(type.rawValue, forKey: .type)
+
         switch self {
         case let .solid(color: color):
             try container.encode(color, forKey: .color)

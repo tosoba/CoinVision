@@ -5,7 +5,7 @@ import Foundation
  */
 public struct TrackingModeOptions: Codable {
     public var exitMode: TrackingModeExitMode?
-    
+
     public init(exitMode: TrackingModeExitMode? = nil) {
         self.exitMode = exitMode
     }

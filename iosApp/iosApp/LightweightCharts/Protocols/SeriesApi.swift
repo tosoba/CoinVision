@@ -1,10 +1,9 @@
 import Foundation
 
 public protocol SeriesApi: AnyObject {
-       
     associatedtype Options: SeriesOptionsCommon
     associatedtype TickValue: SeriesData
-    
+
     /**
      * Returns current price formatter
      * - Returns: interface to the price formatter object that can be used to format prices in the same way as the chart does
@@ -24,7 +23,7 @@ public protocol SeriesApi: AnyObject {
      * - Parameter completion: price value  of the coordinate on the chart
      */
     func coordinateToPrice(coordinate: Double, completion: @escaping (BarPrice?) -> Void)
-    
+
     /**
      * Retrieves information about the series' data within a given logical range.
      *
@@ -37,7 +36,7 @@ public protocol SeriesApi: AnyObject {
      * the given index range falls into the viewport).
      */
     func barsInLogicalRange(range: FromToRange<Double>, completion: @escaping (BarsInfo?) -> Void)
-    
+
     /**
      * Applies new options to the existing series
      * - Parameter options: any subset of options
@@ -55,7 +54,7 @@ public protocol SeriesApi: AnyObject {
      * - Returns: object to control the price scale
      */
     func priceScale() -> PriceScaleApi
-    
+
     /**
      * Sets or replaces series data
      * - Parameter data: ordered (earlier time point goes first) array of data items.
@@ -70,7 +69,7 @@ public protocol SeriesApi: AnyObject {
      * If the new item's time is equal to the last existing item's time, then the existing item is replaced with the new one.
      */
     func update(bar: TickValue)
-    
+
     /**
      * Sets or replaces series data
      * - Parameter data: ordered (earlier time point goes first) array of data items.
@@ -85,7 +84,7 @@ public protocol SeriesApi: AnyObject {
      * If the new item's time is equal to the last existing item's time, then the existing item is replaced with the new one.
      */
     func update(bar: WhitespaceData)
-    
+
     /**
      * Sets or replaces series data
      * - Parameter data: ordered (earlier time point goes first) array of data items.
@@ -100,12 +99,12 @@ public protocol SeriesApi: AnyObject {
      * If the new item's time is equal to the last existing item's time, then the existing item is replaced with the new one.
      */
     func update(bar: SeriesDataType<TickValue>)
-    
+
     /**
      * Returns a bar data by provided logical index.
      */
     func dataByIndex(logicalIndex: Int, mismatchDirection: MismatchDirection?, completion: @escaping (TickValue?) -> Void)
-    
+
     /**
      * Sets markers for the series
      * - Parameter data: array of series markers.
@@ -113,7 +112,7 @@ public protocol SeriesApi: AnyObject {
      * Several markers with same time are allowed.
      */
     func setMarkers(data: [SeriesMarker])
-    
+
     /**
      * Returns an list of series markers.
      * - Parameter completion: list of series markers
@@ -125,13 +124,13 @@ public protocol SeriesApi: AnyObject {
      * - Parameter options:  any subset of options
      */
     func createPriceLine(options: PriceLineOptions?) -> PriceLine
-    
+
     /**
      * Removes an existing price line
      * - Parameter line: line to remove
      */
     func removePriceLine(line: PriceLine)
-    
+
     /**
      * Returns the type of this series
      * - Parameter completion: this SeriesType

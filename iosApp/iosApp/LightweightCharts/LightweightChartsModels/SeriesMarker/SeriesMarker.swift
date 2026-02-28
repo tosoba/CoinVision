@@ -7,6 +7,7 @@ public enum SeriesMarkerPosition: String, Codable {
 }
 
 // MARK: -
+
 public enum SeriesMarkerShape: String, Codable {
     case circle
     case square
@@ -15,8 +16,8 @@ public enum SeriesMarkerShape: String, Codable {
 }
 
 // MARK: -
+
 public struct SeriesMarker: Codable {
-    
     public var time: Time
     public var position: SeriesMarkerPosition
     public var shape: SeriesMarkerShape
@@ -24,14 +25,15 @@ public struct SeriesMarker: Codable {
     public var id: String?
     public var text: String?
     public var size: Double?
-    
+
     public init(time: Time,
                 position: SeriesMarkerPosition,
                 shape: SeriesMarkerShape,
                 color: ChartColor,
                 id: String? = nil,
                 text: String? = nil,
-                size: Double? = nil) {
+                size: Double? = nil)
+    {
         self.time = time
         self.position = position
         self.shape = shape
@@ -40,5 +42,4 @@ public struct SeriesMarker: Codable {
         self.text = text
         self.size = size
     }
-    
 }

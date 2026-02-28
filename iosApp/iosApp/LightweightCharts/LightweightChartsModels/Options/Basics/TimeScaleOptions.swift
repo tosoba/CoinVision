@@ -1,7 +1,6 @@
 import Foundation
 
 public struct TimeScaleOptions {
-    
     public var rightOffset: Double?
     public var barSpacing: Double?
     public var minBarSpacing: Double?
@@ -16,7 +15,7 @@ public struct TimeScaleOptions {
     public var secondsVisible: Bool?
     public var shiftVisibleRangeOnNewBar: Bool?
     public var ticksVisible: Bool?
-    
+
     public var tickMarkFormatter: JavaScriptMethod<TickMarkFormatterParameters, String>? {
         get {
             tickMarkFormatterJSFunction?.function
@@ -25,8 +24,9 @@ public struct TimeScaleOptions {
             tickMarkFormatterJSFunction = newValue.map { JSFunction(prompt: .tickMarkFormatter, function: $0) }
         }
     }
+
     var tickMarkFormatterJSFunction: JSFunction<TickMarkFormatterParameters, String>?
-    
+
     public init(rightOffset: Double? = nil,
                 barSpacing: Double? = nil,
                 minBarSpacing: Double? = nil,
@@ -41,7 +41,8 @@ public struct TimeScaleOptions {
                 secondsVisible: Bool? = nil,
                 shiftVisibleRangeOnNewBar: Bool? = nil,
                 ticksVisible: Bool? = nil,
-                tickMarkFormatter: JavaScriptMethod<TickMarkFormatterParameters, String>? = nil) {
+                tickMarkFormatter: JavaScriptMethod<TickMarkFormatterParameters, String>? = nil)
+    {
         self.rightOffset = rightOffset
         self.barSpacing = barSpacing
         self.minBarSpacing = minBarSpacing
@@ -58,12 +59,11 @@ public struct TimeScaleOptions {
         self.ticksVisible = ticksVisible
         self.tickMarkFormatter = tickMarkFormatter
     }
-
 }
 
 // MARK: - Codable
+
 extension TimeScaleOptions: Codable {
-    
     enum CodingKeys: String, CodingKey {
         case rightOffset
         case barSpacing
@@ -79,12 +79,11 @@ extension TimeScaleOptions: Codable {
         case secondsVisible
         case shiftVisibleRangeOnNewBar
     }
-    
 }
 
 // MARK: -
+
 extension TimeScaleOptions {
-    
     func optionsScript(for closuresStore: ClosuresStore?) -> (options: String, variableName: String) {
         let variableName = "options"
         var optionsScript = "var \(variableName) = \(jsonString);"
@@ -94,5 +93,4 @@ extension TimeScaleOptions {
         }
         return (optionsScript, variableName)
     }
-    
 }

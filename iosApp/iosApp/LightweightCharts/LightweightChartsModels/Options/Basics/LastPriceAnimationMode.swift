@@ -8,12 +8,12 @@ public enum LastPriceAnimationMode: Int, Codable {
      Animation is always disabled
      */
     case disabled
-    
+
     /**
      Animation is always enabled
      */
     case continuous
-    
+
     /**
      Animation is active some time after data update
      */

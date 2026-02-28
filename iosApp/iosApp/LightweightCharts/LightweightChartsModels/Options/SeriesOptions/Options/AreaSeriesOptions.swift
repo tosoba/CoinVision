@@ -1,7 +1,6 @@
 import Foundation
 
 public struct AreaSeriesOptions: SeriesOptionsCommon {
-    
     public var lastValueVisible: Bool?
     public var title: String?
     public var priceScaleId: String?
@@ -17,7 +16,7 @@ public struct AreaSeriesOptions: SeriesOptionsCommon {
     public var baseLineWidth: LineWidth?
     public var baseLineStyle: LineStyle?
     public var autoscaleInfoProvider: AutoscaleInfoProvider?
-    
+
     public var topColor: ChartColor?
     public var bottomColor: ChartColor?
     public var invertFilledArea: Bool?
@@ -30,7 +29,7 @@ public struct AreaSeriesOptions: SeriesOptionsCommon {
     public var crosshairMarkerBackgroundColor: ChartColor?
     public var crosshairMarkerBorderWidth: Double?
     public var lastPriceAnimation: LastPriceAnimationMode?
-    
+
     public init(lastValueVisible: Bool? = nil,
                 title: String? = nil,
                 priceScaleId: String? = nil,
@@ -57,7 +56,8 @@ public struct AreaSeriesOptions: SeriesOptionsCommon {
                 crosshairMarkerBorderColor: ChartColor? = nil,
                 crosshairMarkerBackgroundColor: ChartColor? = nil,
                 crosshairMarkerBorderWidth: Double? = nil,
-                lastPriceAnimation: LastPriceAnimationMode? = nil) {
+                lastPriceAnimation: LastPriceAnimationMode? = nil)
+    {
         self.lastValueVisible = lastValueVisible
         self.title = title
         self.priceScaleId = priceScaleId
@@ -86,5 +86,4 @@ public struct AreaSeriesOptions: SeriesOptionsCommon {
         self.crosshairMarkerBorderWidth = crosshairMarkerBorderWidth
         self.lastPriceAnimation = lastPriceAnimation
     }
-    
 }

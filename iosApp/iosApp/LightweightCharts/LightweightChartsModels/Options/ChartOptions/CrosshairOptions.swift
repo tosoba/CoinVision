@@ -12,32 +12,32 @@ public enum CrosshairMode: Int, Codable {
 }
 
 // MARK: -
+
 /**
  Structure describing crosshair options
  */
 public struct CrosshairOptions: Codable {
-    
     /**
      Crosshair mode
      */
     public var mode: CrosshairMode?
-    
+
     /**
      Options of the crosshair vertical line
      */
     public var vertLine: CrosshairLineOptions?
-    
+
     /**
      Options of the crosshair horizontal line
      */
     public var horzLine: CrosshairLineOptions?
-    
+
     public init(mode: CrosshairMode? = nil,
                 vertLine: CrosshairLineOptions? = nil,
-                horzLine: CrosshairLineOptions? = nil) {
+                horzLine: CrosshairLineOptions? = nil)
+    {
         self.mode = mode
         self.vertLine = vertLine
         self.horzLine = horzLine
     }
-    
 }
