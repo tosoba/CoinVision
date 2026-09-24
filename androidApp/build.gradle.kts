@@ -1,29 +1,11 @@
 plugins {
-  kotlin("multiplatform")
-  id("com.android.application")
-  alias(libs.plugins.jetbrainsCompose)
+  alias(libs.plugins.androidApplication)
   alias(libs.plugins.compose.compiler)
-}
-
-kotlin {
-  androidTarget()
-  sourceSets {
-    val androidMain by getting {
-      dependencies {
-        implementation(project(":shared"))
-
-        implementation(libs.koin.android)
-        implementation(libs.koin.core)
-      }
-    }
-  }
 }
 
 android {
   namespace = "com.trm.coinvision.android"
-  compileSdk = 36
-
-  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  compileSdk = 37
 
   defaultConfig {
     applicationId = "com.trm.coinvision.android"
@@ -33,7 +15,13 @@ android {
     versionName = "1.0"
   }
 
-  packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1,INDEX.LIST}" } }
+  packaging {
+    resources {
+      excludes += "/META-INF/AL2.0"
+      excludes += "/META-INF/LGPL2.1"
+      excludes += "/META-INF/INDEX.LIST"
+    }
+  }
 
   buildTypes { getByName("release") { isMinifyEnabled = false } }
 
@@ -41,6 +29,11 @@ android {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
+}
 
-  kotlin { jvmToolchain(17) }
+dependencies {
+  implementation(project(":shared"))
+
+  implementation(libs.koin.android)
+  implementation(libs.koin.core)
 }
