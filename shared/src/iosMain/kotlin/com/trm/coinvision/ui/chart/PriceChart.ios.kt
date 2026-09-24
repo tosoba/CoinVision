@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.interop.UIKitView
-import kotlinx.cinterop.ExperimentalForeignApi
+import androidx.compose.ui.viewinterop.UIKitView
 import platform.UIKit.UIView
 
-@OptIn(ExperimentalForeignApi::class)
 @Composable
 internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
   val factory = LocalSharedFactory.current
