@@ -1,3 +1,4 @@
+import LightweightCharts
 import shared
 import UIKit
 
