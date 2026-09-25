@@ -4,11 +4,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
-import kotlinx.coroutines.CoroutineScope
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -26,11 +28,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class TokensSearchBarViewModel(
-  private val coroutineScope: CoroutineScope,
   getSelectedTokenFlow: () -> Flow<SelectedToken>,
   private val updateSelectedToken: suspend (SelectedToken) -> Unit,
-  private val getTokenListPaging: (String?) -> Flow<PagingData<TokenListItemDTO>>
-) {
+  private val getTokenListPaging: (String?) -> Flow<PagingData<TokenListItemDTO>>,
+) : ViewModel() {
   private val queryFlow = MutableSharedFlow<String>()
 
   var query by mutableStateOf("")
@@ -52,7 +53,7 @@ internal class TokensSearchBarViewModel(
         selectedToken = it
         isLoading = false
       }
-      .launchIn(coroutineScope)
+      .launchIn(viewModelScope)
   }
 
   val tokensListState = LazyListState(0, 0)
@@ -61,12 +62,12 @@ internal class TokensSearchBarViewModel(
     queryFlow
       .map { it.takeIf { it.length > 2 } }
       .distinctUntilChanged()
-      .debounce(500L)
-      .flatMapLatest { getTokenListPaging(it).cachedIn(coroutineScope) }
+      .debounce(500L.milliseconds)
+      .flatMapLatest { getTokenListPaging(it).cachedIn(viewModelScope) }
       .stateIn(
-        scope = coroutineScope,
+        scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = PagingData.empty()
+        initialValue = PagingData.empty(),
       )
 
   fun onActiveChange(active: Boolean) {
@@ -79,7 +80,7 @@ internal class TokensSearchBarViewModel(
   fun onQueryChange(query: String) {
     this.query = query
 
-    coroutineScope.launch { queryFlow.emit(query) }
+    viewModelScope.launch { queryFlow.emit(query) }
   }
 
   fun onTokenSelected(token: TokenListItemDTO) {
@@ -88,7 +89,7 @@ internal class TokensSearchBarViewModel(
     active = false
 
     resetSearch()
-    coroutineScope.launch {
+    viewModelScope.launch {
       updateSelectedToken(
         SelectedToken(
           id = token.id,
@@ -101,6 +102,6 @@ internal class TokensSearchBarViewModel(
   }
 
   private fun resetSearch() {
-    coroutineScope.launch { queryFlow.emit("") }
+    viewModelScope.launch { queryFlow.emit("") }
   }
 }

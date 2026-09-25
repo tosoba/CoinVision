@@ -14,6 +14,7 @@ koin = "4.2.2"
 kotlin = "2.4.20"
 kotlinx-serialization-json = "1.11.0"
 ktor = "3.6.0"
+lifecycle = "2.11.0"
 logback-classic = "1.6.3"
 material3-windowSizeClass = "0.5.0"
 napier = "2.7.1"
@@ -23,7 +24,6 @@ shimmer = "1.5.0"
 sqlDelight = "2.4.0"
 stately = "2.1.0"
 tradingview-charts = "5.2.0"
-voyager = "2.2.21-1.10.3"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -39,7 +39,10 @@ kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
 kamel-decoder-image-bitmap = { group = "media.kamel", name = "kamel-decoder-image-bitmap", version.ref = "kamel" }
 kamel-decoder-image-vector = { group = "media.kamel", name = "kamel-decoder-image-vector", version.ref = "kamel" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-core-viewmodel = { group = "io.insert-koin", name = "koin-core-viewmodel", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -52,6 +55,8 @@ ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.r
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 material3-windowSizeClass = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3-windowSizeClass" }
 napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
@@ -64,10 +69,6 @@ sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
 tradingview-charts = { group = "com.tradingview", name = "lightweightcharts", version.ref = "tradingview-charts" }
-voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

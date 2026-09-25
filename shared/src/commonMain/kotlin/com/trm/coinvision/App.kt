@@ -8,7 +8,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import cafe.adriel.voyager.navigator.Navigator
 import com.trm.coinvision.core.common.util.LocalHeightSizeClass
 import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.MainScreen
@@ -30,7 +29,7 @@ fun App() {
     MaterialTheme(
       colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
     ) {
-      Navigator(MainScreen)
+      MainScreen()
     }
   }
 }

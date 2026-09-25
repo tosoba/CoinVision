@@ -2,18 +2,20 @@ package com.trm.coinvision.ui
 
 import com.trm.coinvision.core.domain.repo.TokenListPagingRepository
 import com.trm.coinvision.core.domain.repo.TokenRepository
-import com.trm.coinvision.ui.compareTokens.CompareTokensScreenModel
-import com.trm.coinvision.ui.tokensList.TokensListScreenModel
+import com.trm.coinvision.ui.compareTokens.CompareTokensViewModel
+import com.trm.coinvision.ui.tokensList.TokensListViewModel
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
-import kotlinx.coroutines.CoroutineScope
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 internal val uiModule = module {
-  factory {
+  viewModel { MainNavigatorViewModel() }
+
+  viewModel {
     val tokenRepository = get<TokenRepository>()
-    CompareTokensScreenModel(
+    CompareTokensViewModel(
       getSelectedMainTokenWithChartFlowUseCase = get(),
       getSelectedReferenceTokenFlowUseCase = get(),
       swapSelectedTokens = tokenRepository::swapSelectedTokens,
@@ -22,9 +24,9 @@ internal val uiModule = module {
     )
   }
 
-  factory {
+  viewModel {
     val tokenRepository = get<TokenRepository>()
-    TokensListScreenModel(
+    TokensListViewModel(
       tokenListPagingRepository = get(),
       getSelectedMainTokenWithChartFlowUseCase = get(),
       updateChartPeriod = tokenRepository::updateChartPeriod,
@@ -32,22 +34,18 @@ internal val uiModule = module {
     )
   }
 
-  factory { MainNavigatorScreenModel() }
-
-  factory(named(TokensSearchBarType.MAIN)) { (coroutineScope: CoroutineScope) ->
+  viewModel(named(TokensSearchBarType.MAIN)) {
     val tokenRepository = get<TokenRepository>()
     TokensSearchBarViewModel(
-      coroutineScope = coroutineScope,
       getSelectedTokenFlow = tokenRepository::getSelectedMainTokenFlow,
       updateSelectedToken = tokenRepository::updateSelectedMainToken,
       getTokenListPaging = get<TokenListPagingRepository>()::invoke
     )
   }
 
-  factory(named(TokensSearchBarType.REFERENCE)) { (coroutineScope: CoroutineScope) ->
+  viewModel(named(TokensSearchBarType.REFERENCE)) {
     val tokenRepository = get<TokenRepository>()
     TokensSearchBarViewModel(
-      coroutineScope = coroutineScope,
       getSelectedTokenFlow = tokenRepository::getSelectedReferenceTokenFlow,
       updateSelectedToken = tokenRepository::updateSelectedReferenceToken,
       getTokenListPaging = get<TokenListPagingRepository>()::invoke

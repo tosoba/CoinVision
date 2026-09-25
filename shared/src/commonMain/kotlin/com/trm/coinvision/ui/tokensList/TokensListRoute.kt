@@ -38,20 +38,11 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import cafe.adriel.voyager.koin.getNavigatorScreenModel
-import cafe.adriel.voyager.koin.getScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import coinvision.shared.generated.resources.Res
 import coinvision.shared.generated.resources.if_label
-import coinvision.shared.generated.resources.list
 import coinvision.shared.generated.resources.reached_market_cap_of
-import com.trm.coinvision.core.common.util.ext.root
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
 import com.trm.coinvision.core.domain.model.TokenDTO
-import com.trm.coinvision.ui.MainNavigatorScreenModel
 import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.chart.PriceChartHeader
 import com.trm.coinvision.ui.common.AutoSizeText
@@ -65,94 +56,83 @@ import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import kotlinx.coroutines.flow.flowOf
-import org.jetbrains.compose.resources.painterResource
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.qualifier.named
 
-object TokensListTab : Tab {
-  @Composable
-  override fun Content() {
-    val mainTokensSearchBarViewModel =
-      LocalNavigator.currentOrThrow
-        .root()
-        .getNavigatorScreenModel<MainNavigatorScreenModel>()
-        .mainTokensSearchBarViewModel
-    val tokensListScreenModel = getScreenModel<TokensListScreenModel>()
+@Composable
+internal fun TokensListRoute(
+  viewModel: TokensListViewModel = koinViewModel(),
+  mainTokensSearchBarViewModel: TokensSearchBarViewModel = koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
+) {
+  val mainToken by viewModel.mainTokenFlow.collectAsState()
+  val listState = rememberLazyListState()
+  val tokenPotentialComparisonItems =
+    viewModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
 
-    val mainToken by tokensListScreenModel.mainTokenFlow.collectAsState()
-    val listState = rememberLazyListState()
-    val tokenPotentialComparisonItems =
-      tokensListScreenModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
+  if (usingHorizontalTabSplit) {
+    val chartPoints by viewModel.mainTokenChartPointsFlow.collectAsState()
+    val chartPeriod by viewModel.chartPeriod.collectAsState()
 
-    if (usingHorizontalTabSplit) {
-      val chartPoints by tokensListScreenModel.mainTokenChartPointsFlow.collectAsState()
-      val chartPeriod by tokensListScreenModel.chartPeriod.collectAsState()
-
-      Row(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
-          TokensSearchBar(
-            modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-            viewModel = mainTokensSearchBarViewModel,
-          )
-
-          PriceChartHeader(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
-            marketData = mainToken.mapNullable(block = TokenDTO::marketData),
-            chartPeriod = chartPeriod,
-            onChartPeriodClick = tokensListScreenModel::onChartPeriodClick,
-          )
-
-          LoadableView(
-            modifier = Modifier.fillMaxSize().padding(tabElementPadding),
-            loadable = chartPoints,
-            onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
-          ) {
-            PriceChart(modifier = Modifier.fillMaxSize(), points = it)
-          }
-        }
-
-        LoadableView(
-          modifier = Modifier.weight(.5f).fillMaxHeight(),
-          loadable = mainToken,
-          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
-        ) {
-          TokenPotentialComparisonLazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = listState,
-            comparisonItems = tokenPotentialComparisonItems,
-          )
-        }
-      }
-    } else {
-      Column(modifier = Modifier.fillMaxSize()) {
+    Row(modifier = Modifier.fillMaxSize()) {
+      Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
         TokensSearchBar(
           modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
           viewModel = mainTokensSearchBarViewModel,
         )
 
+        PriceChartHeader(
+          modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
+          marketData = mainToken.mapNullable(block = TokenDTO::marketData),
+          chartPeriod = chartPeriod,
+          onChartPeriodClick = viewModel::onChartPeriodClick,
+        )
+
         LoadableView(
-          modifier = Modifier.fillMaxSize(),
-          loadable = mainToken,
-          onRetryClick = tokensListScreenModel::onRetryMainTokenWithChartClick,
+          modifier = Modifier.fillMaxSize().padding(tabElementPadding),
+          loadable = chartPoints,
+          onRetryClick = viewModel::onRetryMainTokenWithChartClick,
         ) {
-          TokenPotentialComparisonLazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = listState,
-            comparisonItems = tokenPotentialComparisonItems,
-          )
+          PriceChart(modifier = Modifier.fillMaxSize(), points = it)
         }
+      }
+
+      LoadableView(
+        modifier = Modifier.weight(.5f).fillMaxHeight(),
+        loadable = mainToken,
+        onRetryClick = viewModel::onRetryMainTokenWithChartClick,
+      ) {
+        TokenPotentialComparisonLazyColumn(
+          modifier = Modifier.fillMaxSize(),
+          state = listState,
+          comparisonItems = tokenPotentialComparisonItems,
+        )
+      }
+    }
+  } else {
+    Column(modifier = Modifier.fillMaxSize()) {
+      TokensSearchBar(
+        modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
+        viewModel = mainTokensSearchBarViewModel,
+      )
+
+      LoadableView(
+        modifier = Modifier.fillMaxSize(),
+        loadable = mainToken,
+        onRetryClick = viewModel::onRetryMainTokenWithChartClick,
+      ) {
+        TokenPotentialComparisonLazyColumn(
+          modifier = Modifier.fillMaxSize(),
+          state = listState,
+          comparisonItems = tokenPotentialComparisonItems,
+        )
       }
     }
   }
+  }
 
-  override val options: TabOptions
-    @Composable
-    get() =
-      TabOptions(
-        index = 1u,
-        title = stringResource(Res.string.list),
-        icon = painterResource(Res.drawable.list),
-      )
-}
 
 @Composable
 private fun TokenPotentialComparisonLazyColumn(

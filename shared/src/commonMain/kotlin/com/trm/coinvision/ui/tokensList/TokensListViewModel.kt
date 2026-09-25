@@ -1,10 +1,10 @@
 package com.trm.coinvision.ui.tokensList
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.Loading
 import com.trm.coinvision.core.domain.model.LoadingFirst
@@ -35,12 +35,12 @@ import kotlinx.coroutines.flow.withIndex
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class TokensListScreenModel(
+internal class TokensListViewModel(
   tokenListPagingRepository: TokenListPagingRepository,
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
   getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
-) : ScreenModel {
+) : ViewModel() {
   val mainTokenFlow = MutableStateFlow<Loadable<TokenDTO>>(LoadingFirst)
 
   private val _mainTokenChartPointsFlow =
@@ -62,16 +62,16 @@ internal class TokensListScreenModel(
         mainTokenFlow.value = it.map { (token) -> token }
         _mainTokenChartPointsFlow.value = it.map { (_, chartPoints) -> chartPoints }
       }
-      .launchIn(screenModelScope)
+      .launchIn(viewModelScope)
   }
 
   fun onRetryMainTokenWithChartClick() {
-    screenModelScope.launch { retryMainTokenWithChartFlow.emit(Unit) }
+    viewModelScope.launch { retryMainTokenWithChartFlow.emit(Unit) }
   }
 
   val tokenPotentialComparisonPagingFlow: StateFlow<PagingData<TokenPotentialComparison>> =
     tokenListPagingRepository(null)
-      .cachedIn(screenModelScope)
+      .cachedIn(viewModelScope)
       .combine(
         mainTokenFlow
           .withIndex()
@@ -82,7 +82,7 @@ internal class TokensListScreenModel(
         paging.map(TokenPotentialComparisonMapper(mainToken))
       }
       .stateIn(
-        scope = screenModelScope,
+        scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = PagingData.empty()
       )
@@ -90,12 +90,12 @@ internal class TokensListScreenModel(
   val chartPeriod: StateFlow<MarketChartDaysPeriod> =
     getChartPeriodFlow()
       .stateIn(
-        screenModelScope,
+        viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = MarketChartDaysPeriod.default
       )
 
   fun onChartPeriodClick(period: MarketChartDaysPeriod) {
-    screenModelScope.launch { updateChartPeriod(period) }
+    viewModelScope.launch { updateChartPeriod(period) }
   }
 }

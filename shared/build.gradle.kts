@@ -50,7 +50,9 @@ kotlin {
       implementation(libs.kamel.decoder.image.bitmap)
       implementation(libs.kamel.decoder.image.vector)
 
-      api(libs.koin.core)
+      implementation(libs.koin.core)
+      implementation(libs.koin.compose)
+      implementation(libs.koin.compose.viewmodel)
 
       implementation(libs.kotlinx.datetime)
       implementation(libs.kotlinx.serialization.json)
@@ -59,6 +61,9 @@ kotlin {
       implementation(libs.ktor.client.logging)
       implementation(libs.ktor.client.content.negotiation)
       implementation(libs.ktor.serialization.kotlinx.json)
+
+      implementation(libs.lifecycle.viewmodel)
+      implementation(libs.lifecycle.viewmodel.compose)
 
       implementation(libs.logback.classic)
 
@@ -73,11 +78,6 @@ kotlin {
       implementation(libs.shimmer)
 
       implementation(libs.sqldelight.coroutines.extensions)
-
-      implementation(libs.voyager.koin)
-      implementation(libs.voyager.navigator)
-      implementation(libs.voyager.tab.navigator)
-      implementation(libs.voyager.transitions)
     }
 
     commonTest.dependencies {
