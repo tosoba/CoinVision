@@ -73,20 +73,18 @@ internal fun TokensListRoute(
     koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
 ) {
   val mainToken by viewModel.mainTokenFlow.collectAsState()
-  val listState = rememberLazyListState()
   val tokenPotentialComparisonItems =
     viewModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
-  val searchBarState = mainTokensSearchBarViewModel.viewState
   val searchTokens = mainTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
-  val searchListState = mainTokensSearchBarViewModel.tokensListState
+  val listState = rememberLazyListState()
 
   if (usingHorizontalTabSplit) {
     val chartPoints by viewModel.mainTokenChartPointsFlow.collectAsState()
     val chartPeriod by viewModel.chartPeriod.collectAsState()
 
     TokensListHorizontalSplit(
-      searchBarState = searchBarState,
-      searchListState = searchListState,
+      searchBarState = mainTokensSearchBarViewModel.viewState,
+      searchListState = mainTokensSearchBarViewModel.tokensListState,
       searchTokens = searchTokens,
       onSearchQueryChange = mainTokensSearchBarViewModel::onQueryChange,
       onSearchActiveChange = mainTokensSearchBarViewModel::onActiveChange,
@@ -101,8 +99,8 @@ internal fun TokensListRoute(
     )
   } else {
     TokensList(
-      searchBarState = searchBarState,
-      searchListState = searchListState,
+      searchBarState = mainTokensSearchBarViewModel.viewState,
+      searchListState = mainTokensSearchBarViewModel.tokensListState,
       searchTokens = searchTokens,
       onSearchQueryChange = mainTokensSearchBarViewModel::onQueryChange,
       onSearchActiveChange = mainTokensSearchBarViewModel::onActiveChange,

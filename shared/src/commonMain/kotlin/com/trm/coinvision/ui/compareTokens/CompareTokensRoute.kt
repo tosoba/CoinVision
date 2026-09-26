@@ -57,19 +57,9 @@ internal fun CompareTokensRoute(
 ) {
   val mainTokenWithChart by viewModel.mainTokenWithChartFlow.collectAsState()
   val selectedReferenceToken by viewModel.referenceTokenFlow.collectAsState()
-  val mainSearchBarState = mainTokensSearchBarViewModel.viewState
-  val mainSearchListState = mainTokensSearchBarViewModel.tokensListState
   val mainSearchTokens = mainTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
-  val referenceSearchBarState = referenceTokensSearchBarViewModel.viewState
-  val referenceSearchListState = referenceTokensSearchBarViewModel.tokensListState
   val referenceSearchTokens =
     referenceTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
-  val onMainQueryChange = mainTokensSearchBarViewModel::onQueryChange
-  val onMainActiveChange = mainTokensSearchBarViewModel::onActiveChange
-  val onMainTokenSelected = mainTokensSearchBarViewModel::onTokenSelected
-  val onReferenceQueryChange = referenceTokensSearchBarViewModel::onQueryChange
-  val onReferenceActiveChange = referenceTokensSearchBarViewModel::onActiveChange
-  val onReferenceTokenSelected = referenceTokensSearchBarViewModel::onTokenSelected
 
   Box(modifier = Modifier.fillMaxSize()) {
     val chartPeriod by viewModel.chartPeriod.collectAsState()
@@ -81,18 +71,18 @@ internal fun CompareTokensRoute(
         referenceToken = selectedReferenceToken,
         chartPeriod = chartPeriod,
         chartPeriodButtonScrollState = chartPeriodButtonScrollState,
-        mainSearchBarState = mainSearchBarState,
-        mainSearchListState = mainSearchListState,
+        mainSearchBarState = mainTokensSearchBarViewModel.viewState,
+        mainSearchListState = mainTokensSearchBarViewModel.tokensListState,
         mainSearchTokens = mainSearchTokens,
-        referenceSearchBarState = referenceSearchBarState,
-        referenceSearchListState = referenceSearchListState,
+        referenceSearchBarState = referenceTokensSearchBarViewModel.viewState,
+        referenceSearchListState = referenceTokensSearchBarViewModel.tokensListState,
         referenceSearchTokens = referenceSearchTokens,
-        onMainQueryChange = onMainQueryChange,
-        onMainActiveChange = onMainActiveChange,
-        onMainTokenSelected = onMainTokenSelected,
-        onReferenceQueryChange = onReferenceQueryChange,
-        onReferenceActiveChange = onReferenceActiveChange,
-        onReferenceTokenSelected = onReferenceTokenSelected,
+        onMainQueryChange = mainTokensSearchBarViewModel::onQueryChange,
+        onMainActiveChange = mainTokensSearchBarViewModel::onActiveChange,
+        onMainTokenSelected = mainTokensSearchBarViewModel::onTokenSelected,
+        onReferenceQueryChange = referenceTokensSearchBarViewModel::onQueryChange,
+        onReferenceActiveChange = referenceTokensSearchBarViewModel::onActiveChange,
+        onReferenceTokenSelected = referenceTokensSearchBarViewModel::onTokenSelected,
         onChartPeriodClick = viewModel::onChartPeriodClick,
         onRetryMainTokenWithChartClick = viewModel::onRetryMainTokenWithChartClick,
         onRetryReferenceTokenClick = viewModel::onRetryReferenceTokenClick,
@@ -103,18 +93,18 @@ internal fun CompareTokensRoute(
         referenceToken = selectedReferenceToken,
         chartPeriod = chartPeriod,
         chartPeriodButtonScrollState = chartPeriodButtonScrollState,
-        mainSearchBarState = mainSearchBarState,
-        mainSearchListState = mainSearchListState,
+        mainSearchBarState = mainTokensSearchBarViewModel.viewState,
+        mainSearchListState = mainTokensSearchBarViewModel.tokensListState,
         mainSearchTokens = mainSearchTokens,
-        referenceSearchBarState = referenceSearchBarState,
-        referenceSearchListState = referenceSearchListState,
+        referenceSearchBarState = referenceTokensSearchBarViewModel.viewState,
+        referenceSearchListState = referenceTokensSearchBarViewModel.tokensListState,
         referenceSearchTokens = referenceSearchTokens,
-        onMainQueryChange = onMainQueryChange,
-        onMainActiveChange = onMainActiveChange,
-        onMainTokenSelected = onMainTokenSelected,
-        onReferenceQueryChange = onReferenceQueryChange,
-        onReferenceActiveChange = onReferenceActiveChange,
-        onReferenceTokenSelected = onReferenceTokenSelected,
+        onMainQueryChange = mainTokensSearchBarViewModel::onQueryChange,
+        onMainActiveChange = mainTokensSearchBarViewModel::onActiveChange,
+        onMainTokenSelected = mainTokensSearchBarViewModel::onTokenSelected,
+        onReferenceQueryChange = referenceTokensSearchBarViewModel::onQueryChange,
+        onReferenceActiveChange = referenceTokensSearchBarViewModel::onActiveChange,
+        onReferenceTokenSelected = referenceTokensSearchBarViewModel::onTokenSelected,
         onChartPeriodClick = viewModel::onChartPeriodClick,
         onRetryMainTokenWithChartClick = viewModel::onRetryMainTokenWithChartClick,
         onRetryReferenceTokenClick = viewModel::onRetryReferenceTokenClick,
