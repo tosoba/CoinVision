@@ -2,6 +2,7 @@ package com.trm.coinvision.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -28,55 +29,59 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun MainScreen() {
-  val pagerState =
-    rememberPagerState(initialPage = MainTab.COMPARE_TOKENS.ordinal) { MainTab.entries.size }
-  val selectedTab = MainTab.entries[pagerState.currentPage]
   val scope = rememberCoroutineScope()
 
-  Row {
-    if (!usingNavigationBar) {
-      NavigationRail {
-        MainTabNavigationRailItem(
-          tab = MainTab.COMPARE_TOKENS,
-          selectedTab = selectedTab,
-          onTabSelected = {
-            scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
-          },
-        )
+  val pagerState =
+    rememberPagerState(
+      initialPage = MainTab.COMPARE_TOKENS.ordinal,
+      pageCount = MainTab.entries::size,
+    )
+  val selectedTab = MainTab.entries[pagerState.currentPage]
 
-        MainTabNavigationRailItem(
-          tab = MainTab.TOKENS_LIST,
-          selectedTab = selectedTab,
-          onTabSelected = {
-            scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
-          },
-        )
-      }
-    }
-
-    Scaffold(
-      bottomBar = {
-        if (usingNavigationBar) {
-          NavigationBar {
-            MainTabNavigationBarItem(
-              tab = MainTab.COMPARE_TOKENS,
-              selectedTab = selectedTab,
-              onTabSelected = {
-                scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
-              },
-            )
-            MainTabNavigationBarItem(
-              tab = MainTab.TOKENS_LIST,
-              selectedTab = selectedTab,
-              onTabSelected = {
-                scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
-              },
-            )
-          }
+  Scaffold(
+    bottomBar = {
+      if (usingNavigationBar) {
+        NavigationBar {
+          MainTabNavigationBarItem(
+            tab = MainTab.COMPARE_TOKENS,
+            selectedTab = selectedTab,
+            onTabSelected = {
+              scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+            },
+          )
+          MainTabNavigationBarItem(
+            tab = MainTab.TOKENS_LIST,
+            selectedTab = selectedTab,
+            onTabSelected = {
+              scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+            },
+          )
         }
       }
-    ) { paddingValues ->
-      HorizontalPager(state = pagerState, modifier = Modifier.padding(paddingValues)) { page ->
+    }
+  ) { paddingValues ->
+    Row(modifier = Modifier.padding(paddingValues)) {
+      if (!usingNavigationBar) {
+        NavigationRail(windowInsets = WindowInsets()) {
+          MainTabNavigationRailItem(
+            tab = MainTab.COMPARE_TOKENS,
+            selectedTab = selectedTab,
+            onTabSelected = {
+              scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+            },
+          )
+
+          MainTabNavigationRailItem(
+            tab = MainTab.TOKENS_LIST,
+            selectedTab = selectedTab,
+            onTabSelected = {
+              scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+            },
+          )
+        }
+      }
+
+      HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
         when (MainTab.entries[page]) {
           MainTab.COMPARE_TOKENS -> CompareTokensRoute()
           MainTab.TOKENS_LIST -> TokensListRoute()
