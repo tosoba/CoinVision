@@ -1,7 +1,5 @@
 package com.trm.coinvision.ui.compareTokens
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -61,7 +58,6 @@ internal fun CompareTokensRoute(
   val referenceSearchTokens =
     referenceTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
   val chartPeriod by viewModel.chartPeriod.collectAsState()
-  val chartPeriodButtonScrollState = rememberScrollState()
 
   Box(modifier = Modifier.fillMaxSize()) {
     if (usingHorizontalTabSplit) {
@@ -69,7 +65,6 @@ internal fun CompareTokensRoute(
         mainTokenWithChart = mainTokenWithChart,
         referenceToken = selectedReferenceToken,
         chartPeriod = chartPeriod,
-        chartPeriodButtonScrollState = chartPeriodButtonScrollState,
         mainSearchBarState = mainTokensSearchBarViewModel.viewState,
         mainSearchListState = mainTokensSearchBarViewModel.tokensListState,
         mainSearchTokens = mainSearchTokens,
@@ -91,7 +86,6 @@ internal fun CompareTokensRoute(
         mainTokenWithChart = mainTokenWithChart,
         referenceToken = selectedReferenceToken,
         chartPeriod = chartPeriod,
-        chartPeriodButtonScrollState = chartPeriodButtonScrollState,
         mainSearchBarState = mainTokensSearchBarViewModel.viewState,
         mainSearchListState = mainTokensSearchBarViewModel.tokensListState,
         mainSearchTokens = mainSearchTokens,
@@ -134,7 +128,6 @@ private fun CompareTokens(
   mainTokenWithChart: Loadable<Pair<TokenDTO, List<PriceChartPoint>>>,
   referenceToken: Loadable<TokenDTO>,
   chartPeriod: MarketChartDaysPeriod,
-  chartPeriodButtonScrollState: ScrollState,
   mainSearchBarState: TokensSearchBarViewState,
   mainSearchListState: LazyListState,
   mainSearchTokens: LazyPagingItems<TokenListItemDTO>,
@@ -165,11 +158,7 @@ private fun CompareTokens(
     PriceChartHeader(
       marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
       chartPeriod = chartPeriod,
-      modifier =
-        Modifier.fillMaxWidth()
-          .horizontalScroll(chartPeriodButtonScrollState)
-          .padding(horizontal = tabElementPadding),
-      daysPeriodScrollState = chartPeriodButtonScrollState,
+      modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
       onChartPeriodClick = onChartPeriodClick,
     )
 
@@ -212,7 +201,6 @@ private fun CompareTokensHorizontalSplit(
   mainTokenWithChart: Loadable<Pair<TokenDTO, List<PriceChartPoint>>>,
   referenceToken: Loadable<TokenDTO>,
   chartPeriod: MarketChartDaysPeriod,
-  chartPeriodButtonScrollState: ScrollState,
   mainSearchBarState: TokensSearchBarViewState,
   mainSearchListState: LazyListState,
   mainSearchTokens: LazyPagingItems<TokenListItemDTO>,
@@ -245,7 +233,6 @@ private fun CompareTokensHorizontalSplit(
         marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
         chartPeriod = chartPeriod,
         modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
-        daysPeriodScrollState = chartPeriodButtonScrollState,
         onChartPeriodClick = onChartPeriodClick,
       )
 

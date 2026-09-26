@@ -1,6 +1,5 @@
 package com.trm.coinvision.ui.chart
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
@@ -34,14 +33,13 @@ internal fun PriceChartHeader(
   marketData: Loadable<TokenMarketDataDTO>,
   chartPeriod: MarketChartDaysPeriod,
   modifier: Modifier = Modifier,
-  daysPeriodScrollState: ScrollState = rememberScrollState(),
   onChartPeriodClick: (MarketChartDaysPeriod) -> Unit,
 ) {
   Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
     SegmentedButton(
       selectedItem = chartPeriod,
       items = MarketChartDaysPeriod.entries.toList(),
-      modifier = Modifier.weight(1f).horizontalScroll(daysPeriodScrollState),
+      modifier = Modifier.weight(1f).horizontalScroll(rememberScrollState()),
       label = MarketChartDaysPeriod::label,
       onItemClick = onChartPeriodClick,
     )
