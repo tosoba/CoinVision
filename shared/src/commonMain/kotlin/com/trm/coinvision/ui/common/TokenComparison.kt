@@ -31,9 +31,9 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TokenComparison(
-  modifier: Modifier = Modifier,
   mainToken: TokenDTO,
   referenceToken: TokenDTO,
+  modifier: Modifier = Modifier,
 ) {
   val mainTokenSymbol = remember(mainToken) { mainToken.symbol }
   val referenceTokenSymbol = remember(referenceToken) { referenceToken.symbol }
@@ -99,10 +99,10 @@ internal fun TokenComparison(
                 )
               ) {
                 TokenImageOrSymbol(
-                  modifier = Modifier.fillMaxSize().clip(CircleShape),
                   image = mainToken.image?.small,
                   symbol = mainTokenSymbol.orEmpty(),
                   name = mainToken.name.orEmpty(),
+                  modifier = Modifier.fillMaxSize().clip(CircleShape),
                 )
               },
             REFERENCE_TOKEN_IMAGE_ID to
@@ -114,10 +114,10 @@ internal fun TokenComparison(
                 )
               ) {
                 TokenImageOrSymbol(
-                  modifier = Modifier.fillMaxSize().clip(CircleShape),
                   image = referenceToken.image?.small,
                   symbol = referenceTokenSymbol.orEmpty(),
                   name = referenceToken.name.orEmpty(),
+                  modifier = Modifier.fillMaxSize().clip(CircleShape),
                 )
               },
           )

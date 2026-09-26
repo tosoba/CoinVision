@@ -6,7 +6,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 
 @Composable
-internal expect fun PriceChart(modifier: Modifier = Modifier, points: List<PriceChartPoint>)
+internal expect fun PriceChart(points: List<PriceChartPoint>, modifier: Modifier = Modifier)
 
 expect interface ComposeSharedFactory
 

@@ -12,7 +12,7 @@ internal val usingHorizontalTabSplit: Boolean
     LocalWidthSizeClass.current != WindowWidthSizeClass.Compact &&
       LocalHeightSizeClass.current != WindowHeightSizeClass.Expanded
 
-internal val usingNavigationBar
+internal val usingNavigationBar: Boolean
   @Composable
   get() =
     LocalWidthSizeClass.current == WindowWidthSizeClass.Compact ||

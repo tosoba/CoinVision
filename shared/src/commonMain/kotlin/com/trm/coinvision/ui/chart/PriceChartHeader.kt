@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.trm.coinvision.core.common.util.ext.decimalFormat
-import com.trm.coinvision.core.domain.model.Empty
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenMarketDataDTO
@@ -32,24 +31,29 @@ import com.trm.coinvision.ui.common.SegmentedButton
 
 @Composable
 internal fun PriceChartHeader(
+  marketData: Loadable<TokenMarketDataDTO>,
+  chartPeriod: MarketChartDaysPeriod,
   modifier: Modifier = Modifier,
   daysPeriodScrollState: ScrollState = rememberScrollState(),
-  marketData: Loadable<TokenMarketDataDTO> = Empty,
-  chartPeriod: MarketChartDaysPeriod = MarketChartDaysPeriod.DAY,
-  onChartPeriodClick: (MarketChartDaysPeriod) -> Unit = {},
+  onChartPeriodClick: (MarketChartDaysPeriod) -> Unit,
 ) {
   Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
     SegmentedButton(
-      modifier = Modifier.weight(1f).horizontalScroll(daysPeriodScrollState),
-      items = MarketChartDaysPeriod.entries.toList(),
       selectedItem = chartPeriod,
+      items = MarketChartDaysPeriod.entries.toList(),
+      modifier = Modifier.weight(1f).horizontalScroll(daysPeriodScrollState),
       label = MarketChartDaysPeriod::label,
       onItemClick = onChartPeriodClick,
     )
 
-    Spacer(modifier = Modifier.width(5.dp))
+    Spacer(modifier = Modifier.width(4.dp))
 
-    LoadableView(loadable = marketData, loadingContent = {}, failedContent = {}) { marketData ->
+    LoadableView(
+      loadable = marketData,
+      onRetryClick = {},
+      loadingContent = {},
+      failedContent = {},
+    ) { marketData ->
       val price = remember(marketData) { marketData.currentPrice?.usd?.decimalFormat() }
       val priceChange =
         remember(marketData, chartPeriod) {
@@ -63,6 +67,7 @@ internal fun PriceChartHeader(
             }?.decimalFormat(signed = true)
           }
         }
+
       if (price != null) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
           Text(
@@ -74,7 +79,7 @@ internal fun PriceChartHeader(
           if (priceChange != null)
             Box(
               modifier =
-                Modifier.clip(RoundedCornerShape(5.dp))
+                Modifier.clip(RoundedCornerShape(4.dp))
                   .background(
                     color =
                       when {
@@ -85,7 +90,7 @@ internal fun PriceChartHeader(
                   )
             ) {
               Text(
-                modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
+                modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp).basicMarquee(),
                 text = "$priceChange%",
                 fontWeight = FontWeight.Medium,
                 color =

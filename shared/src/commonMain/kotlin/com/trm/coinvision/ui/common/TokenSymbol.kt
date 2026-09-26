@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun TokenSymbol(symbol: String = "", modifier: Modifier = Modifier.tokenSymbolShape()) {
+internal fun TokenSymbol(symbol: String, modifier: Modifier = Modifier.tokenSymbolShape()) {
   Box(modifier = modifier) {
     Text(
       modifier = Modifier.align(Alignment.Center).basicMarquee(),
@@ -28,6 +28,6 @@ internal fun TokenSymbol(symbol: String = "", modifier: Modifier = Modifier.toke
 @Composable
 internal fun Modifier.tokenSymbolShape(): Modifier =
   then(
-    Modifier.background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp))
+    Modifier.background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp))
       .size(40.dp)
   )

@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun <T : Any> SegmentedButton(
+  selectedItem: T?,
+  items: List<T>,
   modifier: Modifier = Modifier,
-  items: List<T> = emptyList(),
-  selectedItem: T? = null,
   label: (T) -> String = { it.toString() },
-  onItemClick: (T) -> Unit = {},
+  onItemClick: (T) -> Unit,
 ) {
   Row(modifier = modifier) {
     val cornerRadius = 16.dp

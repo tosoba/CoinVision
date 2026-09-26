@@ -8,10 +8,10 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun TokenImageOrSymbol(
-  modifier: Modifier = Modifier,
   image: String?,
   symbol: String,
   name: String,
+  modifier: Modifier = Modifier,
 ) {
   image?.let {
     KamelImage(

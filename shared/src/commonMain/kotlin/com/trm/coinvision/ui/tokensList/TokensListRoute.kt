@@ -34,7 +34,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -57,7 +56,6 @@ import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
-import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -85,9 +83,9 @@ internal fun TokensListRoute(
         )
 
         PriceChartHeader(
-          modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
           marketData = mainToken.mapNullable(block = TokenDTO::marketData),
           chartPeriod = chartPeriod,
+          modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
           onChartPeriodClick = viewModel::onChartPeriodClick,
         )
 
@@ -96,7 +94,7 @@ internal fun TokensListRoute(
           loadable = chartPoints,
           onRetryClick = viewModel::onRetryMainTokenWithChartClick,
         ) {
-          PriceChart(modifier = Modifier.fillMaxSize(), points = it)
+          PriceChart(points = it, modifier = Modifier.fillMaxSize())
         }
       }
 
@@ -106,9 +104,9 @@ internal fun TokensListRoute(
         onRetryClick = viewModel::onRetryMainTokenWithChartClick,
       ) {
         TokenPotentialComparisonLazyColumn(
+          comparisonItems = tokenPotentialComparisonItems,
           modifier = Modifier.fillMaxSize(),
           state = listState,
-          comparisonItems = tokenPotentialComparisonItems,
         )
       }
     }
@@ -125,9 +123,9 @@ internal fun TokensListRoute(
         onRetryClick = viewModel::onRetryMainTokenWithChartClick,
       ) {
         TokenPotentialComparisonLazyColumn(
+          comparisonItems = tokenPotentialComparisonItems,
           modifier = Modifier.fillMaxSize(),
           state = listState,
-          comparisonItems = tokenPotentialComparisonItems,
         )
       }
     }
@@ -136,28 +134,27 @@ internal fun TokensListRoute(
 
 @Composable
 private fun TokenPotentialComparisonLazyColumn(
+  comparisonItems: LazyPagingItems<TokenPotentialComparison>,
   modifier: Modifier = Modifier,
   state: LazyListState = rememberLazyListState(),
-  comparisonItems: LazyPagingItems<TokenPotentialComparison> =
-    flowOf(PagingData.empty<TokenPotentialComparison>()).collectAsLazyPagingItems(),
 ) {
   LazyColumn(
     modifier = modifier,
-    contentPadding = PaddingValues(bottom = 10.dp, start = 10.dp, end = 10.dp),
+    contentPadding = PaddingValues(bottom = 8.dp, start = 8.dp, end = 8.dp),
     state = state,
   ) {
     when (val prepend = comparisonItems.loadState.prepend) {
       is LoadState.Error -> {
         item {
           CoinVisionRetryRow(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             text = prepend.error.errorText(),
             onRetryClick = comparisonItems::retry,
           )
         }
       }
       LoadState.Loading -> {
-        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp)) }
       }
       else -> {}
     }
@@ -185,11 +182,11 @@ private fun TokenPotentialComparisonLazyColumn(
           ?.let { symbol ->
             stickyHeader {
               TokenPotentialComparisonHeader(
+                tokenSymbol = symbol,
                 modifier =
                   Modifier.fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.background)
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                tokenSymbol = symbol,
+                    .padding(bottom = 4.dp, start = 4.dp, end = 4.dp),
               )
             }
           }
@@ -200,9 +197,9 @@ private fun TokenPotentialComparisonLazyColumn(
         ) { index ->
           comparisonItems[index]?.let {
             TokenPotentialComparisonItem(
-              modifier = Modifier.fillMaxWidth().padding(5.dp),
-              index = index,
               item = it,
+              index = index,
+              modifier = Modifier.fillMaxWidth().padding(4.dp),
             )
           }
         }
@@ -213,14 +210,14 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.Error -> {
         item {
           CoinVisionRetryRow(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             text = append.error.errorText(),
             onRetryClick = comparisonItems::retry,
           )
         }
       }
       LoadState.Loading -> {
-        item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp)) }
       }
       else -> {}
     }
@@ -228,7 +225,7 @@ private fun TokenPotentialComparisonLazyColumn(
 }
 
 @Composable
-private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenSymbol: String) {
+private fun TokenPotentialComparisonHeader(tokenSymbol: String, modifier: Modifier = Modifier) {
   AutoSizeText(
     modifier = modifier,
     text =
@@ -249,14 +246,14 @@ private fun TokenPotentialComparisonHeader(modifier: Modifier = Modifier, tokenS
 
 @Composable
 private fun TokenPotentialComparisonItem(
-  modifier: Modifier = Modifier,
-  index: Int,
   item: TokenPotentialComparison,
+  index: Int,
+  modifier: Modifier = Modifier,
 ) {
   val (subjectToken, potential) = item
   Card(modifier = modifier) {
     Row(
-      modifier = Modifier.fillMaxWidth().padding(5.dp),
+      modifier = Modifier.fillMaxWidth().padding(4.dp),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -266,16 +263,16 @@ private fun TokenPotentialComparisonItem(
         maxLines = 1,
       )
 
-      Spacer(modifier = Modifier.width(10.dp))
+      Spacer(modifier = Modifier.width(8.dp))
 
       TokenImageOrSymbol(
-        modifier = Modifier.size(40.dp).clip(CircleShape),
         image = subjectToken.image,
         symbol = subjectToken.symbol,
         name = subjectToken.name,
+        modifier = Modifier.size(40.dp).clip(CircleShape),
       )
 
-      Spacer(modifier = Modifier.width(10.dp))
+      Spacer(modifier = Modifier.width(8.dp))
 
       Column(modifier = Modifier.weight(1f)) {
         Text(
@@ -287,7 +284,7 @@ private fun TokenPotentialComparisonItem(
         Text(modifier = Modifier.basicMarquee(), text = subjectToken.name, maxLines = 1)
       }
 
-      Spacer(modifier = Modifier.width(10.dp))
+      Spacer(modifier = Modifier.width(8.dp))
 
       Text(
         modifier = Modifier.weight(1f).basicMarquee(),
@@ -297,7 +294,7 @@ private fun TokenPotentialComparisonItem(
       )
 
       potential?.let { (_, potentialPriceFormatted, potentialUpsideFormatted) ->
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
           Text(
@@ -308,7 +305,7 @@ private fun TokenPotentialComparisonItem(
           )
           Box(
             modifier =
-              Modifier.clip(RoundedCornerShape(5.dp))
+              Modifier.clip(RoundedCornerShape(4.dp))
                 .background(
                   color =
                     when {
@@ -326,7 +323,7 @@ private fun TokenPotentialComparisonItem(
                 )
           ) {
             Text(
-              modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp).basicMarquee(),
+              modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp).basicMarquee(),
               text = potentialUpsideFormatted ?: "N/A",
               fontWeight = FontWeight.Medium,
               color =

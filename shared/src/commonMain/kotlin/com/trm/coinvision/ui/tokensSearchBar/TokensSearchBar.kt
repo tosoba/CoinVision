@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -53,7 +51,6 @@ import com.trm.coinvision.ui.common.TokenSymbol
 import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.tokenSymbolShape
 import com.valentinilk.shimmer.shimmer
-import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -62,13 +59,13 @@ internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSea
   val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
 
   TokensSearchBar(
-    modifier = modifier,
     query = viewModel.query,
     selectedToken = viewModel.selectedToken,
     active = viewModel.active,
     isLoading = viewModel.isLoading,
     tokensListState = tokensListState,
     tokens = tokens,
+    modifier = modifier,
     onQueryChange = viewModel::onQueryChange,
     onActiveChange = viewModel::onActiveChange,
     onTokenSelected = viewModel::onTokenSelected,
@@ -78,27 +75,26 @@ internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSea
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun TokensSearchBar(
-  modifier: Modifier = Modifier,
-  query: String = "",
+  query: String,
   selectedToken: SelectedToken,
-  active: Boolean = false,
-  isLoading: Boolean = false,
-  tokensListState: LazyListState = rememberLazyListState(),
-  tokens: LazyPagingItems<TokenListItemDTO> =
-    flowOf(PagingData.empty<TokenListItemDTO>()).collectAsLazyPagingItems(),
-  onQueryChange: (String) -> Unit = {},
-  onActiveChange: (Boolean) -> Unit = {},
-  onTokenSelected: (TokenListItemDTO) -> Unit = {},
+  active: Boolean,
+  isLoading: Boolean,
+  tokensListState: LazyListState,
+  tokens: LazyPagingItems<TokenListItemDTO>,
+  modifier: Modifier = Modifier,
+  onQueryChange: (String) -> Unit,
+  onActiveChange: (Boolean) -> Unit,
+  onTokenSelected: (TokenListItemDTO) -> Unit,
 ) {
   Column(modifier = modifier) {
     DockedSearchBar(
       modifier = Modifier.fillMaxWidth(),
       enabled = !isLoading,
       query = query,
-      onQueryChange = { onQueryChange(it) },
+      onQueryChange = onQueryChange,
       onSearch = {},
       active = active,
-      onActiveChange = { onActiveChange(it) },
+      onActiveChange = onActiveChange,
       placeholder = {
         Text(stringResource(if (isLoading) Res.string.loading else Res.string.search_for_tokens))
       },
@@ -121,10 +117,10 @@ internal fun TokensSearchBar(
           exit = fadeOut(),
         ) {
           TokenImageOrSymbol(
-            modifier = Modifier.size(40.dp).clip(CircleShape),
             image = selectedToken.image,
             symbol = selectedToken.symbol,
             name = selectedToken.name,
+            modifier = Modifier.size(40.dp).clip(CircleShape),
           )
         }
       },
@@ -134,14 +130,14 @@ internal fun TokensSearchBar(
           is LoadState.Error -> {
             item {
               CoinVisionRetryRow(
-                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItem(),
+                modifier = Modifier.fillMaxWidth().padding(16.dp).animateItem(),
                 text = prepend.error.errorText(),
                 onRetryClick = tokens::retry,
               )
             }
           }
           LoadState.Loading -> {
-            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItem()) }
+            item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp).animateItem()) }
           }
           else -> {}
         }
@@ -162,7 +158,9 @@ internal fun TokensSearchBar(
                 modifier = Modifier.animateItem(),
                 headlineContent = { Box(modifier = Modifier.shimmerListItemContent()) },
                 supportingContent = { Box(modifier = Modifier.shimmerListItemContent()) },
-                leadingContent = { TokenSymbol(modifier = Modifier.shimmer().tokenSymbolShape()) },
+                leadingContent = {
+                  TokenSymbol(symbol = "", modifier = Modifier.shimmer().tokenSymbolShape())
+                },
               )
             }
           }
@@ -182,10 +180,10 @@ internal fun TokensSearchBar(
                   },
                   leadingContent = {
                     TokenImageOrSymbol(
-                      modifier = Modifier.size(40.dp).clip(CircleShape),
                       image = token.image,
                       symbol = token.symbol,
                       name = token.name,
+                      modifier = Modifier.size(40.dp).clip(CircleShape),
                     )
                   },
                   trailingContent = {
@@ -203,14 +201,14 @@ internal fun TokensSearchBar(
           is LoadState.Error -> {
             item {
               CoinVisionRetryRow(
-                modifier = Modifier.fillMaxWidth().padding(20.dp).animateItem(),
+                modifier = Modifier.fillMaxWidth().padding(16.dp).animateItem(),
                 text = append.error.errorText(),
                 onRetryClick = tokens::retry,
               )
             }
           }
           LoadState.Loading -> {
-            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItem()) }
+            item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp).animateItem()) }
           }
           else -> {}
         }
@@ -227,10 +225,10 @@ internal fun TokensSearchBar(
 private fun Modifier.shimmerListItemContent() =
   then(
     Modifier.fillMaxWidth(.5f)
-      .height(20.dp)
+      .height(16.dp)
       .padding(vertical = 2.dp)
       .shimmer()
-      .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(5.dp))
+      .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp))
   )
 
-internal val tabElementPadding = 10.dp
+internal val tabElementPadding = 8.dp

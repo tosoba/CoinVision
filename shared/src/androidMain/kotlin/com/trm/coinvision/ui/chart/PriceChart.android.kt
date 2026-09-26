@@ -9,7 +9,7 @@ import com.tradingview.lightweightcharts.view.ChartsView
 import java.util.Date
 
 @Composable
-internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
+internal actual fun PriceChart(points: List<PriceChartPoint>, modifier: Modifier) {
   AndroidView(
     modifier = modifier,
     factory = ::ChartsView,

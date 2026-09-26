@@ -1,6 +1,6 @@
 package com.trm.coinvision.ui.tokensSearchBar
 
-enum class TokensSearchBarType {
+internal enum class TokensSearchBarType {
   MAIN,
   REFERENCE,
 }

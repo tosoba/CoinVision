@@ -20,9 +20,9 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun <T : Any> LoadableView(
+  loadable: Loadable<T>,
   modifier: Modifier = Modifier,
-  loadable: Loadable<T> = Empty,
-  onRetryClick: () -> Unit = {},
+  onRetryClick: () -> Unit,
   loadingContent: @Composable () -> Unit = {
     Box(modifier = Modifier.fillMaxSize()) {
       CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -36,7 +36,7 @@ fun <T : Any> LoadableView(
     )
   },
   emptyContent: @Composable () -> Unit = {},
-  readyContent: @Composable (T) -> Unit = {},
+  readyContent: @Composable (T) -> Unit,
 ) {
   Crossfade(targetState = loadable, modifier = modifier) {
     when (loadable) {
@@ -50,11 +50,11 @@ fun <T : Any> LoadableView(
 
 @Composable
 fun <T : Any, S : Any> LoadableView(
-  modifier: Modifier = Modifier,
   loadable1: Loadable<T>,
   loadable2: Loadable<S>,
-  onRetryClick1: () -> Unit = {},
-  onRetryClick2: () -> Unit = {},
+  modifier: Modifier = Modifier,
+  onRetryClick1: () -> Unit,
+  onRetryClick2: () -> Unit,
   loadingContent: @Composable () -> Unit = {
     Box(modifier = Modifier.fillMaxSize()) {
       CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -75,18 +75,22 @@ fun <T : Any, S : Any> LoadableView(
     )
   },
   emptyContent: @Composable () -> Unit = {},
-  readyContent: @Composable (T, S) -> Unit = { _, _ -> },
+  readyContent: @Composable (T, S) -> Unit,
 ) {
   Crossfade(targetState = listOf(loadable1, loadable2), modifier = modifier) { loadables ->
     when {
-      loadables.any { it is Loading } -> loadingContent()
+      loadables.any { it is Loading } -> {
+        loadingContent()
+      }
       loadables.any { it is Failed } -> {
         failedContent(
           loadables.firstOrNull()?.safeAs<Failed>()?.throwable,
           loadables.lastOrNull()?.safeAs<Failed>()?.throwable,
         )
       }
-      loadables.any { it is Empty } -> emptyContent()
+      loadables.any { it is Empty } -> {
+        emptyContent()
+      }
       loadables.all { it is Ready } -> {
         readyContent(
           loadables.first().requireAs<Ready<T>>().data,

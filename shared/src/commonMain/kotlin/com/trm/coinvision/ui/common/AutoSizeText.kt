@@ -3,7 +3,6 @@ package com.trm.coinvision.ui.common
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,118 +37,6 @@ import androidx.compose.ui.unit.sp
 import com.trm.coinvision.ui.common.SuggestedFontSizesStatus.Companion.rememberSuggestedFontSizesStatus
 import io.github.aakira.napier.Napier
 import kotlin.math.min
-
-fun Density.roundToPx(sp: TextUnit): Int = sp.roundToPx()
-
-fun Density.toSp(px: Int): TextUnit = px.toSp()
-
-fun Density.toIntSize(dpSize: DpSize): IntSize =
-  IntSize(dpSize.width.roundToPx(), dpSize.height.roundToPx())
-
-/**
- * Composable function that automatically adjusts the text size to fit within given constraints,
- * considering the ratio of line spacing to text size.
- *
- * Features:
- * 1. Best performance: Utilizes a dichotomous binary search algorithm for swift and optimal text
- *    size determination without unnecessary iterations.
- * 2. Alignment support: Supports six possible alignment values via the Alignment interface.
- * 3. Material Design 3 support.
- * 4. Font scaling support: User-initiated font scaling doesn't affect the visual rendering output.
- * 5. Multiline Support with maxLines Parameter.
- *
- * @param text the text to be displayed
- * @param modifier the [Modifier] to be applied to this layout node
- * @param color [Color] to apply to the text. If [Color.Unspecified], and [style] has no color set,
- *   this will be [LocalContentColor].
- * @param suggestedFontSizes The suggested font sizes to choose from (Should be sorted from smallest
- *   to largest, not empty and contains only sp text unit).
- * @param suggestedFontSizesStatus Whether or not suggestedFontSizes is valid: not empty - contains
- *   oly sp text unit - sorted. You can check validity by invoking
- *   [List<TextUnit>.suggestedFontSizesStatus]
- * @param stepGranularityTextSize The step size for adjusting the text size. this parameter is
- *   ignored if [suggestedFontSizes] is specified and [suggestedFontSizesStatus] is
- *   [SuggestedFontSizesStatus.VALID].
- * @param minTextSize The minimum text size allowed. this parameter is ignored if
- *   [suggestedFontSizes] is specified or [suggestedFontSizesStatus] is
- *   [SuggestedFontSizesStatus.VALID].
- * @param maxTextSize The maximum text size allowed.
- * @param fontStyle the typeface variant to use when drawing the letters (e.g., italic). See
- *   [TextStyle.fontStyle].
- * @param fontWeight the typeface thickness to use when painting the text (e.g., [FontWeight.Bold]).
- * @param fontFamily the font family to be used when rendering the text. See [TextStyle.fontFamily].
- * @param letterSpacing the amount of space to add between each letter. See
- *   [TextStyle.letterSpacing].
- * @param textDecoration the decorations to paint on the text (e.g., an underline). See
- *   [TextStyle.textDecoration].
- * @param alignment The alignment of the text within its container.
- * @param overflow how visual overflow should be handled.
- * @param softWrap whether the text should break at soft line breaks. If false, the glyphs in the
- *   text will be positioned as if there was unlimited horizontal space. If [softWrap] is false,
- *   [overflow] and TextAlign may have unexpected effects.
- * @param maxLines An optional maximum number of lines for the text to span, wrapping if necessary.
- *   If the text exceeds the given number of lines, it will be truncated according to [overflow] and
- *   [softWrap]. It is required that 1 <= [minLines] <= [maxLines].
- * @param minLines The minimum height in terms of minimum number of visible lines. It is required
- *   that 1 <= [minLines] <= [maxLines]. insert composables into text layout. See
- *   [InlineTextContent].
- * @param onTextLayout callback that is executed when a new text layout is calculated. A
- *   [TextLayoutResult] object that callback provides contains paragraph information, size of the
- *   text, baselines and other details. The callback can be used to add additional decoration or
- *   functionality to the text. For example, to draw selection around the text.
- * @param style style configuration for the text such as color, font, line height etc.
- * @param lineSpacingRatio The ratio of line spacing to text size.
- * @author Reda El Madini - For support, contact gladiatorkilo@gmail.com
- */
-@Composable
-fun AutoSizeText(
-  text: String,
-  modifier: Modifier = Modifier,
-  color: Color = Color.Unspecified,
-  suggestedFontSizes: List<TextUnit> = emptyList(),
-  suggestedFontSizesStatus: SuggestedFontSizesStatus =
-    suggestedFontSizes.rememberSuggestedFontSizesStatus,
-  stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
-  minTextSize: TextUnit = TextUnit.Unspecified,
-  maxTextSize: TextUnit = TextUnit.Unspecified,
-  fontStyle: FontStyle? = null,
-  fontWeight: FontWeight? = null,
-  fontFamily: FontFamily? = null,
-  letterSpacing: TextUnit = TextUnit.Unspecified,
-  textDecoration: TextDecoration? = null,
-  alignment: Alignment = Alignment.TopStart,
-  overflow: TextOverflow = TextOverflow.Clip,
-  softWrap: Boolean = true,
-  maxLines: Int = Int.MAX_VALUE,
-  minLines: Int = 1,
-  onTextLayout: (TextLayoutResult) -> Unit = {},
-  style: TextStyle = LocalTextStyle.current,
-  lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
-) {
-  AutoSizeText(
-    text = AnnotatedString(text),
-    modifier = modifier,
-    color = color,
-    suggestedFontSizes = suggestedFontSizes,
-    suggestedFontSizesStatus = suggestedFontSizesStatus,
-    stepGranularityTextSize = stepGranularityTextSize,
-    minTextSize = minTextSize,
-    maxTextSize = maxTextSize,
-    fontStyle = fontStyle,
-    fontWeight = fontWeight,
-    fontFamily = fontFamily,
-    letterSpacing = letterSpacing,
-    textDecoration = textDecoration,
-    alignment = alignment,
-    overflow = overflow,
-    softWrap = softWrap,
-    maxLines = maxLines,
-    minLines = minLines,
-    onTextLayout = onTextLayout,
-    style = style,
-    lineSpacingRatio = lineSpacingRatio,
-  )
-}
 
 /**
  * Composable function that automatically adjusts the text size to fit within given constraints
@@ -381,3 +268,10 @@ enum class SuggestedFontSizesStatus {
       @Composable get() = remember(key1 = this) { suggestedFontSizesStatus }
   }
 }
+
+private fun Density.roundToPx(sp: TextUnit): Int = sp.roundToPx()
+
+private fun Density.toSp(px: Int): TextUnit = px.toSp()
+
+private fun Density.toIntSize(dpSize: DpSize): IntSize =
+  IntSize(dpSize.width.roundToPx(), dpSize.height.roundToPx())

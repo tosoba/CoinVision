@@ -61,10 +61,10 @@ internal fun CompareTokensRoute(
           )
 
           PriceChartHeader(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
-            daysPeriodScrollState = chartPeriodButtonScrollState,
             marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
             chartPeriod = chartPeriod,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
+            daysPeriodScrollState = chartPeriodButtonScrollState,
             onChartPeriodClick = viewModel::onChartPeriodClick,
           )
 
@@ -73,7 +73,7 @@ internal fun CompareTokensRoute(
             loadable = mainTokenWithChart.map { (_, chart) -> chart },
             onRetryClick = viewModel::onRetryMainTokenWithChartClick,
           ) {
-            PriceChart(modifier = Modifier.fillMaxSize().padding(tabElementPadding), points = it)
+            PriceChart(points = it, modifier = Modifier.fillMaxSize().padding(tabElementPadding))
           }
         }
 
@@ -91,9 +91,9 @@ internal fun CompareTokensRoute(
             onRetryClick2 = viewModel::onRetryReferenceTokenClick,
           ) { mainToken, referenceToken ->
             TokenComparison(
-              modifier = Modifier.fillMaxSize(),
               mainToken = mainToken,
               referenceToken = referenceToken,
+              modifier = Modifier.fillMaxSize(),
             )
           }
         }
@@ -106,13 +106,13 @@ internal fun CompareTokensRoute(
         )
 
         PriceChartHeader(
+          marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
+          chartPeriod = chartPeriod,
           modifier =
             Modifier.fillMaxWidth()
               .horizontalScroll(chartPeriodButtonScrollState)
               .padding(horizontal = tabElementPadding),
           daysPeriodScrollState = chartPeriodButtonScrollState,
-          marketData = mainTokenWithChart.mapNullable { (token) -> token.marketData },
-          chartPeriod = chartPeriod,
           onChartPeriodClick = viewModel::onChartPeriodClick,
         )
 
@@ -121,7 +121,7 @@ internal fun CompareTokensRoute(
           loadable = mainTokenWithChart.map { (_, chart) -> chart },
           onRetryClick = viewModel::onRetryMainTokenWithChartClick,
         ) {
-          PriceChart(modifier = Modifier.fillMaxSize(), points = it)
+          PriceChart(points = it, modifier = Modifier.fillMaxSize())
         }
 
         TokensSearchBar(
@@ -137,9 +137,9 @@ internal fun CompareTokensRoute(
           onRetryClick2 = viewModel::onRetryReferenceTokenClick,
         ) { mainToken, referenceToken ->
           TokenComparison(
-            modifier = Modifier.fillMaxSize(),
             mainToken = mainToken,
             referenceToken = referenceToken,
+            modifier = Modifier.fillMaxSize(),
           )
         }
       }

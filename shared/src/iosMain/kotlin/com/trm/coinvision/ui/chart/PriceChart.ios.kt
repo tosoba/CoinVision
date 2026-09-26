@@ -8,7 +8,7 @@ import androidx.compose.ui.viewinterop.UIKitView
 import platform.UIKit.UIView
 
 @Composable
-internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
+internal actual fun PriceChart(points: List<PriceChartPoint>, modifier: Modifier) {
   val factory = LocalComposeSharedFactory.current
   val (view, delegate) = remember { factory.createPriceChartUIView(points) }
   LaunchedEffect(points) { delegate.updatePoints(points) }

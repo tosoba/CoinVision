@@ -38,7 +38,7 @@ internal fun CoinVisionRetryRow(
     horizontalArrangement = Arrangement.Center,
   ) {
     Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
-    Spacer(modifier = Modifier.width(5.dp))
+    Spacer(modifier = Modifier.width(4.dp))
     Button(onRetryClick) { Text(text = stringResource(Res.string.retry)) }
   }
 }
@@ -62,7 +62,7 @@ internal fun CoinVisionRetryColumn(
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Text(text = text, maxLines = 2, overflow = TextOverflow.Ellipsis)
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(4.dp))
     Button(onRetryClick) { Text(text = stringResource(Res.string.retry)) }
   }
 }
