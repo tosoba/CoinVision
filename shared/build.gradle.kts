@@ -17,15 +17,8 @@ kotlin {
     compileSdk = 37
     minSdk = 24
 
-    // AGP 9 KMP library plugin processes Android resources only when explicitly
-    // enabled. Required so Compose Multiplatform resources (*.cvr under
-    // composeResources/) are packaged into the AAR/APK.
     androidResources { enable = true }
-
     compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
-
-    // Host (unit) tests are disabled by default by the Android-KMP library plugin.
-    // Enabling them keeps the commonTest tests running on the Android target.
     withHostTest {}
   }
 
