@@ -35,22 +35,6 @@ fun Double.decimalFormat(significantDecimals: Int = 3, signed: Boolean = false):
     if (abs(this@decimalFormat) >= 1.0) {
       append(format(significantDecimals))
     } else {
-      append("0.")
-
-      var nonZeroFound = false
-      var significant = 0
-      BigDecimal.fromDouble(this@decimalFormat).toPlainString().substring(2).forEach {
-        if (significant >= significantDecimals) return@forEach
-        nonZeroFound = nonZeroFound || it != '0'
-        if (nonZeroFound) {
-          ++significant
-          append(it)
-        }
-      }
-
-      for (index in this.lastIndex downTo if (signed) 4 else 3) {
-        if (this[index] != '0') break
-        deleteAt(index)
-      }
+      append(BigDecimal.fromDouble(this@decimalFormat).toPlainString())
     }
   }

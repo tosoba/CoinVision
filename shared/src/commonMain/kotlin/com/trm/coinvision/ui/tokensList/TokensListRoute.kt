@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -186,7 +187,7 @@ private fun TokenPotentialComparisonLazyColumn(
                 modifier =
                   Modifier.fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.background)
-                    .padding(bottom = 4.dp, start = 4.dp, end = 4.dp),
+                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
               )
             }
           }
@@ -232,15 +233,15 @@ private fun TokenPotentialComparisonHeader(tokenSymbol: String, modifier: Modifi
       buildAnnotatedString {
         append(stringResource(Res.string.if_label))
         append(' ')
-        pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
-        append(tokenSymbol.uppercase())
-        pop()
+        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+          append(tokenSymbol.uppercase())
+        }
         append(' ')
         append(stringResource(Res.string.reached_market_cap_of))
         append('…')
       },
     maxLines = 1,
-    maxTextSize = MaterialTheme.typography.headlineMedium.fontSize,
+    maxTextSize = MaterialTheme.typography.titleLarge.fontSize,
   )
 }
 
@@ -251,9 +252,10 @@ private fun TokenPotentialComparisonItem(
   modifier: Modifier = Modifier,
 ) {
   val (subjectToken, potential) = item
-  Card(modifier = modifier) {
+
+  ElevatedCard(modifier = modifier) {
     Row(
-      modifier = Modifier.fillMaxWidth().padding(4.dp),
+      modifier = Modifier.fillMaxWidth().padding(8.dp),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween,
     ) {
