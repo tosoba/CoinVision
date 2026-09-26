@@ -60,11 +60,10 @@ internal fun CompareTokensRoute(
   val mainSearchTokens = mainTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
   val referenceSearchTokens =
     referenceTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
+  val chartPeriod by viewModel.chartPeriod.collectAsState()
+  val chartPeriodButtonScrollState = rememberScrollState()
 
   Box(modifier = Modifier.fillMaxSize()) {
-    val chartPeriod by viewModel.chartPeriod.collectAsState()
-    val chartPeriodButtonScrollState = rememberScrollState()
-
     if (usingHorizontalTabSplit) {
       CompareTokensHorizontalSplit(
         mainTokenWithChart = mainTokenWithChart,
