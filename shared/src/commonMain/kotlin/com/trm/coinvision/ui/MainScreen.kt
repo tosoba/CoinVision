@@ -3,6 +3,7 @@ package com.trm.coinvision.ui
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -90,8 +91,8 @@ internal fun MainScreen() {
         userScrollEnabled = false,
       ) { page ->
         when (MainTab.entries[page]) {
-          MainTab.COMPARE_TOKENS -> CompareTokensRoute()
-          MainTab.TOKENS_LIST -> TokensListRoute()
+          MainTab.COMPARE_TOKENS -> CompareTokensRoute(modifier = Modifier.fillMaxSize())
+          MainTab.TOKENS_LIST -> TokensListRoute(modifier = Modifier.fillMaxSize())
         }
       }
     }

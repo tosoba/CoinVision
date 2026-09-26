@@ -46,6 +46,7 @@ import org.koin.core.qualifier.named
 
 @Composable
 internal fun CompareTokensRoute(
+  modifier: Modifier = Modifier,
   viewModel: CompareTokensViewModel = koinViewModel(),
   mainTokensSearchBarViewModel: TokensSearchBarViewModel =
     koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
@@ -59,7 +60,7 @@ internal fun CompareTokensRoute(
     referenceTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
   val chartPeriod by viewModel.chartPeriod.collectAsState()
 
-  Box(modifier = Modifier.fillMaxSize()) {
+  Box(modifier = modifier) {
     if (usingHorizontalTabSplit) {
       CompareTokensHorizontalSplit(
         mainTokenWithChart = mainTokenWithChart,
@@ -125,6 +126,7 @@ internal fun CompareTokensRoute(
 
 @Composable
 private fun CompareTokens(
+  modifier: Modifier = Modifier,
   mainTokenWithChart: Loadable<Pair<TokenDTO, List<PriceChartPoint>>>,
   referenceToken: Loadable<TokenDTO>,
   chartPeriod: MarketChartDaysPeriod,
@@ -144,7 +146,7 @@ private fun CompareTokens(
   onRetryMainTokenWithChartClick: () -> Unit,
   onRetryReferenceTokenClick: () -> Unit,
 ) {
-  Column(modifier = Modifier.fillMaxSize()) {
+  Column(modifier = modifier) {
     TokensSearchBar(
       state = mainSearchBarState,
       tokensListState = mainSearchListState,
@@ -198,6 +200,7 @@ private fun CompareTokens(
 
 @Composable
 private fun CompareTokensHorizontalSplit(
+  modifier: Modifier = Modifier,
   mainTokenWithChart: Loadable<Pair<TokenDTO, List<PriceChartPoint>>>,
   referenceToken: Loadable<TokenDTO>,
   chartPeriod: MarketChartDaysPeriod,
@@ -217,7 +220,7 @@ private fun CompareTokensHorizontalSplit(
   onRetryMainTokenWithChartClick: () -> Unit,
   onRetryReferenceTokenClick: () -> Unit,
 ) {
-  Row(modifier = Modifier.fillMaxSize()) {
+  Row(modifier = modifier) {
     Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
       TokensSearchBar(
         state = mainSearchBarState,

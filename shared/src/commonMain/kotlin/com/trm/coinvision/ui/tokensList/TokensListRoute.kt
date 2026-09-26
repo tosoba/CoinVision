@@ -68,6 +68,7 @@ import org.koin.core.qualifier.named
 
 @Composable
 internal fun TokensListRoute(
+  modifier: Modifier = Modifier,
   viewModel: TokensListViewModel = koinViewModel(),
   mainTokensSearchBarViewModel: TokensSearchBarViewModel =
     koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
@@ -83,6 +84,7 @@ internal fun TokensListRoute(
     val chartPeriod by viewModel.chartPeriod.collectAsState()
 
     TokensListHorizontalSplit(
+      modifier = modifier,
       searchBarState = mainTokensSearchBarViewModel.viewState,
       searchListState = mainTokensSearchBarViewModel.tokensListState,
       searchTokens = searchTokens,
@@ -99,6 +101,7 @@ internal fun TokensListRoute(
     )
   } else {
     TokensList(
+      modifier = modifier,
       searchBarState = mainTokensSearchBarViewModel.viewState,
       searchListState = mainTokensSearchBarViewModel.tokensListState,
       searchTokens = searchTokens,
@@ -115,6 +118,7 @@ internal fun TokensListRoute(
 
 @Composable
 private fun TokensList(
+  modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarViewState,
   searchListState: LazyListState,
   searchTokens: LazyPagingItems<TokenListItemDTO>,
@@ -126,7 +130,7 @@ private fun TokensList(
   tokenPotentialComparisonItems: LazyPagingItems<TokenPotentialComparison>,
   listState: LazyListState,
 ) {
-  Column(modifier = Modifier.fillMaxSize()) {
+  Column(modifier = modifier) {
     TokensSearchBar(
       state = searchBarState,
       tokensListState = searchListState,
@@ -153,6 +157,7 @@ private fun TokensList(
 
 @Composable
 private fun TokensListHorizontalSplit(
+  modifier: Modifier = Modifier,
   searchBarState: TokensSearchBarViewState,
   searchListState: LazyListState,
   searchTokens: LazyPagingItems<TokenListItemDTO>,
@@ -167,7 +172,7 @@ private fun TokensListHorizontalSplit(
   tokenPotentialComparisonItems: LazyPagingItems<TokenPotentialComparison>,
   listState: LazyListState,
 ) {
-  Row(modifier = Modifier.fillMaxSize()) {
+  Row(modifier = modifier) {
     Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
       TokensSearchBar(
         state = searchBarState,
@@ -224,14 +229,14 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.Error -> {
         item {
           CoinVisionRetryRow(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp).animateItem(),
             text = prepend.error.errorText(),
             onRetryClick = comparisonItems::retry,
           )
         }
       }
       LoadState.Loading -> {
-        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp)) }
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp).animateItem()) }
       }
       else -> {}
     }
@@ -240,14 +245,14 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.Error -> {
         item {
           CoinVisionRetryColumn(
-            modifier = Modifier.fillParentMaxSize(),
+            modifier = Modifier.fillParentMaxSize().animateItem(),
             text = refresh.error.errorText(),
             onRetryClick = comparisonItems::retry,
           )
         }
       }
       LoadState.Loading -> {
-        item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize()) }
+        item { CoinVisionProgressIndicator(modifier = Modifier.fillParentMaxSize().animateItem()) }
       }
       is LoadState.NotLoading -> {
         comparisonItems
@@ -257,13 +262,13 @@ private fun TokenPotentialComparisonLazyColumn(
           ?.token
           ?.symbol
           ?.let { symbol ->
-            stickyHeader {
+            item {
               TokenPotentialComparisonHeader(
                 tokenSymbol = symbol,
                 modifier =
                   Modifier.fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
+                    .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
+                    .animateItem(),
               )
             }
           }
@@ -276,7 +281,8 @@ private fun TokenPotentialComparisonLazyColumn(
             TokenPotentialComparisonItem(
               item = it,
               index = index,
-              modifier = Modifier.fillMaxWidth().padding(4.dp),
+              modifier =
+                Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 8.dp).animateItem(),
             )
           }
         }
@@ -287,14 +293,14 @@ private fun TokenPotentialComparisonLazyColumn(
       is LoadState.Error -> {
         item {
           CoinVisionRetryRow(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp).animateItem(),
             text = append.error.errorText(),
             onRetryClick = comparisonItems::retry,
           )
         }
       }
       LoadState.Loading -> {
-        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp)) }
+        item { CoinVisionProgressIndicator(modifier = Modifier.padding(16.dp).animateItem()) }
       }
       else -> {}
     }
