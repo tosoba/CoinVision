@@ -28,20 +28,17 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coinvision.shared.generated.resources.Res
 import coinvision.shared.generated.resources.back
 import coinvision.shared.generated.resources.loading
 import coinvision.shared.generated.resources.search
 import coinvision.shared.generated.resources.search_for_tokens
-import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
@@ -54,31 +51,9 @@ import com.valentinilk.shimmer.shimmer
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun TokensSearchBar(modifier: Modifier = Modifier, viewModel: TokensSearchBarViewModel) {
-  val tokensListState = rememberSaveable(saver = LazyListState.Saver) { viewModel.tokensListState }
-  val tokens = viewModel.tokensPagingFlow.collectAsLazyPagingItems()
-
-  TokensSearchBar(
-    query = viewModel.query,
-    selectedToken = viewModel.selectedToken,
-    active = viewModel.active,
-    isLoading = viewModel.isLoading,
-    tokensListState = tokensListState,
-    tokens = tokens,
-    modifier = modifier,
-    onQueryChange = viewModel::onQueryChange,
-    onActiveChange = viewModel::onActiveChange,
-    onTokenSelected = viewModel::onTokenSelected,
-  )
-}
-
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun TokensSearchBar(
-  query: String,
-  selectedToken: SelectedToken,
-  active: Boolean,
-  isLoading: Boolean,
+  state: TokensSearchBarViewState,
   tokensListState: LazyListState,
   tokens: LazyPagingItems<TokenListItemDTO>,
   modifier: Modifier = Modifier,
@@ -89,37 +64,45 @@ internal fun TokensSearchBar(
   Column(modifier = modifier) {
     DockedSearchBar(
       modifier = Modifier.fillMaxWidth(),
-      enabled = !isLoading,
-      query = query,
+      enabled = !state.isLoading,
+      query = state.query,
       onQueryChange = onQueryChange,
       onSearch = {},
-      active = active,
+      active = state.active,
       onActiveChange = onActiveChange,
       placeholder = {
-        Text(stringResource(if (isLoading) Res.string.loading else Res.string.search_for_tokens))
+        Text(
+          text =
+            stringResource(
+              if (state.isLoading) Res.string.loading else Res.string.search_for_tokens
+            )
+        )
       },
       leadingIcon = {
-        IconButton({ onActiveChange(!active) }) {
-          if (active) {
+        IconButton(onClick = { onActiveChange(!state.active) }) {
+          if (state.active) {
             Icon(
-              Icons.AutoMirrored.Rounded.ArrowBack,
+              imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
               contentDescription = stringResource(Res.string.back),
             )
           } else {
-            Icon(Icons.Rounded.Search, contentDescription = stringResource(Res.string.search))
+            Icon(
+              imageVector = Icons.Rounded.Search,
+              contentDescription = stringResource(Res.string.search),
+            )
           }
         }
       },
       trailingIcon = {
         AnimatedVisibility(
-          visible = selectedToken.image != null,
+          visible = state.selectedToken.image != null,
           enter = fadeIn(),
           exit = fadeOut(),
         ) {
           TokenImageOrSymbol(
-            image = selectedToken.image,
-            symbol = selectedToken.symbol,
-            name = selectedToken.name,
+            image = state.selectedToken.image,
+            symbol = state.selectedToken.symbol,
+            name = state.selectedToken.name,
             modifier = Modifier.size(40.dp).clip(CircleShape),
           )
         }
@@ -187,7 +170,7 @@ internal fun TokensSearchBar(
                     )
                   },
                   trailingContent = {
-                    AnimatedVisibility(visible = selectedToken.id == token.id) {
+                    AnimatedVisibility(visible = state.selectedToken.id == token.id) {
                       Icon(Icons.Default.Check, contentDescription = null)
                     }
                   },
@@ -215,7 +198,7 @@ internal fun TokensSearchBar(
       }
     }
 
-    AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
+    AnimatedVisibility(visible = state.isLoading, enter = fadeIn(), exit = fadeOut()) {
       LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     }
   }

@@ -1,9 +1,6 @@
 package com.trm.coinvision.ui.tokensSearchBar
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -34,24 +31,12 @@ internal class TokensSearchBarViewModel(
 ) : ViewModel() {
   private val queryFlow = MutableSharedFlow<String>()
 
-  var query by mutableStateOf("")
-    private set
-
-  var selectedToken by mutableStateOf(SelectedToken(id = "", symbol = "", name = "", image = null))
-    private set
-
-  var active by mutableStateOf(false)
-    private set
-
-  var isLoading by mutableStateOf(true)
-    private set
+  val viewState = TokensSearchBarViewState()
 
   init {
     getSelectedTokenFlow()
       .onEach {
-        query = it.name
-        selectedToken = it
-        isLoading = false
+        viewState.updateSelectedToken(it)
       }
       .launchIn(viewModelScope)
   }
@@ -71,22 +56,20 @@ internal class TokensSearchBarViewModel(
       )
 
   fun onActiveChange(active: Boolean) {
-    this.active = active
-    if (!active) query = selectedToken.name
+    viewState.updateActive(active)
+    if (!active) viewState.updateQuery(viewState.selectedToken.name)
 
     resetSearch()
   }
 
   fun onQueryChange(query: String) {
-    this.query = query
+    viewState.updateQuery(query)
 
     viewModelScope.launch { queryFlow.emit(query) }
   }
 
   fun onTokenSelected(token: TokenListItemDTO) {
-    query = token.name
-    selectedToken = SelectedToken(token.id, token.symbol, token.name, token.image)
-    active = false
+    viewState.updateSelectedTokenFromSearch(token)
 
     resetSearch()
     viewModelScope.launch {

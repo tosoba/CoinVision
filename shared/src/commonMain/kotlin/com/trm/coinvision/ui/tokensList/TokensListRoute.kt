@@ -42,9 +42,13 @@ import coinvision.shared.generated.resources.Res
 import coinvision.shared.generated.resources.if_label
 import coinvision.shared.generated.resources.reached_market_cap_of
 import com.trm.coinvision.core.common.util.ext.toMarketCapFormat
+import com.trm.coinvision.core.domain.model.Loadable
+import com.trm.coinvision.core.domain.model.MarketChartDaysPeriod
 import com.trm.coinvision.core.domain.model.TokenDTO
+import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.ui.chart.PriceChart
 import com.trm.coinvision.ui.chart.PriceChartHeader
+import com.trm.coinvision.ui.chart.PriceChartPoint
 import com.trm.coinvision.ui.common.AutoSizeText
 import com.trm.coinvision.ui.common.CoinVisionProgressIndicator
 import com.trm.coinvision.ui.common.CoinVisionRetryColumn
@@ -56,6 +60,7 @@ import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
+import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewState
 import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -71,64 +76,137 @@ internal fun TokensListRoute(
   val listState = rememberLazyListState()
   val tokenPotentialComparisonItems =
     viewModel.tokenPotentialComparisonPagingFlow.collectAsLazyPagingItems()
+  val searchBarState = mainTokensSearchBarViewModel.viewState
+  val searchTokens = mainTokensSearchBarViewModel.tokensPagingFlow.collectAsLazyPagingItems()
+  val searchListState = mainTokensSearchBarViewModel.tokensListState
 
   if (usingHorizontalTabSplit) {
     val chartPoints by viewModel.mainTokenChartPointsFlow.collectAsState()
     val chartPeriod by viewModel.chartPeriod.collectAsState()
 
-    Row(modifier = Modifier.fillMaxSize()) {
-      Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
-        TokensSearchBar(
-          modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-          viewModel = mainTokensSearchBarViewModel,
-        )
-
-        PriceChartHeader(
-          marketData = mainToken.mapNullable(block = TokenDTO::marketData),
-          chartPeriod = chartPeriod,
-          modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
-          onChartPeriodClick = viewModel::onChartPeriodClick,
-        )
-
-        LoadableView(
-          modifier = Modifier.fillMaxSize().padding(tabElementPadding),
-          loadable = chartPoints,
-          onRetryClick = viewModel::onRetryMainTokenWithChartClick,
-        ) {
-          PriceChart(points = it, modifier = Modifier.fillMaxSize())
-        }
-      }
-
-      LoadableView(
-        modifier = Modifier.weight(.5f).fillMaxHeight(),
-        loadable = mainToken,
-        onRetryClick = viewModel::onRetryMainTokenWithChartClick,
-      ) {
-        TokenPotentialComparisonLazyColumn(
-          comparisonItems = tokenPotentialComparisonItems,
-          modifier = Modifier.fillMaxSize(),
-          state = listState,
-        )
-      }
-    }
+    TokensListHorizontalSplit(
+      searchBarState = searchBarState,
+      searchListState = searchListState,
+      searchTokens = searchTokens,
+      onSearchQueryChange = mainTokensSearchBarViewModel::onQueryChange,
+      onSearchActiveChange = mainTokensSearchBarViewModel::onActiveChange,
+      onSearchTokenSelected = mainTokensSearchBarViewModel::onTokenSelected,
+      mainToken = mainToken,
+      chartPeriod = chartPeriod,
+      onRetryMainTokenWithChartClick = viewModel::onRetryMainTokenWithChartClick,
+      onChartPeriodClick = viewModel::onChartPeriodClick,
+      chartPoints = chartPoints,
+      tokenPotentialComparisonItems = tokenPotentialComparisonItems,
+      listState = listState,
+    )
   } else {
-    Column(modifier = Modifier.fillMaxSize()) {
+    TokensList(
+      searchBarState = searchBarState,
+      searchListState = searchListState,
+      searchTokens = searchTokens,
+      onSearchQueryChange = mainTokensSearchBarViewModel::onQueryChange,
+      onSearchActiveChange = mainTokensSearchBarViewModel::onActiveChange,
+      onSearchTokenSelected = mainTokensSearchBarViewModel::onTokenSelected,
+      mainToken = mainToken,
+      onRetryMainTokenWithChartClick = viewModel::onRetryMainTokenWithChartClick,
+      tokenPotentialComparisonItems = tokenPotentialComparisonItems,
+      listState = listState,
+    )
+  }
+}
+
+@Composable
+private fun TokensList(
+  searchBarState: TokensSearchBarViewState,
+  searchListState: LazyListState,
+  searchTokens: LazyPagingItems<TokenListItemDTO>,
+  onSearchQueryChange: (String) -> Unit,
+  onSearchActiveChange: (Boolean) -> Unit,
+  onSearchTokenSelected: (TokenListItemDTO) -> Unit,
+  mainToken: Loadable<TokenDTO>,
+  onRetryMainTokenWithChartClick: () -> Unit,
+  tokenPotentialComparisonItems: LazyPagingItems<TokenPotentialComparison>,
+  listState: LazyListState,
+) {
+  Column(modifier = Modifier.fillMaxSize()) {
+    TokensSearchBar(
+      state = searchBarState,
+      tokensListState = searchListState,
+      tokens = searchTokens,
+      modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
+      onQueryChange = onSearchQueryChange,
+      onActiveChange = onSearchActiveChange,
+      onTokenSelected = onSearchTokenSelected,
+    )
+
+    LoadableView(
+      modifier = Modifier.fillMaxSize(),
+      loadable = mainToken,
+      onRetryClick = onRetryMainTokenWithChartClick,
+    ) {
+      TokenPotentialComparisonLazyColumn(
+        comparisonItems = tokenPotentialComparisonItems,
+        modifier = Modifier.fillMaxSize(),
+        state = listState,
+      )
+    }
+  }
+}
+
+@Composable
+private fun TokensListHorizontalSplit(
+  searchBarState: TokensSearchBarViewState,
+  searchListState: LazyListState,
+  searchTokens: LazyPagingItems<TokenListItemDTO>,
+  onSearchQueryChange: (String) -> Unit,
+  onSearchActiveChange: (Boolean) -> Unit,
+  onSearchTokenSelected: (TokenListItemDTO) -> Unit,
+  mainToken: Loadable<TokenDTO>,
+  chartPeriod: MarketChartDaysPeriod,
+  onRetryMainTokenWithChartClick: () -> Unit,
+  onChartPeriodClick: (MarketChartDaysPeriod) -> Unit,
+  chartPoints: Loadable<List<PriceChartPoint>>,
+  tokenPotentialComparisonItems: LazyPagingItems<TokenPotentialComparison>,
+  listState: LazyListState,
+) {
+  Row(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.weight(.5f).fillMaxHeight()) {
       TokensSearchBar(
+        state = searchBarState,
+        tokensListState = searchListState,
+        tokens = searchTokens,
         modifier = Modifier.fillMaxWidth().padding(tabElementPadding),
-        viewModel = mainTokensSearchBarViewModel,
+        onQueryChange = onSearchQueryChange,
+        onActiveChange = onSearchActiveChange,
+        onTokenSelected = onSearchTokenSelected,
+      )
+
+      PriceChartHeader(
+        marketData = mainToken.mapNullable(block = TokenDTO::marketData),
+        chartPeriod = chartPeriod,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = tabElementPadding),
+        onChartPeriodClick = onChartPeriodClick,
       )
 
       LoadableView(
-        modifier = Modifier.fillMaxSize(),
-        loadable = mainToken,
-        onRetryClick = viewModel::onRetryMainTokenWithChartClick,
+        modifier = Modifier.fillMaxSize().padding(tabElementPadding),
+        loadable = chartPoints,
+        onRetryClick = onRetryMainTokenWithChartClick,
       ) {
-        TokenPotentialComparisonLazyColumn(
-          comparisonItems = tokenPotentialComparisonItems,
-          modifier = Modifier.fillMaxSize(),
-          state = listState,
-        )
+        PriceChart(points = it, modifier = Modifier.fillMaxSize())
       }
+    }
+
+    LoadableView(
+      modifier = Modifier.weight(.5f).fillMaxHeight(),
+      loadable = mainToken,
+      onRetryClick = onRetryMainTokenWithChartClick,
+    ) {
+      TokenPotentialComparisonLazyColumn(
+        comparisonItems = tokenPotentialComparisonItems,
+        modifier = Modifier.fillMaxSize(),
+        state = listState,
+      )
     }
   }
 }
