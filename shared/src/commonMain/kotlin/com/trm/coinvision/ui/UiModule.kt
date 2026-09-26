@@ -11,8 +11,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 internal val uiModule = module {
-  viewModel { MainNavigatorViewModel() }
-
   viewModel {
     val tokenRepository = get<TokenRepository>()
     CompareTokensViewModel(
@@ -20,7 +18,7 @@ internal val uiModule = module {
       getSelectedReferenceTokenFlowUseCase = get(),
       swapSelectedTokens = tokenRepository::swapSelectedTokens,
       updateChartPeriod = tokenRepository::updateChartPeriod,
-      getChartPeriodFlow = tokenRepository::getChartPeriodFlow
+      getChartPeriodFlow = tokenRepository::getChartPeriodFlow,
     )
   }
 
@@ -30,7 +28,7 @@ internal val uiModule = module {
       tokenListPagingRepository = get(),
       getSelectedMainTokenWithChartFlowUseCase = get(),
       updateChartPeriod = tokenRepository::updateChartPeriod,
-      getChartPeriodFlow = tokenRepository::getChartPeriodFlow
+      getChartPeriodFlow = tokenRepository::getChartPeriodFlow,
     )
   }
 
@@ -39,7 +37,7 @@ internal val uiModule = module {
     TokensSearchBarViewModel(
       getSelectedTokenFlow = tokenRepository::getSelectedMainTokenFlow,
       updateSelectedToken = tokenRepository::updateSelectedMainToken,
-      getTokenListPaging = get<TokenListPagingRepository>()::invoke
+      getTokenListPaging = get<TokenListPagingRepository>()::invoke,
     )
   }
 
@@ -48,7 +46,7 @@ internal val uiModule = module {
     TokensSearchBarViewModel(
       getSelectedTokenFlow = tokenRepository::getSelectedReferenceTokenFlow,
       updateSelectedToken = tokenRepository::updateSelectedReferenceToken,
-      getTokenListPaging = get<TokenListPagingRepository>()::invoke
+      getTokenListPaging = get<TokenListPagingRepository>()::invoke,
     )
   }
 }

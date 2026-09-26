@@ -2,7 +2,6 @@ package com.trm.coinvision.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,8 +13,7 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import coinvision.shared.generated.resources.Res
@@ -24,38 +22,35 @@ import coinvision.shared.generated.resources.list
 import com.trm.coinvision.ui.common.usingNavigationBar
 import com.trm.coinvision.ui.compareTokens.CompareTokensRoute
 import com.trm.coinvision.ui.tokensList.TokensListRoute
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun MainScreen() {
-  val mainNavigatorViewModel: MainNavigatorViewModel = koinViewModel()
-  val selectedTab = mainNavigatorViewModel.selectedTab
-  val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { MainTab.entries.size }
-
-  LaunchedEffect(pagerState) {
-    snapshotFlow(pagerState::settledPage).collect { page ->
-      val tab = MainTab.entries[page]
-      if (tab != mainNavigatorViewModel.selectedTab) {
-        mainNavigatorViewModel.onTabSelected(tab)
-      }
-    }
-  }
-
-  LaunchedEffect(selectedTab) {
-    if (pagerState.settledPage != selectedTab.ordinal) {
-      pagerState.animateScrollToPage(selectedTab.ordinal)
-    }
-  }
+  val pagerState =
+    rememberPagerState(initialPage = MainTab.COMPARE_TOKENS.ordinal) { MainTab.entries.size }
+  val selectedTab = MainTab.entries[pagerState.currentPage]
+  val scope = rememberCoroutineScope()
 
   Row {
     if (!usingNavigationBar) {
       NavigationRail {
-        Spacer(Modifier.weight(1f))
-        MainTabNavigationRailItem(tab = MainTab.COMPARE_TOKENS, viewModel = mainNavigatorViewModel)
-        MainTabNavigationRailItem(tab = MainTab.TOKENS_LIST, viewModel = mainNavigatorViewModel)
-        Spacer(Modifier.weight(1f))
+        MainTabNavigationRailItem(
+          tab = MainTab.COMPARE_TOKENS,
+          selectedTab = selectedTab,
+          onTabSelected = {
+            scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+          },
+        )
+
+        MainTabNavigationRailItem(
+          tab = MainTab.TOKENS_LIST,
+          selectedTab = selectedTab,
+          onTabSelected = {
+            scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+          },
+        )
       }
     }
 
@@ -65,9 +60,18 @@ internal fun MainScreen() {
           NavigationBar {
             MainTabNavigationBarItem(
               tab = MainTab.COMPARE_TOKENS,
-              viewModel = mainNavigatorViewModel,
+              selectedTab = selectedTab,
+              onTabSelected = {
+                scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+              },
             )
-            MainTabNavigationBarItem(tab = MainTab.TOKENS_LIST, viewModel = mainNavigatorViewModel)
+            MainTabNavigationBarItem(
+              tab = MainTab.TOKENS_LIST,
+              selectedTab = selectedTab,
+              onTabSelected = {
+                scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+              },
+            )
           }
         }
       }
@@ -83,28 +87,15 @@ internal fun MainScreen() {
 }
 
 @Composable
-private fun mainTabTitle(tab: MainTab): String =
-  when (tab) {
-    MainTab.COMPARE_TOKENS -> stringResource(Res.string.compare)
-    MainTab.TOKENS_LIST -> stringResource(Res.string.list)
-  }
-
-@Composable
-private fun mainTabIcon(tab: MainTab): Painter =
-  when (tab) {
-    MainTab.COMPARE_TOKENS -> painterResource(Res.drawable.compare)
-    MainTab.TOKENS_LIST -> painterResource(Res.drawable.list)
-  }
-
-@Composable
 private fun RowScope.MainTabNavigationBarItem(
   tab: MainTab,
-  viewModel: MainNavigatorViewModel,
+  selectedTab: MainTab,
+  onTabSelected: () -> Unit,
 ) {
   NavigationBarItem(
-    selected = viewModel.selectedTab == tab,
-    onClick = { viewModel.onTabSelected(tab) },
-    icon = { Icon(painter = mainTabIcon(tab), contentDescription = mainTabTitle(tab)) },
+    selected = selectedTab == tab,
+    onClick = onTabSelected,
+    icon = { MainTabIcon(tab) },
     label = { Text(mainTabTitle(tab)) },
   )
 }
@@ -112,12 +103,36 @@ private fun RowScope.MainTabNavigationBarItem(
 @Composable
 private fun MainTabNavigationRailItem(
   tab: MainTab,
-  viewModel: MainNavigatorViewModel,
+  selectedTab: MainTab,
+  onTabSelected: () -> Unit,
 ) {
   NavigationRailItem(
-    selected = viewModel.selectedTab == tab,
-    onClick = { viewModel.onTabSelected(tab) },
-    icon = { Icon(painter = mainTabIcon(tab), contentDescription = mainTabTitle(tab)) },
+    selected = selectedTab == tab,
+    onClick = onTabSelected,
+    icon = { MainTabIcon(tab) },
     label = { Text(mainTabTitle(tab)) },
   )
 }
+
+@Composable
+private fun MainTabIcon(tab: MainTab) {
+  Icon(painter = mainTabIcon(tab), contentDescription = mainTabTitle(tab))
+}
+
+@Composable
+private fun mainTabTitle(tab: MainTab): String =
+  stringResource(
+    when (tab) {
+      MainTab.COMPARE_TOKENS -> Res.string.compare
+      MainTab.TOKENS_LIST -> Res.string.list
+    }
+  )
+
+@Composable
+private fun mainTabIcon(tab: MainTab): Painter =
+  painterResource(
+    when (tab) {
+      MainTab.COMPARE_TOKENS -> Res.drawable.compare
+      MainTab.TOKENS_LIST -> Res.drawable.list
+    }
+  )

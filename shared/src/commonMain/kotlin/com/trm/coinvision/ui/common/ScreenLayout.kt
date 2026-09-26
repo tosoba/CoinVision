@@ -16,5 +16,4 @@ internal val usingNavigationBar
   @Composable
   get() =
     LocalWidthSizeClass.current == WindowWidthSizeClass.Compact ||
-      LocalHeightSizeClass.current == WindowHeightSizeClass.Medium ||
-      LocalHeightSizeClass.current == WindowHeightSizeClass.Expanded
+      LocalHeightSizeClass.current != WindowHeightSizeClass.Compact
