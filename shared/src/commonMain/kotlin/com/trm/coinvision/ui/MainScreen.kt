@@ -30,13 +30,16 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun MainScreen() {
   val scope = rememberCoroutineScope()
-
   val pagerState =
     rememberPagerState(
       initialPage = MainTab.COMPARE_TOKENS.ordinal,
       pageCount = MainTab.entries::size,
     )
   val selectedTab = MainTab.entries[pagerState.currentPage]
+
+  fun switchTabTo(tab: MainTab) {
+    scope.launch { pagerState.scrollToPage(tab.ordinal) }
+  }
 
   Scaffold(
     bottomBar = {
@@ -46,14 +49,14 @@ internal fun MainScreen() {
             tab = MainTab.COMPARE_TOKENS,
             selectedTab = selectedTab,
             onTabSelected = {
-              scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+              switchTabTo(MainTab.COMPARE_TOKENS)
             },
           )
           MainTabNavigationBarItem(
             tab = MainTab.TOKENS_LIST,
             selectedTab = selectedTab,
             onTabSelected = {
-              scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+              switchTabTo(MainTab.TOKENS_LIST)
             },
           )
         }
@@ -67,7 +70,7 @@ internal fun MainScreen() {
             tab = MainTab.COMPARE_TOKENS,
             selectedTab = selectedTab,
             onTabSelected = {
-              scope.launch { pagerState.animateScrollToPage(MainTab.COMPARE_TOKENS.ordinal) }
+              switchTabTo(MainTab.COMPARE_TOKENS)
             },
           )
 
@@ -75,13 +78,17 @@ internal fun MainScreen() {
             tab = MainTab.TOKENS_LIST,
             selectedTab = selectedTab,
             onTabSelected = {
-              scope.launch { pagerState.animateScrollToPage(MainTab.TOKENS_LIST.ordinal) }
+              switchTabTo(MainTab.TOKENS_LIST)
             },
           )
         }
       }
 
-      HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
+      HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.weight(1f),
+        userScrollEnabled = false,
+      ) { page ->
         when (MainTab.entries[page]) {
           MainTab.COMPARE_TOKENS -> CompareTokensRoute()
           MainTab.TOKENS_LIST -> TokensListRoute()
