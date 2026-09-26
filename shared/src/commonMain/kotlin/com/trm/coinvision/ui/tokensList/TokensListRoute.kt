@@ -54,10 +54,10 @@ import com.trm.coinvision.ui.common.TokenImageOrSymbol
 import com.trm.coinvision.ui.common.errorText
 import com.trm.coinvision.ui.common.usingHorizontalTabSplit
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBar
-import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
-import kotlinx.coroutines.flow.flowOf
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarType
 import com.trm.coinvision.ui.tokensSearchBar.TokensSearchBarViewModel
+import com.trm.coinvision.ui.tokensSearchBar.tabElementPadding
+import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -65,7 +65,8 @@ import org.koin.core.qualifier.named
 @Composable
 internal fun TokensListRoute(
   viewModel: TokensListViewModel = koinViewModel(),
-  mainTokensSearchBarViewModel: TokensSearchBarViewModel = koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
+  mainTokensSearchBarViewModel: TokensSearchBarViewModel =
+    koinViewModel(qualifier = named(TokensSearchBarType.MAIN)),
 ) {
   val mainToken by viewModel.mainTokenFlow.collectAsState()
   val listState = rememberLazyListState()
@@ -131,8 +132,7 @@ internal fun TokensListRoute(
       }
     }
   }
-  }
-
+}
 
 @Composable
 private fun TokenPotentialComparisonLazyColumn(

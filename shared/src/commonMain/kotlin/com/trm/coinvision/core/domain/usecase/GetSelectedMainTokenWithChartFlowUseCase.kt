@@ -28,7 +28,7 @@ internal class GetSelectedMainTokenWithChartFlowUseCase(private val repository: 
             repository.getTokenChart(
               id = tokenId,
               vsFiatCurrency = FiatCurrency.USD,
-              days = daysPeriod
+              days = daysPeriod,
             )
           }
           emit(Ready(token.await() to chart.await()))

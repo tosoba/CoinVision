@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 internal fun tokenRepository(
   client: CoinGeckoApiClient,
-  database: CoinVisionDatabase
+  database: CoinVisionDatabase,
 ): TokenRepository =
   object : TokenRepository {
     override suspend fun updateSelectedMainToken(token: SelectedToken) {
@@ -69,7 +69,7 @@ internal fun tokenRepository(
     override suspend fun getTokenChart(
       id: String,
       vsFiatCurrency: FiatCurrency,
-      days: MarketChartDaysPeriod
+      days: MarketChartDaysPeriod,
     ): MarketChartDTO =
       client
         .getMarketChart(id = id, vsFiatCurrency = vsFiatCurrency, days = days)
@@ -87,7 +87,7 @@ private fun defaultMainToken(): SelectedToken =
     id = DEFAULT_SELECTED_MAIN_TOKEN_ID,
     symbol = DEFAULT_SELECTED_MAIN_TOKEN_SYMBOL,
     name = DEFAULT_SELECTED_MAIN_TOKEN_NAME,
-    image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE
+    image = DEFAULT_SELECTED_MAIN_TOKEN_IMAGE,
   )
 
 private const val DEFAULT_SELECTED_REFERENCE_TOKEN_ID = "bitcoin"
@@ -101,5 +101,5 @@ private fun defaultReferenceToken(): SelectedToken =
     id = DEFAULT_SELECTED_REFERENCE_TOKEN_ID,
     symbol = DEFAULT_SELECTED_REFERENCE_TOKEN_SYMBOL,
     name = DEFAULT_SELECTED_REFERENCE_TOKEN_NAME,
-    image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE
+    image = DEFAULT_SELECTED_REFERENCE_TOKEN_IMAGE,
   )

@@ -8,8 +8,7 @@ import kotlinx.serialization.Serializable
 internal data class MarketData(
   @SerialName("circulating_supply") override val circulatingSupply: Double?,
   @SerialName("current_price") override val currentPrice: ValueInCurrency?,
-  @SerialName("fully_diluted_valuation")
-  override val fullyDilutedValuation: ValueInCurrency?,
+  @SerialName("fully_diluted_valuation") override val fullyDilutedValuation: ValueInCurrency?,
   @SerialName("high_24h") override val high24h: ValueInCurrency?,
   @SerialName("last_updated") override val lastUpdated: String?,
   @SerialName("low_24h") override val low24h: ValueInCurrency?,

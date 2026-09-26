@@ -24,8 +24,7 @@ class PriceChartUIView: UIView, PriceChartUIViewDelegate {
     }
 
     private func setupChartView(points: [PriceChartPoint]) {
-        let options = ChartOptions()
-        chart = LightweightCharts(options: options)
+        chart = LightweightCharts()
         chart.translatesAutoresizingMaskIntoConstraints = false
         addSubview(chart)
         NSLayoutConstraint.activate([

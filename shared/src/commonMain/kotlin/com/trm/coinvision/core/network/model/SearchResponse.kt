@@ -8,5 +8,5 @@ internal data class SearchResponse(
   @SerialName("categories") val categories: List<Category>?,
   @SerialName("coins") val coins: List<Coin>?,
   @SerialName("exchanges") val exchanges: List<Exchange>?,
-  @SerialName("nfts") val nfts: List<Nft>?
+  @SerialName("nfts") val nfts: List<Nft>?,
 )

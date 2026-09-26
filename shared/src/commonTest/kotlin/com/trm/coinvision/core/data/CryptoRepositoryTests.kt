@@ -7,10 +7,10 @@ import com.trm.coinvision.core.network.client.coinGeckoHttpClientDefaultConfig
 import com.trm.coinvision.core.network.mapper.toTokenListItems
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import kotlinx.coroutines.test.runTest
 
 class CryptoRepositoryTests {
   private lateinit var repository: CoinGeckoApiClient

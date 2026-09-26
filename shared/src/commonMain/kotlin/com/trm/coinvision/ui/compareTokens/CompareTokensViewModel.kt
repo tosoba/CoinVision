@@ -27,7 +27,7 @@ internal class CompareTokensViewModel(
   getSelectedReferenceTokenFlowUseCase: GetSelectedReferenceTokenFlowUseCase,
   private val swapSelectedTokens: suspend () -> Unit,
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
-  getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
+  getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>,
 ) : ViewModel() {
   private val retryMainTokenWithChartFlow = MutableSharedFlow<Unit>()
 
@@ -42,7 +42,7 @@ internal class CompareTokensViewModel(
       .stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = LoadingFirst
+        initialValue = LoadingFirst,
       )
 
   fun onRetryMainTokenWithChartClick() {
@@ -58,7 +58,7 @@ internal class CompareTokensViewModel(
       .stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = LoadingFirst
+        initialValue = LoadingFirst,
       )
 
   fun onRetryReferenceTokenClick() {
@@ -74,7 +74,7 @@ internal class CompareTokensViewModel(
       .stateIn(
         viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = MarketChartDaysPeriod.default
+        initialValue = MarketChartDaysPeriod.default,
       )
 
   fun onChartPeriodClick(period: MarketChartDaysPeriod) {

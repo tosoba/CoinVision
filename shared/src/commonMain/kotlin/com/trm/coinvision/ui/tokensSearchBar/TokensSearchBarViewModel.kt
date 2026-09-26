@@ -10,7 +10,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.trm.coinvision.core.domain.model.SelectedToken
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +24,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 internal class TokensSearchBarViewModel(

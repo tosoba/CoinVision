@@ -18,7 +18,7 @@ fun <T : Any> SegmentedButton(
   items: List<T> = emptyList(),
   selectedItem: T? = null,
   label: (T) -> String = { it.toString() },
-  onItemClick: (T) -> Unit = {}
+  onItemClick: (T) -> Unit = {},
 ) {
   Row(modifier = modifier) {
     val cornerRadius = 16.dp
@@ -38,7 +38,7 @@ fun <T : Any> SegmentedButton(
                 topStart = cornerRadius,
                 topEnd = 0.dp,
                 bottomStart = cornerRadius,
-                bottomEnd = 0.dp
+                bottomEnd = 0.dp,
               )
             }
             items.lastIndex -> {
@@ -46,7 +46,7 @@ fun <T : Any> SegmentedButton(
                 topStart = 0.dp,
                 topEnd = cornerRadius,
                 bottomStart = 0.dp,
-                bottomEnd = cornerRadius
+                bottomEnd = cornerRadius,
               )
             }
             else -> {
@@ -60,14 +60,14 @@ fun <T : Any> SegmentedButton(
               colorScheme.primary
             } else {
               colorScheme.primary.copy(alpha = 0.75f)
-            }
+            },
           ),
         colors =
           if (item == selectedItem) {
             selectedColor
           } else {
             nonSelectedColor
-          }
+          },
       ) {
         Text(label(item))
       }

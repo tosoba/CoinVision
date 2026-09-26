@@ -19,7 +19,9 @@ fun TokenImageOrSymbol(
       resource = { asyncPainterResource(it) },
       contentDescription = name,
       onFailure = { TokenSymbol(symbol) },
-      onLoading = { TokenSymbol(symbol = symbol, modifier = Modifier.tokenSymbolShape().shimmer()) },
+      onLoading = {
+        TokenSymbol(symbol = symbol, modifier = Modifier.tokenSymbolShape().shimmer())
+      },
     )
   } ?: run { TokenSymbol(symbol) }
 }

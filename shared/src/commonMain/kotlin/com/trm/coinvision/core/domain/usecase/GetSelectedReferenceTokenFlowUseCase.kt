@@ -11,9 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transformLatest
 
-internal class GetSelectedReferenceTokenFlowUseCase(
-  private val repository: TokenRepository
-) {
+internal class GetSelectedReferenceTokenFlowUseCase(private val repository: TokenRepository) {
   @OptIn(ExperimentalCoroutinesApi::class)
   operator fun invoke(): Flow<Loadable<TokenDTO>> =
     repository.getSelectedReferenceTokenIdFlow().transformLatest {

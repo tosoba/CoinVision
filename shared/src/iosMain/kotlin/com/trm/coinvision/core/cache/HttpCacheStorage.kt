@@ -1,7 +1,6 @@
 package com.trm.coinvision.core.cache
 
 import com.trm.coinvision.core.cache.disk.DiskCacheStorage
-import io.ktor.client.plugins.cache.storage.*
 import io.ktor.client.plugins.cache.storage.CacheStorage
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -17,11 +16,11 @@ internal actual class PlatformHttpCacheStorageInitializer : HttpCacheStorageInit
         NSSearchPathForDirectoriesInDomains(
             directory = NSCachesDirectory,
             domainMask = NSUserDomainMask,
-            expandTilde = true
+            expandTilde = true,
           )
           .first()
           .toString()
           .toPath(),
-      maxSize = maxSize
+      maxSize = maxSize,
     )
 }

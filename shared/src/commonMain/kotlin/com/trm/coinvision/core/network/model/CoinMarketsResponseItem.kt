@@ -25,7 +25,7 @@ internal data class CoinMarketsResponseItem(
   @SerialName("price_change_percentage_24h") override val priceChangePercentage24h: Double?,
   @SerialName("symbol") val _symbol: String?,
   @SerialName("total_supply") override val totalSupply: Double?,
-  @SerialName("total_volume") override val totalVolume: Double?
+  @SerialName("total_volume") override val totalVolume: Double?,
 ) : TokenListItemDTO {
   override val currentPrice: Double
     get() = requireNotNull(_currentPrice)

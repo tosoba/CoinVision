@@ -8,11 +8,11 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
+import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlinx.coroutines.test.runTest
 
 class CoinGeckoApiClientTests {
   private lateinit var client: HttpClient

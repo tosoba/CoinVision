@@ -5,13 +5,13 @@ import UIKit
 struct ContentView: View {
     var body: some View {
         ComposeView()
-            .ignoresSafeArea(.all)
+            .ignoresSafeArea()
     }
 }
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context _: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController(generatedViewFactory: PriceChartUIViewFactory())
+        MainViewControllerKt.mainViewController(composeSharedFactory: PriceChartUIViewFactory())
     }
 
     func updateUIViewController(_: UIViewController, context _: Context) {}

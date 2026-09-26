@@ -9,5 +9,5 @@ internal data class Exchange(
   @SerialName("large") val large: String?,
   @SerialName("market_type") val marketType: String?,
   @SerialName("name") val name: String?,
-  @SerialName("thumb") val thumb: String?
+  @SerialName("thumb") val thumb: String?,
 )

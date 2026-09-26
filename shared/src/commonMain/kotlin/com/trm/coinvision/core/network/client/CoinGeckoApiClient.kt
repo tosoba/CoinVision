@@ -20,7 +20,7 @@ internal class CoinGeckoApiClient(private val client: HttpClient) {
     order: String = "market_cap_desc",
     sparkline: Boolean = false,
     locale: String = "en",
-    @IntRange(from = 0L, to = 18L) precision: Short = 2
+    @IntRange(from = 0L, to = 18L) precision: Short = 2,
   ): HttpResponse =
     client.get(COIN_GECKO_API_BASE_URL) {
       url {
@@ -60,7 +60,7 @@ internal class CoinGeckoApiClient(private val client: HttpClient) {
   suspend fun getMarketChart(
     id: String,
     vsFiatCurrency: FiatCurrency,
-    days: MarketChartDaysPeriod = MarketChartDaysPeriod.DAY
+    days: MarketChartDaysPeriod = MarketChartDaysPeriod.DAY,
   ): HttpResponse =
     client.get(COIN_GECKO_API_BASE_URL) {
       url {

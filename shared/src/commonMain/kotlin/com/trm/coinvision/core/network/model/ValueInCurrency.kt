@@ -66,5 +66,5 @@ internal data class ValueInCurrency(
   @SerialName("xlm") override val xlm: Double?,
   @SerialName("xrp") override val xrp: Double?,
   @SerialName("yfi") override val yfi: Double?,
-  @SerialName("zar") override val zar: Double?
-): ValueInCurrencyDTO
+  @SerialName("zar") override val zar: Double?,
+) : ValueInCurrencyDTO

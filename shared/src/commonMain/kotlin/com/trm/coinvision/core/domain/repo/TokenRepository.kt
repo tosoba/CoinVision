@@ -31,6 +31,6 @@ internal interface TokenRepository {
   suspend fun getTokenChart(
     id: String,
     vsFiatCurrency: FiatCurrency,
-    days: MarketChartDaysPeriod
+    days: MarketChartDaysPeriod,
   ): MarketChartDTO
 }

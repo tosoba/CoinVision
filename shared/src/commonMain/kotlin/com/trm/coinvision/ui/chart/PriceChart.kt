@@ -10,5 +10,5 @@ internal expect fun PriceChart(modifier: Modifier = Modifier, points: List<Price
 
 expect interface ComposeSharedFactory
 
-val LocalSharedFactory: ProvidableCompositionLocal<ComposeSharedFactory> =
-  compositionLocalOf(defaultFactory = { error("LocalSharedFactory was not provided.") })
+val LocalComposeSharedFactory: ProvidableCompositionLocal<ComposeSharedFactory> =
+  compositionLocalOf(defaultFactory = { error("LocalComposeSharedFactory was not provided.") })

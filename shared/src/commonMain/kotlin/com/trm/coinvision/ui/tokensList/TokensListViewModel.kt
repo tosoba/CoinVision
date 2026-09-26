@@ -39,7 +39,7 @@ internal class TokensListViewModel(
   tokenListPagingRepository: TokenListPagingRepository,
   getSelectedMainTokenWithChartFlowUseCase: GetSelectedMainTokenWithChartFlowUseCase,
   private val updateChartPeriod: suspend (MarketChartDaysPeriod) -> Unit,
-  getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>
+  getChartPeriodFlow: () -> Flow<MarketChartDaysPeriod>,
 ) : ViewModel() {
   val mainTokenFlow = MutableStateFlow<Loadable<TokenDTO>>(LoadingFirst)
 
@@ -84,15 +84,15 @@ internal class TokensListViewModel(
       .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = PagingData.empty()
+        initialValue = PagingData.empty(),
       )
 
   val chartPeriod: StateFlow<MarketChartDaysPeriod> =
     getChartPeriodFlow()
       .stateIn(
-        viewModelScope,
+        scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = MarketChartDaysPeriod.default
+        initialValue = MarketChartDaysPeriod.default,
       )
 
   fun onChartPeriodClick(period: MarketChartDaysPeriod) {

@@ -7,7 +7,7 @@ import okio.Sink
 /** A sink that never throws [IOException]s, even if the underlying sink does. */
 internal class FaultHidingSink(
   private val delegate: Sink,
-  private val onException: (IOException) -> Unit
+  private val onException: (IOException) -> Unit,
 ) : Sink by delegate {
 
   private var hasErrors = false

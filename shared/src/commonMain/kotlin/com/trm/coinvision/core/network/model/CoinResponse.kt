@@ -15,7 +15,7 @@ internal data class CoinResponse(
   @SerialName("market_cap_rank") override val marketCapRank: Int?,
   @SerialName("market_data") override val marketData: MarketData?,
   @SerialName("name") override val name: String?,
-  @SerialName("symbol") override val symbol: String?
+  @SerialName("symbol") override val symbol: String?,
 ) : TokenDTO {
   override val description: String?
     get() = _description?.en

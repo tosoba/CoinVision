@@ -8,5 +8,5 @@ internal data class Nft(
   @SerialName("id") val id: String?,
   @SerialName("name") val name: String?,
   @SerialName("symbol") val symbol: String?,
-  @SerialName("thumb") val thumb: String?
+  @SerialName("thumb") val thumb: String?,
 )

@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 internal data class Image(
   @SerialName("large") override val large: String?,
   @SerialName("small") override val small: String?,
-  @SerialName("thumb") override val thumb: String?
+  @SerialName("thumb") override val thumb: String?,
 ) : ImageDTO

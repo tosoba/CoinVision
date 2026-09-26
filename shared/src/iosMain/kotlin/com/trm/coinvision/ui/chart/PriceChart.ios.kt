@@ -9,7 +9,7 @@ import platform.UIKit.UIView
 
 @Composable
 internal actual fun PriceChart(modifier: Modifier, points: List<PriceChartPoint>) {
-  val factory = LocalSharedFactory.current
+  val factory = LocalComposeSharedFactory.current
   val (view, delegate) = remember { factory.createPriceChartUIView(points) }
   LaunchedEffect(points) { delegate.updatePoints(points) }
   UIKitView(modifier = modifier, factory = { view })

@@ -1,16 +1,15 @@
 package com.trm.coinvision.ui.tokensList
 
-import com.trm.coinvision.core.common.util.ext.format
 import com.trm.coinvision.core.common.util.ext.decimalFormat
+import com.trm.coinvision.core.common.util.ext.format
 import com.trm.coinvision.core.domain.model.Loadable
 import com.trm.coinvision.core.domain.model.TokenDTO
 import com.trm.coinvision.core.domain.model.TokenListItemDTO
 import com.trm.coinvision.core.domain.model.WithData
 import com.trm.coinvision.core.domain.model.WithoutData
 
-internal class TokenPotentialComparisonMapper(
-  private val mainToken: Loadable<TokenDTO>,
-) : (TokenListItemDTO) -> TokenPotentialComparison {
+internal class TokenPotentialComparisonMapper(private val mainToken: Loadable<TokenDTO>) :
+  (TokenListItemDTO) -> TokenPotentialComparison {
   override operator fun invoke(referenceToken: TokenListItemDTO): TokenPotentialComparison =
     when (mainToken) {
       is WithData -> {
@@ -42,9 +41,9 @@ internal class TokenPotentialComparisonMapper(
                     else -> {
                       "-${(100.0 - ((referenceTokenMarketCap / mainTokenMarketCap) * 100.0)).format(2)}%"
                     }
-                  }
+                  },
               )
-            }
+            },
         )
       }
       is WithoutData -> {

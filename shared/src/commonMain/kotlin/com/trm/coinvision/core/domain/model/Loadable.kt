@@ -35,7 +35,7 @@ data object Empty : WithoutData {
 
   override fun <R : Any> mapNullable(
     orElse: (Nothing) -> Loadable<R>,
-    block: (Nothing) -> R?
+    block: (Nothing) -> R?,
   ): Loadable<R> = this
 }
 
@@ -46,7 +46,7 @@ data object LoadingFirst : WithoutData, Loading {
 
   override fun <R : Any> mapNullable(
     orElse: (Nothing) -> Loadable<R>,
-    block: (Nothing) -> R?
+    block: (Nothing) -> R?,
   ): Loadable<R> = this
 }
 
@@ -77,7 +77,7 @@ data class FailedFirst(override val throwable: Throwable?) : WithoutData, Failed
 
   override fun <R : Any> mapNullable(
     orElse: (Nothing) -> Loadable<R>,
-    block: (Nothing) -> R?
+    block: (Nothing) -> R?,
   ): Loadable<R> = this
 }
 
