@@ -21,4 +21,3 @@
 - [Compose Shimmer](https://github.com/valentinilk/compose-shimmer) – loading placeholders
 - [SQLDelight](https://cashapp.github.io/sqldelight/) – local database
 - [TradingView Lightweight Charts](https://www.tradingview.com/lightweight-charts/) – token price charts
-- [Voyager](https://voyager.adriel.cafe/) – navigation
