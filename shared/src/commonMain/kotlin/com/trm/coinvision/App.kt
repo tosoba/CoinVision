@@ -13,13 +13,22 @@ import com.trm.coinvision.core.common.util.LocalWidthSizeClass
 import com.trm.coinvision.ui.MainScreen
 import com.trm.coinvision.ui.common.coinVisionShimmerTheme
 import com.trm.coinvision.ui.common.kamelConfig
+import com.trm.coinvision.ui.compareTokens.CompareTokensRoute
+import com.trm.coinvision.ui.tokensList.TokensListRoute
 import com.valentinilk.shimmer.LocalShimmerTheme
 import io.kamel.image.config.LocalKamelConfig
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable fun App() = CoinVisionTheme { MainScreen() }
+
+@Composable fun CompareTokensTab() = CoinVisionTheme { CompareTokensRoute() }
+
+@Composable fun TokensListTab() = CoinVisionTheme { TokensListRoute() }
+
 @Composable
-fun App() {
+private fun CoinVisionTheme(content: @Composable () -> Unit) {
+  @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
   val windowSizeClass = calculateWindowSizeClass()
+
   CompositionLocalProvider(
     LocalWidthSizeClass provides windowSizeClass.widthSizeClass,
     LocalHeightSizeClass provides windowSizeClass.heightSizeClass,
@@ -29,7 +38,7 @@ fun App() {
     MaterialTheme(
       colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
     ) {
-      MainScreen()
+      content()
     }
   }
 }

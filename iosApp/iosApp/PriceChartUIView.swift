@@ -9,7 +9,7 @@ class PriceChartUIViewFactory: ComposeSharedFactory {
     }
 }
 
-class PriceChartUIView: UIView, PriceChartUIViewDelegate {
+private class PriceChartUIView: UIView, PriceChartUIViewDelegate {
     private var chart: LightweightCharts!
     private var series: AreaSeries!
 
