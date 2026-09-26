@@ -141,7 +141,7 @@ internal fun TokensSearchBar(
             }
           }
           LoadState.Loading -> {
-            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp)) }
+            item { CoinVisionProgressIndicator(modifier = Modifier.padding(20.dp).animateItem()) }
           }
           else -> {}
         }
