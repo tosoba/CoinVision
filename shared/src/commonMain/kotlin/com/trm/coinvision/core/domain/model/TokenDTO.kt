@@ -1,8 +1,6 @@
 package com.trm.coinvision.core.domain.model
 
-import com.trm.coinvision.core.common.model.Serializable
-
-internal interface TokenDTO : Serializable {
+internal interface TokenDTO {
   val categories: List<String>?
   val coingeckoRank: Int?
   val description: String?

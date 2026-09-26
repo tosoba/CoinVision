@@ -1,8 +1,6 @@
 package com.trm.coinvision.core.domain.model
 
-import com.trm.coinvision.core.common.model.Serializable
-
-interface ValueInCurrencyDTO : Serializable {
+interface ValueInCurrencyDTO {
   val aed: Double?
   val ars: Double?
   val aud: Double?

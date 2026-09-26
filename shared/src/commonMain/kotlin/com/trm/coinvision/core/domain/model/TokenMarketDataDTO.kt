@@ -1,8 +1,6 @@
 package com.trm.coinvision.core.domain.model
 
-import com.trm.coinvision.core.common.model.Serializable
-
-internal interface TokenMarketDataDTO : Serializable {
+internal interface TokenMarketDataDTO {
   val circulatingSupply: Double?
   val currentPrice: ValueInCurrencyDTO?
   val fullyDilutedValuation: ValueInCurrencyDTO?
